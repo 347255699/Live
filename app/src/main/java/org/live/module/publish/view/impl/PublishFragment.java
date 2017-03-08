@@ -19,8 +19,8 @@ import com.tencent.rtmp.ui.TXCloudVideoView;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
-import org.live.module.publish.listener.BackHandledFragment;
-import org.live.module.publish.listener.NoDoubleClickListener;
+import org.live.common.listener.BackHandledFragment;
+import org.live.common.listener.NoDoubleClickListener;
 import org.live.module.publish.presenter.PublishPresenter;
 import org.live.module.publish.presenter.impl.PublishPresenterImpl;
 import org.live.module.publish.view.PublishView;

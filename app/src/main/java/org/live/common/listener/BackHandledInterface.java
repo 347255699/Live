@@ -1,4 +1,4 @@
-package org.live.module.publish.listener;
+package org.live.common.listener;
 
 /**
  * Created by KAM on 2017/3/4.

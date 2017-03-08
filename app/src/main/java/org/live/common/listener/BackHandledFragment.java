@@ -1,4 +1,4 @@
-package org.live.module.publish.listener;
+package org.live.common.listener;
 
 import android.app.Fragment;
 import android.os.Bundle;
