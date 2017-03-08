@@ -2,6 +2,7 @@ package org.live.module.publish.view.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.appyvet.rangebar.RangeBar;
+
 import org.live.R;
+
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.suke.widget.SwitchButton;
@@ -38,7 +41,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     private static final int ALPHHA_DEFAULT_VALUE = 50; // 默认透明度
     private TXCloudVideoView iPreviewVideoView = null; // 直播预览视图
     private PublishPresenter recorderPresenter = null;
-    private String rtmpUrl = "rtmp://123.207.19.234/live/stream01"; // 测试用例
+    private String rtmpUrl = null; // 测试用例
     private DialogPlus dialog = null; // 对话框
     /**
      * ui之间对应的状态标识
@@ -77,7 +80,8 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         view = inflater.inflate(R.layout.fragment_recorder, container);
         listener = new IconButtonOnClickListenner(); // 初始化图标按钮监听事件
         recorderPresenter = new PublishPresenterImpl(this, getActivity());
-
+        PublishActivity publishActivity = (PublishActivity) getActivity();
+        this.rtmpUrl = publishActivity.getRtmpUrl();
         initUIElements(); // 初始化ui控件
 
         recorderPresenter.startCameraPreview(); // 开始预览
@@ -238,7 +242,11 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
             switch (v.getId()) {
                 case R.id.btn_recording_status:
                     if (!isRecording) {
-                        recorderPresenter.startPusher(rtmpUrl);
+                        if (rtmpUrl != null) {
+                            recorderPresenter.startPusher(rtmpUrl);
+                        } else {
+                            onShowToastMessage("地址出错！", Toast.LENGTH_SHORT);
+                        }
                     } else {
                         recorderPresenter.stopRtmpPublish();
                     }

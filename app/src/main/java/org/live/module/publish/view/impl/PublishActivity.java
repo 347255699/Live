@@ -2,6 +2,7 @@ package org.live.module.publish.view.impl;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -17,7 +18,7 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
     private static final String TAG = "PublishActivity";
     private BackHandledFragment mBackHandedFragment;
     private Window win = null;
-
+    private String rtmpUrl = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,7 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
         win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 保持屏幕常亮
         // win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // 全屏显示
         requestWindowFeature(Window.FEATURE_NO_TITLE); // 隐藏标题
+        this.rtmpUrl = getIntent().getStringExtra("rtmpUrl"); // 初始化参数
         setContentView(R.layout.activity_recorder);
     }
 
@@ -48,5 +50,9 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
                 getSupportFragmentManager().popBackStack();
             }
         }
+    }
+
+    public String getRtmpUrl(){
+        return  this.rtmpUrl;
     }
 }
