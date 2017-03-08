@@ -19,9 +19,9 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
     private ListView mDemoListView = null;
-    private static final String[] mItemTitles = {"推流界面"}; // 列表项名称
+    private static final String[] mItemTitles = {"推流界面"}; // 定义列表标题
     private static final String[] mItemActivityNames = {"org.live.module.publish.view.impl.PublishActivity"}; // 定义目标界面Activity
-    private static final String[] mParams = {"rtmp://123.207.19.234/live/stream01"}; // 定义需要携带至目标界面Activity的参数
+    private static final String[] mParams = {"rtmp://123.207.19.234/live/stream01"}; // 定义需要携带至目标界面Activity的参数，若无携带参数则添加null
     private ListItemClickListener listener = null;
 
     @Override
