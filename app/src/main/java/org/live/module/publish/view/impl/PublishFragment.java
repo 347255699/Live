@@ -174,7 +174,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         }
         dialog = DialogPlus.newDialog(getActivity())
                 .setContentHolder(new ViewHolder(R.layout.dialog_beauty_settings))
-                .setExpanded(true, 350).setGravity(Gravity.BOTTOM)
+                .setExpanded(true, 400).setGravity(Gravity.BOTTOM)
                 .create();
         dialog.show();
         initBeautySettingsRangeBar(dialog.getHolderView(), beauty, whitening); // 监听并初始化拉杆
