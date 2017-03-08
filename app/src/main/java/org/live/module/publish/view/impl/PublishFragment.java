@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.appyvet.rangebar.RangeBar;
-import com.live.live.R;
+import org.live.R;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.suke.widget.SwitchButton;

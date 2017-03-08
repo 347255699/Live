@@ -5,8 +5,8 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.live.live.R;
 
+import org.live.R;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.BackHandledInterface;
 
