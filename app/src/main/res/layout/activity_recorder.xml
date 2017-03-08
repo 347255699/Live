@@ -4,13 +4,13 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/icon_color_black"
+    android:background="@color/colorPrimaryDark"
 
-    tools:context="kam.liveapp.recorder.view.impl.RecorderActivity">
+    tools:context="org.live.module.publish.view.impl.PublishActivity">
 
     <fragment
         android:id="@+id/fgt_icon_group"
-        android:name="kam.liveapp.recorder.view.impl.RecorderFragment"
+        android:name="org.live.module.publish.view.impl.PublishFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

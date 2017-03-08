@@ -34,7 +34,6 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="play"
-                app:materialIconColor="@color/icon_color_black"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -53,7 +52,6 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="camera_party_mode"
-                app:materialIconColor="@color/icon_color_black"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -72,7 +70,6 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="auto_fix"
-                app:materialIconColor="@color/icon_color_black"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -91,7 +88,6 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="flash"
-                app:materialIconColor="@color/icon_color_black"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -112,7 +108,6 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="volume_high"
-                app:materialIconColor="@color/icon_color_black"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -131,7 +126,6 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="settings"
-                app:materialIconColor="@color/icon_color_black"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -150,7 +144,6 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="close"
-                app:materialIconColor="@color/icon_color_black"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
     </LinearLayout>
