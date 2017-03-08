@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/vv_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="7">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/btn_recording_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_backgroud"
+                android:padding="5dp"
+                android:scaleType="center"
+                app:materialIcon="play"
+                app:materialIconColor="@color/icon_color_black"
+                app:materialIconSize="@dimen/icon_recorder_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/btn_camera_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_backgroud"
+                android:padding="5dp"
+                android:scaleType="center"
+                app:materialIcon="camera_party_mode"
+                app:materialIconColor="@color/icon_color_black"
+                app:materialIconSize="@dimen/icon_recorder_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/btn_beauty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_backgroud"
+                android:padding="5dp"
+                android:scaleType="center"
+                app:materialIcon="auto_fix"
+                app:materialIconColor="@color/icon_color_black"
+                app:materialIconSize="@dimen/icon_recorder_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView
+                android:id="@+id/btn_flash_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_backgroud"
+                android:padding="5dp"
+                android:scaleType="center"
+                app:materialIcon="flash"
+                app:materialIconColor="@color/icon_color_black"
+                app:materialIconSize="@dimen/icon_recorder_size" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/btn_volume_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_backgroud"
+                android:padding="5dp"
+                android:scaleType="center"
+                app:materialIcon="volume_high"
+                app:materialIconColor="@color/icon_color_black"
+                app:materialIconSize="@dimen/icon_recorder_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/btn_record_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_backgroud"
+                android:padding="5dp"
+                android:scaleType="center"
+                app:materialIcon="settings"
+                app:materialIconColor="@color/icon_color_black"
+                app:materialIconSize="@dimen/icon_recorder_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/btn_record_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_backgroud"
+                android:padding="5dp"
+                android:scaleType="center"
+                app:materialIcon="close"
+                app:materialIconColor="@color/icon_color_black"
+                app:materialIconSize="@dimen/icon_recorder_size" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

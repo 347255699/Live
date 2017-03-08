@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Live</string>
+    <string name="beauty_settings">美颜设置</string>
+    <string name="positive">确认</string>
+    <string name="beauty">磨皮</string>
+    <string name="whitening">美白</string>
 </resources>
