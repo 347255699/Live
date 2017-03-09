@@ -4,7 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 
 /**
- * 返回键监听虚拟类
+ * Fragment返回键监听处理
  * Created by KAM on 2017/3/4.
  */
 
