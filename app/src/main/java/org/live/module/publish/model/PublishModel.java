@@ -24,7 +24,9 @@ public interface PublishModel {
 
     public boolean switchFlashLight(boolean flashTurnOn); // 打开闪光灯
 
-    public void setPushConfig(Map<Integer, Object> configs); // 设置推流参数
+    public void setPushConfig(String configType, Object value); // 设置推流参数
+
+    public void getPushConfig();
 
     public void pausePusher(); // 切换后台处理
 
@@ -46,7 +48,7 @@ public interface PublishModel {
 
     public void setVolumeVal(Float microPhone, Float volume); // 设置音量
 
-    public boolean setVolumeOff(boolean turnVolumeOff); // 设置静音
+    public void setVolumeOff(boolean turnVolumeOff); // 设置静音
 
     /** 背景混音暂未计划开发**/
 }

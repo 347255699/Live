@@ -2,6 +2,8 @@ package org.live.module.publish.view;
 
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
+import java.util.Map;
+
 /**
  * 主播模块ui响应监听
  * Created by KAM on 2017/3/3.
@@ -28,7 +30,9 @@ public interface PublishView {
 
     public TXCloudVideoView getPreviewVideoView(); // 获取预览视频ui控件
 
-    public void onShowVolumeSettingsView(Float microphone, Float volume); // 显示音量设置视图
+    public void onShowVolumeSettingsView(Float microphone, Float volume, boolean isVolumeOff); // 显示音量设置视图
 
-    public void onRefreshVolumeSettingsView(Integer isVisible); // 更新音量设置视图
+    public void onRefreshVolumeOffSwitchVal(boolean isVolumeOff); // 刷新静音按钮状态
+
+    public void onShowPublishSettingsView(Map<String, Object> config); // 显示推流参数设置视图
 }

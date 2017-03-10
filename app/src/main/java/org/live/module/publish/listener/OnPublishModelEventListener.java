@@ -1,5 +1,7 @@
 package org.live.module.publish.listener;
 
+import java.util.Map;
+
 /**
  * 主播模型层事件监听(驱动view层ui做出相应的响应)
  * Created by KAM on 2017/3/3.
@@ -23,7 +25,9 @@ public interface OnPublishModelEventListener {
 
     public void onSetBeautyRangeBarVal(Integer beauty, Integer whitening); // 设置美颜拉杆初始值
 
-    public void onSetVolumeSettingsViewVal(Float microphone, Float volume); // 设置音量视图初始值
+    public void onSetVolumeSettingsViewVal(Float microphone, Float volume, boolean isVolumeOff); // 设置音量视图初始值
 
-    public void onRefreshVolumeSettingsViewVal(Integer isVisible); // 刷新音量设置视图
+    public void onSetVolumeOffSwitchButton(boolean isVolumeOff); // 刷新静音按钮状态
+
+    public void onSetPublishSettingsViewVal(Map<String, Object> config); // 设置推流参数视图初始值
 }

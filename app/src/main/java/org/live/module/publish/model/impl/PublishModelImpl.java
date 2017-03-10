@@ -1,12 +1,11 @@
 package org.live.module.publish.model.impl;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Surface;
-import android.view.View;
 import android.widget.Toast;
 
 import com.tencent.rtmp.ITXLivePushListener;
@@ -17,8 +16,12 @@ import com.tencent.rtmp.ui.TXCloudVideoView;
 
 import org.live.module.publish.listener.OnPublishModelEventListener;
 import org.live.module.publish.model.PublishModel;
+import org.live.module.publish.service.PublishPreferencesService;
+import org.live.module.publish.util.constant.PublishConstant;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.tencent.rtmp.TXLiveConstants.*;
 
@@ -45,6 +48,36 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
         livePusher.setConfig(livePushConfig); // 设置推流默认参数
         preferences = context.getSharedPreferences("push_config", Context.MODE_PRIVATE);
         config = (Map<String, Object>) preferences.getAll(); // 取出所有推流配置参数
+        initPublishConfig(); // 初始化推流配置
+    }
+
+    /**
+     * 初始化操作
+     */
+    private void initPublishConfig() {
+        if (config.size() > 0) {
+            for (String key : config.keySet()) {
+                Object obj = config.get(key);
+                switch (key) {
+                    case PublishConstant.CONFIG_TYPE_BEAUTY_VAL:
+                        setBeautyFilter((Integer) obj, null); // 设置磨皮和美白
+                        break;
+                    case PublishConstant.CONFIG_TYPE_MICRO_PHONE_VAL:
+                        if (!(boolean) config.get(PublishConstant.CONFIG_TYPE_IS_VOLUME_OFF)) {
+                            setVolumeVal((Float) obj, null); // 设置音量
+                        }
+                        break;
+                    case PublishConstant.CONFIG_TYPE_IS_VOLUME_OFF:
+                        if ((boolean) obj) {
+                            livePusher.setMicVolume(0.0f); // 设置为麦克风静音
+                            livePusher.setBGMVolume(0.0f); // 设置为背景静
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
     /**
@@ -139,13 +172,39 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
     }
 
     /**
-     * 批量设置推流参数
+     * 设置推流参数
      *
-     * @param configs 相关参数集合
+     * @param configType 参数类型
+     * @param value      参数值
      */
     @Override
-    public void setPushConfig(Map<Integer, Object> configs) {
-        // 未定参数
+    public void setPushConfig(String configType, Object value) {
+        switch (configType) {
+            case PublishConstant.CONFIG_TYPE_VIDEO_QUALITY:
+                livePusher.setVideoQuality((Integer) value); // 设置清晰度
+                config.put(PublishConstant.CONFIG_TYPE_VIDEO_QUALITY, value);
+                break;
+            case PublishConstant.CONFIG_TYPE_TOUCH_FOCUS:
+                livePushConfig.setTouchFocus((boolean) value); // 设置对焦模式
+                livePusher.setConfig(livePushConfig);
+                config.put(PublishConstant.CONFIG_TYPE_TOUCH_FOCUS, value);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 获取推流参数
+     *
+     * @return Map<String, Object> 参数键值对
+     */
+    @Override
+    public void getPushConfig() {
+        Map<String, Object> pushConfig = new HashMap<String, Object>();
+        pushConfig.put(PublishConstant.CONFIG_TYPE_TOUCH_FOCUS, config.get(PublishConstant.CONFIG_TYPE_TOUCH_FOCUS));
+        pushConfig.put(PublishConstant.CONFIG_TYPE_VIDEO_QUALITY, config.get(PublishConstant.CONFIG_TYPE_VIDEO_QUALITY));
+        listener.onSetPublishSettingsViewVal(pushConfig);
     }
 
     /**
@@ -221,16 +280,8 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
      */
     @Override
     public void getBeautyAndWhiteningVal() {
-        boolean hasBeautyVal = config.containsKey("beautyVal");
-        boolean hasWhiteningVal = config.containsKey("whiteningVal");
-        if (!hasBeautyVal) {
-            config.put("beautyVal", 0);
-        }
-        if (!hasWhiteningVal) {
-            config.put("whiteningVal", 0);
-        }
-        Integer beauty = (Integer) config.get("beautyVal");
-        Integer whitening = (Integer) config.get("whiteningVal");
+        Integer beauty = (Integer) config.get(PublishConstant.CONFIG_TYPE_BEAUTY_VAL);
+        Integer whitening = (Integer) config.get(PublishConstant.CONFIG_TYPE_WHITENING_VAL);
         listener.onSetBeautyRangeBarVal(beauty, whitening); // 通知presenter所获取的美颜参数并更新ui
     }
 
@@ -239,7 +290,35 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
      */
     @Override
     public void refreshPreferences() {
-        // 未实现
+        Intent intent = new Intent(context, PublishPreferencesService.class);
+        intent.putExtras(getBundle());
+        context.startService(intent); // 开启参数持久化服务类
+    }
+
+    /**
+     * 获取参数
+     *
+     * @return Bundle
+     */
+    private Bundle getBundle() {
+        Bundle bundle = new Bundle();
+        for (String key : config.keySet()) {
+            Object obj = config.get(key);
+            if (obj instanceof Integer) {
+                bundle.putInt(key, (Integer) obj);
+            }
+            if (obj instanceof Float) {
+                bundle.putFloat(key, (Float) obj);
+            }
+            if (obj instanceof String) {
+                bundle.putString(key, (String) obj);
+            }
+            if (obj instanceof Boolean) {
+                bundle.putBoolean(key, (Boolean) obj);
+            }
+        } // 封装参数
+
+        return bundle;
     }
 
     /**
@@ -247,25 +326,10 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
      */
     @Override
     public void getVolumeVal() {
-        boolean hasMicroPhoneVal = config.containsKey("microPhoneVal");
-        boolean hasVolumeVal = config.containsKey("volumeVal");
-        boolean hasIsVolumeOff = config.containsKey("isVolumeOff");
-        Float microPhoneVal = null;
-        Float volumeVal = null;
-
-        if (!hasMicroPhoneVal) {
-            config.put("microPhoneVal", 400.0f);
-        }
-        if (!hasVolumeVal) {
-            config.put("volumeVal", 200.0f);
-        }
-        if (!hasIsVolumeOff) {
-            config.put("isVolumeOff", false);
-        }
-        microPhoneVal = (Float) config.get("microPhoneVal");
-        volumeVal = (Float) config.get("volumeVal");
-        Log.i("PublishFragment", "初始值：" + microPhoneVal + ":" + volumeVal + ":" + config.get("isVolumeOff"));
-        listener.onSetVolumeSettingsViewVal(microPhoneVal, volumeVal); // 通知presenter所获取的音量数值并作出ui更新
+        Float microPhoneVal = (Float) config.get(PublishConstant.CONFIG_TYPE_MICRO_PHONE_VAL);
+        Float volumeVal = (Float) config.get(PublishConstant.CONFIG_TYPE_VOLUME_VAL);
+        boolean isVolumeOff = (boolean) config.get(PublishConstant.CONFIG_TYPE_IS_VOLUME_OFF);
+        listener.onSetVolumeSettingsViewVal(microPhoneVal * 10, volumeVal * 10, isVolumeOff); // 通知presenter所获取的音量数值并作出ui更新
     }
 
     /**
@@ -284,6 +348,11 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
             config.put("volumeVal", volume);
             livePusher.setBGMVolume(volume);
         }
+        if ((boolean) config.get(PublishConstant.CONFIG_TYPE_IS_VOLUME_OFF)) {
+            config.put(PublishConstant.CONFIG_TYPE_IS_VOLUME_OFF, false);
+            listener.onSetVolumeOffSwitchButton(false);
+        } // 关闭静音按钮
+
     }
 
     /**
@@ -292,23 +361,17 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
      * @param turnVolumeOff 当前是否处在静音状态(true|false)
      */
     @Override
-    public boolean setVolumeOff(boolean turnVolumeOff) {
-        boolean currentVolumeOff = !turnVolumeOff; // 更改状态
-        if (currentVolumeOff) {
+    public void setVolumeOff(boolean turnVolumeOff) {
+        if (turnVolumeOff) {
             // 开启静音
             livePusher.setMicVolume(0.0f);
             livePusher.setBGMVolume(0.0f);
-            listener.onRefreshVolumeSettingsViewVal(View.GONE); // 通知presenter所获取的音量数值并作出ui更新
-            Log.i("PublishFragment", "开启静" + (Float) config.get("microPhoneVal") + ":" + (Float) config.get("volumeVal"));
         } else {
             // 关闭静音，恢复设置静音前的音量
             livePusher.setMicVolume((Float) config.get("microPhoneVal"));
-            livePusher.setMicVolume((Float) config.get("volumeVal"));
-            Log.i("PublishFragment", "关闭静音：" + (Float) config.get("microPhoneVal") + ":" + (Float) config.get("volumeVal"));
-            listener.onRefreshVolumeSettingsViewVal(View.VISIBLE); // 通知presenter所获取的音量数值并作出ui更新
+            livePusher.setBGMVolume((Float) config.get("volumeVal"));
         }
-        config.put("isVolumeOff", currentVolumeOff);
-        return currentVolumeOff; // 返回当前状态
+        config.put("isVolumeOff", turnVolumeOff);
     }
 
     /**

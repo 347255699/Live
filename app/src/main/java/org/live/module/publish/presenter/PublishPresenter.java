@@ -1,7 +1,5 @@
 package org.live.module.publish.presenter;
 
-import android.graphics.Bitmap;
-
 import java.util.Map;
 
 /**
@@ -9,7 +7,7 @@ import java.util.Map;
  * Created by KAM on 2017/3/3.
  */
 
-public interface PublishPresenter {
+public interface PublishPresenter{
     public void startCameraPreview(); // 开始预览
 
     public void startPusher(String rtmpUrl); // 开始推流
@@ -22,7 +20,9 @@ public interface PublishPresenter {
 
     public boolean switchFlashLight(boolean flashTurnOn); // 打开闪光灯
 
-    public void setPushConfig(Map<Integer, Object> configs); // 设置推流参数
+    public void setPushConfig(String configType, Object value); // 设置推流参数
+
+    public void getPushConfig(); // 获取推流参数
 
     public void pausePusher(); // 切换后台处理
 
@@ -44,6 +44,6 @@ public interface PublishPresenter {
 
     public void setVolumeVal(Float microPhone, Float volume); // 设置音量
 
-    public boolean setVolumeOff(boolean turnVolumeOff); // 设置静音
+    public void setVolumeOff(boolean turnVolumeOff); // 设置静音
     /** 背景混音暂未计划开发**/
 }
