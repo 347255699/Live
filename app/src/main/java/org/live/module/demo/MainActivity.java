@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             String className = M_ITEM_ACTIVITY_NAMES[position]; // 目标Activity类名
-            String rtmpUrl = M_PARAMS[position]; // 目标Activity所需要的参数
+            String url = M_PARAMS[position]; // 目标Activity所需要的参数
             try {
                 Class<?> clazz = Class.forName(className);
                 Object object = clazz.newInstance();
@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
                 if (mDemoUrlEditText.getText() != null) {
                     intent.putExtra(LiveKeyConstants.Global_URL_KEY, mDemoUrlEditText.getText()); // 携带参数, 目标Activity用LiveKeyConstants.Global_URL_KEY取出参数
                 } else {
-                    intent.putExtra(LiveKeyConstants.Global_URL_KEY, rtmpUrl); // 携带参数, 目标Activity用LiveKeyConstants.Global_URL_KEY取出参数
+                    intent.putExtra(LiveKeyConstants.Global_URL_KEY, url); // 携带参数, 目标Activity用LiveKeyConstants.Global_URL_KEY取出参数
                 }
                 startActivity(intent); // 跳转到目标界面
             } catch (Exception e) {
