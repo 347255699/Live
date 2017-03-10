@@ -12,4 +12,39 @@
         android:visibility="gone"
         />
 
+    <!-- 关闭按钮-->
+    <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/btn_play_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgroud"
+        android:padding="5dp"
+        android:scaleType="center"
+        app:materialIcon="close"
+        app:materialIconSize="@dimen/icon_recorder_size"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        />
+
+    <!-- 呼出输入文字的按钮 -->
+    <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/btn_play_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_backgroud"
+        android:padding="5dp"
+        android:scaleType="center"
+        app:materialIcon="message_text"
+        app:materialIconSize="@dimen/icon_recorder_size"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        />
+
+
+
+
 </RelativeLayout>
