@@ -3,6 +3,7 @@ package org.live.module.demo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -21,9 +22,21 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
     private ListView mDemoListView = null;
-    private static final String[] M_ITEM_TITLES = {"推流界面", "录屏界面"}; // 定义列表标题
-    private static final String[] M_ITEM_ACTIVITY_NAMES = {"org.live.module.publish.view.impl.PublishActivity", "org.live.module.capture.view.impl.CaptureActivity"}; // 定义目标界面Activity
-    private static final String[] M_PARAMS = {"rtmp://123.207.19.234/live/stream01", "rtmp://123.207.19.234/live/stream01"}; // 定义需要携带至目标界面Activity的参数，若无携带参数则添加null
+
+    private static final String[] M_ITEM_TITLES = {
+            "推流界面",
+            "录屏界面"
+    }; // 定义列表标题
+    private static final String[] M_ITEM_ACTIVITY_NAMES = {
+            "org.live.module.publish.view.impl.PublishActivity",
+            "org.live.module.capture.view.impl.CaptureActivity"
+    }; // 定义目标界面Activity
+    private static final String[] M_PARAMS = {
+            "rtmp://123.207.19.234/live/stream01",
+            "rtmp://123.207.19.234/live/stream01"
+    }; // 定义需要携带至目标界面Activity的参数，若无携带参数则添加null
+
+
     private ListItemClickListener listener = null;
     private EditText mDemoUrlEditText = null;
 
@@ -33,6 +46,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         listener = new ListItemClickListener(); // 初始化监听类
         initUIElements();
+
     }
 
     /**
@@ -49,8 +63,6 @@ public class MainActivity extends Activity {
         //添加并且显示
         mDemoListView.setAdapter(adapter);
         mDemoListView.setOnItemClickListener(listener);
-
-        mDemoUrlEditText = (EditText) findViewById(R.id.et_demo_url);
     }
 
     /**
@@ -76,6 +88,8 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
+            mDemoUrlEditText = (EditText) findViewById(R.id.et_demo_url);
+            Log.i("MainLog", "item clicked!");
             String className = M_ITEM_ACTIVITY_NAMES[position]; // 目标Activity类名
             String url = M_PARAMS[position]; // 目标Activity所需要的参数
             try {
