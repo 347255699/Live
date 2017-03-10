@@ -8,11 +8,12 @@ import android.view.WindowManager;
 
 
 import org.live.R;
+import org.live.common.constants.LiveKeyConstants;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.BackHandledInterface;
 
 /**
- * 主播界面
+ * 推流主活动窗口
  */
 public class PublishActivity extends FragmentActivity implements BackHandledInterface {
     private static final String TAG = "PublishActivity";
@@ -26,7 +27,7 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
         win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 保持屏幕常亮
         // win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // 全屏显示
         requestWindowFeature(Window.FEATURE_NO_TITLE); // 隐藏标题
-        this.rtmpUrl = getIntent().getStringExtra("rtmpUrl"); // 初始化参数
+        this.rtmpUrl = getIntent().getStringExtra(LiveKeyConstants.Global_URL_KEY); // 初始化参数
         setContentView(R.layout.activity_recorder);
     }
 

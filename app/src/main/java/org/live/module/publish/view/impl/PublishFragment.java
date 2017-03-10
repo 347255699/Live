@@ -35,14 +35,14 @@ import java.util.Map;
 
 
 /**
- * 图标组
+ * 推流模块
  * Created by KAM on 2017/2/27.
  */
 
 public class PublishFragment extends BackHandledFragment implements PublishView {
     private static final String TAG = "PublishFragment";
     private View view = null;
-    private IconButtonOnClickListenner listener = null;
+    private IconButtonOnClickListener listener = null;
     private static final int ALPHHA_DEFAULT_VALUE = 50; // 默认透明度
     private TXCloudVideoView iPreviewVideoView = null; // 直播预览视图
     private PublishPresenter recorderPresenter = null;
@@ -89,7 +89,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recorder, container);
-        listener = new IconButtonOnClickListenner(); // 初始化图标按钮监听事件
+        listener = new IconButtonOnClickListener(); // 初始化图标按钮监听事件
         recorderPresenter = new PublishPresenterImpl(this, getActivity());
         PublishActivity publishActivity = (PublishActivity) getActivity();
         this.rtmpUrl = publishActivity.getRtmpUrl();
@@ -265,7 +265,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     /**
      * 图标按钮点击事件监听
      */
-    private class IconButtonOnClickListenner extends NoDoubleClickListener {
+    private class IconButtonOnClickListener extends NoDoubleClickListener {
         @Override
         protected void onNoDoubleClick(View v) {
             switch (v.getId()) {
