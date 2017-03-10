@@ -19,9 +19,9 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
     private ListView mDemoListView = null;
-    private static final String[] mItemTitles = {"推流界面"}; // 定义列表标题
-    private static final String[] mItemActivityNames = {"org.live.module.publish.view.impl.PublishActivity"}; // 定义目标界面Activity
-    private static final String[] mParams = {"rtmp://123.207.19.234/live/stream01"}; // 定义需要携带至目标界面Activity的参数，若无携带参数则添加null
+    private static final String[] M_ITEM_TITLES = {"推流界面"}; // 定义列表标题
+    private static final String[] M_ITEM_ACTIVITY_NAMES = {"org.live.module.publish.view.impl.PublishActivity"}; // 定义目标界面Activity
+    private static final String[] M_PARAMS = {"rtmp://123.207.19.234/live/stream01"}; // 定义需要携带至目标界面Activity的参数，若无携带参数则添加null
     private ListItemClickListener listener = null;
 
     @Override
@@ -56,9 +56,9 @@ public class MainActivity extends Activity {
     private List<HashMap<String, String>> getData() {
 
         List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-        for (int i = 0; i < mItemTitles.length; i++) {
+        for (int i = 0; i < M_ITEM_TITLES.length; i++) {
             HashMap<String, String> map = new HashMap<String, String>();
-            map.put("content", mItemTitles[i]);
+            map.put("content", M_ITEM_TITLES[i]);
             list.add(map);
         }
         return list;
@@ -71,8 +71,8 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
-            String className = mItemActivityNames[position]; // 目标Activity类名
-            String rtmpUrl = mParams[position]; // 目标Activity所需要的参数
+            String className = M_ITEM_ACTIVITY_NAMES[position]; // 目标Activity类名
+            String rtmpUrl = M_PARAMS[position]; // 目标Activity所需要的参数
             try {
                 Class<?> clazz = Class.forName(className);
                 Object object = clazz.newInstance();
