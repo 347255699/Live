@@ -96,8 +96,8 @@ public class MainActivity extends Activity {
                 Class<?> clazz = Class.forName(className);
                 Object object = clazz.newInstance();
                 Intent intent = new Intent(MainActivity.this, object.getClass());
-                if (mDemoUrlEditText.getText() != null) {
-                    intent.putExtra(LiveKeyConstants.Global_URL_KEY, mDemoUrlEditText.getText()); // 携带参数, 目标Activity用LiveKeyConstants.Global_URL_KEY取出参数
+                if (null != mDemoUrlEditText.getText()) {
+                    intent.putExtra(LiveKeyConstants.Global_URL_KEY, mDemoUrlEditText.getText().toString()); // 携带参数, 目标Activity用LiveKeyConstants.Global_URL_KEY取出参数
                 } else {
                     intent.putExtra(LiveKeyConstants.Global_URL_KEY, url); // 携带参数, 目标Activity用LiveKeyConstants.Global_URL_KEY取出参数
                 }
