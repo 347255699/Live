@@ -4,4 +4,7 @@
     <string name="positive">确认</string>
     <string name="beauty">磨皮</string>
     <string name="whitening">美白</string>
+    <string name="title_activity_publish_settings">推流参数设置</string>
+    <string name="touch_focus">手动对焦</string>
+    <string name="definition">清晰度</string>
 </resources>
