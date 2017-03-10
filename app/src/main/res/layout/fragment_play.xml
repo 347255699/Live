@@ -3,11 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 用在替换播放器的view  -->
-    <RelativeLayout
-        android:id="@+id/rl_play_playerDump"
+    <!-- 播放器的view -->
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/vv_play_player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>
