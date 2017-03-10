@@ -6,4 +6,5 @@
     <color name="colorGray">#CCCCCC</color>
     <color name="colorWall">#DCDCDC</color>
     <color name="colorDeepGray">#969696</color>
+    <color name="colorBlack">#000000</color>
 </resources>
