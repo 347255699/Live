@@ -4,11 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
+    android:background="@drawable/linearlayout_settings_backgroud"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -16,8 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
-            android:textColor="#CCCCCC"
             android:text="@string/beauty"
+            android:textColor="@color/colorDeepGray"
             android:textSize="16dp" />
 
         <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -32,16 +35,24 @@
             custom:pinMinFont="10dp"
             custom:pinRadius="7dp"
             custom:rangeBar="false"
-            custom:rangeBarColor="#B3B3B3"
+            custom:rangeBarColor="#EBEBEB"
             custom:selectorColor="#A4D3EE"
             custom:selectorSize="6dp"
             custom:tickEnd="9"
             custom:tickHeight="0dp" />
     </LinearLayout>
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/colorGray" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -50,7 +61,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:text="@string/whitening"
-            android:textColor="#CCCCCC"
+            android:textColor="@color/colorDeepGray"
             android:textSize="16dp" />
 
         <com.appyvet.rangebar.RangeBar
@@ -65,10 +76,10 @@
             custom:pinMinFont="10dp"
             custom:pinRadius="7dp"
             custom:rangeBar="false"
-            custom:rangeBarColor="#B3B3B3"
+            custom:rangeBarColor="#EBEBEB"
             custom:selectorColor="#A4D3EE"
             custom:selectorSize="6dp"
-            custom:tickEnd="9"
+            custom:tickEnd="3"
             custom:tickHeight="0dp" />
     </LinearLayout>
 

@@ -1,105 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:background="@color/colorWall">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@drawable/linearlayout_settings_backgroud"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
-        <net.steamcrafted.materialiconlib.MaterialIconView
-            android:id="@+id/icon_volume_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="12dp"
-            android:scaleType="center"
-            app:materialIcon="volume_off"
-            app:materialIconColor="#CCCCCC"
-            app:materialIconSize="24dp" />
-
-        <com.suke.widget.SwitchButton
-            android:id="@+id/btn_volume_off_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:sb_checked_color="#A4D3EE" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/ll_microphone"
-        android:weightSum="1">
-
-        <net.steamcrafted.materialiconlib.MaterialIconView
-            android:id="@+id/icon_microphone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="12dp"
-            android:scaleType="center"
-            app:materialIcon="microphone"
-            app:materialIconColor="#CCCCCC"
-            app:materialIconSize="24dp" />
-
-
-        <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/rb_microphone_setting"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginRight="16dp"
-            custom:connectingLineColor="#A4D3EE"
-            custom:pinColor="#A4D3EE"
-            custom:pinMaxFont="10dp"
-            custom:pinMinFont="10dp"
-            custom:pinRadius="7dp"
-            custom:rangeBar="false"
-            custom:rangeBarColor="#B3B3B3"
-            custom:selectorColor="#A4D3EE"
-            custom:selectorSize="6dp"
-            custom:tickEnd="400"
-            custom:tickHeight="0dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/ll_volume"
-        android:weightSum="1">
-
-        <net.steamcrafted.materialiconlib.MaterialIconView
-            android:id="@+id/icon_volume_high"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:scaleType="center"
-            android:layout_gravity="center"
-            app:materialIcon="volume_high"
-            app:materialIconColor="#CCCCCC"
-            app:materialIconSize="24dp" />
+            android:orientation="horizontal">
 
-        <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/rb_volume_setting"
+            <net.steamcrafted.materialiconlib.MaterialIconView
+                android:id="@+id/icon_volume_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="12dp"
+                android:scaleType="center"
+                app:materialIcon="volume_off"
+                app:materialIconColor="#CCCCCC"
+                app:materialIconSize="24dp" />
+
+            <com.suke.widget.SwitchButton
+                android:id="@+id/btn_volume_off_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:sb_checked_color="#A4D3EE" />
+        </LinearLayout>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/colorGray" />
+        <LinearLayout
+            android:id="@+id/ll_microphone"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginRight="16dp"
-            custom:connectingLineColor="#A4D3EE"
-            custom:pinColor="#A4D3EE"
-            custom:pinMaxFont="10dp"
-            custom:pinMinFont="10dp"
-            custom:pinRadius="7dp"
-            custom:rangeBar="false"
-            custom:rangeBarColor="#B3B3B3"
-            custom:selectorColor="#A4D3EE"
-            custom:selectorSize="6dp"
-            custom:tickEnd="200"
-            custom:tickHeight="0dp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView
+                android:id="@+id/icon_microphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="12dp"
+                android:scaleType="center"
+                app:materialIcon="microphone"
+                app:materialIconColor="#CCCCCC"
+                app:materialIconSize="24dp" />
+
+
+            <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/rb_microphone_setting"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginRight="16dp"
+                custom:connectingLineColor="#A4D3EE"
+                custom:pinColor="#A4D3EE"
+                custom:pinMaxFont="10dp"
+                custom:pinMinFont="10dp"
+                custom:pinRadius="7dp"
+                custom:rangeBar="false"
+                custom:rangeBarColor="#EBEBEB"
+                custom:selectorColor="#A4D3EE"
+                custom:selectorSize="6dp"
+                custom:tickEnd="20"
+                custom:tickHeight="0dp" />
+        </LinearLayout>
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/colorGray" />
+        <LinearLayout
+            android:id="@+id/ll_volume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <net.steamcrafted.materialiconlib.MaterialIconView
+                android:id="@+id/icon_volume_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="12dp"
+                android:scaleType="center"
+                app:materialIcon="volume_high"
+                app:materialIconColor="#CCCCCC"
+                app:materialIconSize="24dp" />
+
+            <com.appyvet.rangebar.RangeBar xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/rb_volume_setting"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginRight="16dp"
+                custom:connectingLineColor="#A4D3EE"
+                custom:pinColor="#A4D3EE"
+                custom:pinMaxFont="10dp"
+                custom:pinMinFont="10dp"
+                custom:pinRadius="7dp"
+                custom:rangeBar="false"
+                custom:rangeBarColor="#EBEBEB"
+                custom:selectorColor="#A4D3EE"
+                custom:selectorSize="6dp"
+                custom:tickEnd="20"
+                custom:tickHeight="0dp" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
