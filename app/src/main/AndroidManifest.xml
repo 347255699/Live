@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".module.publish.view.impl.PublishActivity" />
-
+        <activity android:name=".module.play.view.impl.PlayActivity" />
         <service
             android:name=".module.publish.service.PublishPreferencesService"
             android:exported="false" />
