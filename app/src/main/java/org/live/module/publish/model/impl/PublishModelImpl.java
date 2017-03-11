@@ -384,10 +384,10 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
     public void onPushEvent(int i, Bundle bundle) {
         switch (i) {
             case PUSH_EVT_PUSH_BEGIN:
-                listener.onToastMsg("准备开始直播你的美艳动人吧！baby!", Toast.LENGTH_LONG); // 提示直播准备开始信息
+                listener.onToastMsg("直播开始！", Toast.LENGTH_LONG); // 提示直播准备开始信息
                 break;
             case PUSH_ERR_NET_DISCONNECT:
-                listener.onToastMsg("网络断连,且经三次抢救无效,可以放弃治疗,更多重试请自行重启推流", Toast.LENGTH_LONG); // 提示网络断开
+                listener.onToastMsg("网络断连,且经三次抢救无效,可以放弃治疗,更多重试请自行重启推流！", Toast.LENGTH_LONG); // 提示网络断开
                 listener.onStopPusher(); // 通知ui作出相应
                 break;
             case PUSH_WARNING_NET_BUSY:

@@ -189,7 +189,6 @@ public class PublishPresenterImpl implements PublishPresenter, OnPublishModelEve
     @Override
     public void onPushing() {
         recorderView.onShowPauseIconView();
-        recorderView.onShowToastMessage("开始直播！", Toast.LENGTH_SHORT);
     }
 
     /**

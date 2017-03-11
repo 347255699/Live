@@ -1,6 +1,7 @@
 package org.live.module.capture.presenter.impl;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import org.live.module.capture.listener.OnCaptureModelEventListener;
 import org.live.module.capture.model.CaptureModel;
@@ -47,6 +48,7 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
     @Override
     public void onStopCaptureAndPusher() {
         captureView.onShowCapturePlayIcon();
+        captureView.onShowToastMsg("", Toast.LENGTH_SHORT);
     }
 
     @Override
