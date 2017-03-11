@@ -26,14 +26,17 @@ public class MainActivity extends Activity {
     private static final String[] M_ITEM_TITLES = {
             "推流界面",
             "录屏界面",
-            "播放界面"
+            "播放界面",
+            "播放demo"
     }; // 定义列表标题
     private static final String[] M_ITEM_ACTIVITY_NAMES = {
             "org.live.module.publish.view.impl.PublishActivity",
             "org.live.module.capture.view.impl.CaptureActivity",
-            "org.live.module.play.view.impl.PlayActivity"
+            "org.live.module.play.view.impl.PlayActivity",
+            "org.live.module.demo.PlayActivity"
     }; // 定义目标界面Activity
     private static final String[] M_PARAMS = {
+            "rtmp://123.207.19.234/live/stream01",
             "rtmp://123.207.19.234/live/stream01",
             "rtmp://123.207.19.234/live/stream01",
             "rtmp://123.207.19.234/live/stream01"
