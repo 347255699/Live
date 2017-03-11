@@ -16,5 +16,50 @@
         android:layout_height="wrap_content"
         android:divider="@color/colorGray"
         android:dividerHeight="1dp"
-        android:fadeScrollbars="true"/>
+        android:fadeScrollbars="true"
+        android:visibility="gone"
+        />
+
+    <EditText
+        android:id="@+id/et_main_inputPushIp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="推流地址"
+        android:text="rtmp://123.207.19.234/live/stream01"
+        />
+
+    <Button
+        android:id="@+id/btn_main_live"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:text="直播"
+        android:layout_below="@id/et_main_inputPushIp"
+        />
+
+    <Button
+        android:id="@+id/btn_main_record"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:text="直播"
+        android:layout_below="@id/et_main_inputPushIp"
+        android:layout_toRightOf="@id/btn_main_live"
+        />
+
+    <EditText
+        android:id="@+id/et_mian_inputPlayIp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="拉流地址"
+        android:layout_below="@id/btn_main_live"
+        android:text="rtmp://123.207.19.234/live/stream01"
+        />
+
+    <Button
+        android:id="@+id/btn_main_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="播放"
+        android:layout_below="@id/et_mian_inputPlayIp"
+        />
+
 </RelativeLayout>
