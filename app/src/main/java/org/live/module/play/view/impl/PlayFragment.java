@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
@@ -37,6 +39,8 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
 
     private MaterialIconView inputBtn = null ; //呼出输入文字的btn
 
+    private ProgressBar loadingBar = null ;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         mPlayerView = (TXCloudVideoView) currentFragmentView.findViewById(R.id.vv_play_player) ;   //播放器的view
         closeBtn = (MaterialIconView) currentFragmentView.findViewById(R.id.btn_play_close) ;
         inputBtn = (MaterialIconView) currentFragmentView.findViewById(R.id.btn_play_input) ;
+        loadingBar = (ProgressBar) currentFragmentView.findViewById(R.id.pb_play_loading) ;
         closeBtn.setOnClickListener(this);
         inputBtn.setOnClickListener(this);
     }
@@ -79,11 +84,6 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
     }
 
     @Override
-    public void stopPlay() {
-        playPresenter.stopPlay() ;
-    }
-
-    @Override
     public void pause() {
         playPresenter.pause() ;
     }
@@ -98,6 +98,26 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         return mPlayerView ;
     }
 
+    @Override
+    public void showLoading() {
+        loadingBar.setVisibility(ProgressBar.VISIBLE) ;
+    }
+
+    @Override
+    public void hideLoading() {
+        loadingBar.setVisibility(ProgressBar.GONE) ;
+    }
+
+    @Override
+    public void destroyPlayView() {
+        Toast.makeText(getActivity(), "网络重连失败，请重新进入直播间",Toast.LENGTH_LONG).show() ;
+    }
+
+    @Override
+    public void firstStartPlay() {
+        Toast.makeText(getActivity(), "欢迎进入直播间", Toast.LENGTH_SHORT).show() ;
+    }
+
     /**
      *  按钮的点击事件
      * @param v
@@ -108,7 +128,7 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         switch (resourceFlag) {
             case R.id.btn_play_close : {
                 Log.d(TAG, "点击了关闭按钮") ;
-                this.onDestroy() ;
+                getActivity().finish() ;
                 break ;
             }
             case R.id.btn_play_input : {

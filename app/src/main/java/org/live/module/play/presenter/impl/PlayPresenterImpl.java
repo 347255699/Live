@@ -45,12 +45,22 @@ public class PlayPresenterImpl implements PlayPresenter, OnPlayListener {
     }
 
     @Override
-    public void onStartingPlay() {
+    public void onFirstStartingPlay() {
+        playView.firstStartPlay() ;
+    }
 
+    @Override
+    public void onStartingPlay() {
+        playView.hideLoading() ;
     }
 
     @Override
     public void onLoading() {
+        playView.showLoading() ;
+    }
 
+    @Override
+    public void onDestroyPlayFromNetWorkFail() {
+        playView.destroyPlayView();
     }
 }

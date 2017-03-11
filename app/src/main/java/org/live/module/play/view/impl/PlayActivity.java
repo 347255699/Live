@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.Window;
+import android.view.WindowManager;
 
 import org.live.R;
 
@@ -21,6 +22,7 @@ public class PlayActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) ; // 保持屏幕常亮
         requestWindowFeature(Window.FEATURE_NO_TITLE) ;     //隐藏标题
         setContentView(R.layout.activity_play) ;
         setFragmentDefault() ;

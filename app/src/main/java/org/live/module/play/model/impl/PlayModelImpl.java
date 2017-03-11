@@ -23,6 +23,8 @@ public class PlayModelImpl implements PlayModel {
 
     private OnPlayListener listener ;
 
+    private boolean firstStartPlayFlag = true ;     //第一次直播的标志
+
     public PlayModelImpl(Context context, final OnPlayListener listener) {
         this.livePlayer = new TXLivePlayer(context) ;
         this.listener = listener ;
@@ -31,12 +33,31 @@ public class PlayModelImpl implements PlayModel {
             public void onPlayEvent(int i, Bundle bundle) {
                 switch (i) {
                     case PlayConstants.PLAY_EVT_PLAY_BEGIN: {   //开始直播,或重新开始
+                        if (firstStartPlayFlag) {
+                            listener.onFirstStartingPlay() ;
+                            firstStartPlayFlag = false ;
+                        }
                         Log.d(TAG, "开始直播") ;
                         listener.onStartingPlay() ;
+                        break ;
                     }
                     case PlayConstants.PLAY_EVT_PLAY_LOADING: { //正在加载
                         Log.d(TAG, "正在加载") ;
                         listener.onLoading();
+                        break ;
+                    }
+                    case PlayConstants.PLAY_ERR_NET_DISCONNECT: {   //已经断开连接，需要重新进入
+                        Log.d(TAG, "已经断开连接了") ;
+                        listener.onDestroyPlayFromNetWorkFail() ;
+                        break ;
+                    }
+                    case PlayConstants.PLAY_EVT_CONNECT_SUCC: {     //已经连接到服务器
+                        Log.d(TAG, "已经连接到服务器") ;
+                        break;
+                    }
+                    case PlayConstants.PLAY_EVT_RTMP_STREAM_BEGIN: {    //已经连接到服务器,并开始拉流
+                        Log.d(TAG, "已经连接到服务器,并开始拉流") ;
+                        break ;
                     }
                 }   //switch
             }

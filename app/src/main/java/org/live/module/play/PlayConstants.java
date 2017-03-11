@@ -33,5 +33,15 @@ public class PlayConstants {
      */
     public static final int PLAY_ERR_NET_DISCONNECT = -2301 ;
 
+    /**
+     *  已经连接服务器
+     */
+    public static final int PLAY_EVT_CONNECT_SUCC = 2001 ;
+
+    /**
+     * 已经连接服务器，开始拉流（仅播放RTMP地址时会抛送，即直播的一种）
+     */
+    public static final int PLAY_EVT_RTMP_STREAM_BEGIN = 2002 ;
+
 
 }
