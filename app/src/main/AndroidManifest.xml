@@ -37,6 +37,11 @@
         </activity>
         <activity android:name=".module.publish.view.impl.PublishActivity" />
         <activity android:name=".module.play.view.impl.PlayActivity" />
+        <activity
+            android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity android:name=".module.capture.view.impl.CaptureActivity" />
+
         <service
             android:name=".module.publish.service.PublishPreferencesService"
             android:exported="false" />
