@@ -13,6 +13,7 @@ import android.widget.SimpleAdapter;
 
 import org.live.R;
 import org.live.common.constants.LiveKeyConstants;
+import org.live.module.capture.view.impl.CaptureActivity;
 import org.live.module.play.view.impl.PlayActivity;
 import org.live.module.publish.view.impl.PublishActivity;
 
@@ -123,9 +124,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
             case R.id.btn_main_record: {
                 intent.putExtra(LiveKeyConstants.Global_URL_KEY, inputPushIp.getText().toString()) ;
-                intent.setClass(this,PublishActivity.class) ;
+                intent.setClass(this,CaptureActivity.class) ;
+                break ;
             }
         }
+        startActivity(intent) ;
 
     }
 
