@@ -21,7 +21,6 @@ import org.live.module.publish.util.constant.PublishConstant;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.tencent.rtmp.TXLiveConstants.*;
 
@@ -73,6 +72,12 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
                             livePusher.setBGMVolume(0.0f); // 设置为背景静
                         }
                         break;
+                    case PublishConstant.CONFIG_TYPE_TOUCH_FOCUS:
+                        livePushConfig.setTouchFocus((boolean) config.get(PublishConstant.CONFIG_TYPE_TOUCH_FOCUS));
+                        livePusher.setConfig(livePushConfig); // 设置对焦模式
+                        break;
+                    case PublishConstant.CONFIG_TYPE_VIDEO_QUALITY:
+                        livePusher.setVideoQuality((int) config.get(PublishConstant.CONFIG_TYPE_VIDEO_QUALITY)); // 设置清晰度
                     default:
                         break;
                 }
