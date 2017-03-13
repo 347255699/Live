@@ -35,13 +35,8 @@ public class PlayPresenterImpl implements PlayPresenter, OnPlayListener {
     }
 
     @Override
-    public void pause() {
-        playModel.pause() ;
-    }
-
-    @Override
-    public void resume() {
-        playModel.resume() ;
+    public void setPlayViewOrientation(int orientation) {
+        this.playModel.setPlayViewOrientation(orientation) ;
     }
 
     @Override
@@ -62,5 +57,10 @@ public class PlayPresenterImpl implements PlayPresenter, OnPlayListener {
     @Override
     public void onDestroyPlayFromNetWorkFail() {
         playView.destroyPlayView();
+    }
+
+    @Override
+    public void onPlayEnd() {
+
     }
 }

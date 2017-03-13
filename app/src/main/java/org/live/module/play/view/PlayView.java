@@ -16,16 +16,6 @@ public interface PlayView {
     public void play(String playIp) ;
 
     /**
-     *  暂停
-     */
-    public void pause() ;
-
-    /**
-     *  继续播放
-     */
-    public void resume() ;
-
-    /**
      *  获取播放器的view
      * @return
      */
