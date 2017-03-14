@@ -20,6 +20,7 @@
 
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".common.application.CommonApplication"
@@ -31,7 +32,6 @@
         <activity android:name=".module.demo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,11 +40,22 @@
         <activity
             android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"
             android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".module.capture.view.impl.CaptureActivity" />
+        <activity android:name=".module.capture.view.impl.CaptureActivity" android:launchMode="singleTask" />
 
+        <!-- service -->
         <service
-            android:name=".module.publish.service.PublishPreferencesService"
+            android:name=".common.service.PreferencesService"
             android:exported="false" />
+        <service
+            android:name=".module.capture.service.CaptureService"
+            android:exported="false" />
+
+        <!-- testActivity -->
+        <activity
+            android:name=".module.demo.test.ServiceDemoActivity"
+            android:theme="@style/Theme.AppCompat">
+
+        </activity>
     </application>
 
 </manifest>
