@@ -26,5 +26,10 @@ public interface OnPlayListener {
      */
     public void onDestroyPlayFromNetWorkFail() ;
 
+    /**
+     *  主播自行结束直播
+     */
+    public void onPlayEnd() ;
+
 
 }

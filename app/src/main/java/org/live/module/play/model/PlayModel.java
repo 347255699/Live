@@ -18,16 +18,12 @@ public interface PlayModel {
      */
     public void stopPlay() ;
 
-    /**
-     *  暂停
-     */
-    public void pause() ;
-
-    /**
-     *  恢复播放
-     */
-    public void resume() ;
-
     public void initPlayerView(TXCloudVideoView playView) ;
+
+    /**
+     *
+     * @param orientation 1. 竖屏   2.横屏
+     */
+    public void setPlayViewOrientation(int orientation) ;
 
 }

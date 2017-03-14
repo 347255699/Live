@@ -38,4 +38,14 @@ public class PlayActivity extends FragmentActivity {
         fragmentTransaction.commit() ;
     }
 
+    /**
+     *  重新加载当前的fragment
+     */
+    public void reLoadCurrentFragment() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction() ;
+        fragmentTransaction.replace(R.id.rl_play_playerDump, new PlayFragment(), PlayFragment.TAG) ;
+        fragmentTransaction.commit() ;
+    }
+
+
 }

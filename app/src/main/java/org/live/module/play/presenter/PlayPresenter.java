@@ -16,13 +16,9 @@ public interface PlayPresenter {
     public void stopPlay() ;
 
     /**
-     *  暂停
+     *
+     * @param orientation 1. 竖屏   2.横屏
      */
-    public void pause() ;
-
-    /**
-     *  继续播放
-     */
-    public void resume() ;
+    public void setPlayViewOrientation(int orientation) ;
 
 }
