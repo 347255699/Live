@@ -7,4 +7,6 @@
     <color name="colorWall">#DCDCDC</color>
     <color name="colorDeepGray">#969696</color>
     <color name="colorBlack">#000000</color>
+    <color name="tab_title_default_color">#000000</color>
+    <color name="tab_title_click_color">#B0CF10</color>
 </resources>
