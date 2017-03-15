@@ -58,7 +58,6 @@ public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
         mLivePusher.stopScreenCapture();
         mLivePusher.setPushListener(null);
         mLivePusher.stopPusher();
-        listener.onStopCaptureAndPusher(); // 通知表示器已停止录屏和直播
     }
 
     @Override
@@ -69,7 +68,6 @@ public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
                 break;
             case PUSH_ERR_NET_DISCONNECT:
                 listener.onShowToastMsg("网络断连,且经三次抢救无效,可以放弃治疗,更多重试请自行重启推流", Toast.LENGTH_LONG); // 提示网络断开
-                listener.onStopCaptureAndPusher(); // 通知ui作出相应
                 break;
             case PUSH_WARNING_NET_BUSY:
                 listener.onShowToastMsg("网络状况不佳，可能影响你的粉丝观看哦！", Toast.LENGTH_LONG); // 提示网络不佳

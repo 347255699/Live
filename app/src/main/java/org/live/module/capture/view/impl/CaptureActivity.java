@@ -11,6 +11,7 @@ import org.live.R;
 import org.live.common.constants.LiveKeyConstants;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.BackHandledInterface;
+import org.live.module.capture.util.constant.CaptureConstant;
 import org.w3c.dom.Text;
 
 /**
@@ -27,13 +28,21 @@ public class CaptureActivity extends FragmentActivity implements BackHandledInte
         super.onCreate(savedInstanceState);
         win = this.getWindow();
         win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 保持屏幕常亮
+        this.rtmpUrl = getIntent().getStringExtra(LiveKeyConstants.Global_URL_KEY);
         // win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // 全屏显示
         requestWindowFeature(Window.FEATURE_NO_TITLE); // 隐藏标题
-        this.rtmpUrl = getIntent().getStringExtra(LiveKeyConstants.Global_URL_KEY);
-        Log.i("MainLog", rtmpUrl);
         setContentView(R.layout.activity_capture);
-
         initUIElements();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     /**
@@ -59,6 +68,7 @@ public class CaptureActivity extends FragmentActivity implements BackHandledInte
             }
         }
     }
+
     public String getRtmpUrl() {
         return this.rtmpUrl;
     }
