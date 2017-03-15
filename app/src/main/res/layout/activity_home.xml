@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
     <me.majiajie.pagerbottomtabstrip.PageBottomTabLayout
         android:id="@+id/tab_home_nav"
@@ -12,13 +13,11 @@
         android:background="@color/tab_background_color"
         />
 
-    <FrameLayout
-        android:id="@+id/fl_home_mainDump"
+    <org.live.module.home.view.custom.NoTouchViewPager
+        android:id="@+id/vp_home_mainDump"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tab_home_nav">
-
-    </FrameLayout>
+        android:layout_above="@id/tab_home_nav"/>
 
   <!--  <View
         android:layout_width="match_parent"

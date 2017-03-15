@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.live.R;
 
@@ -22,7 +23,12 @@ public class LiveFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        currentFragmentView = inflater.inflate(R.layout.fragment_live, null) ;
-        return currentFragmentView ;
+       // currentFragmentView = inflater.inflate(R.layout.fragment_live, null) ;
+      //  return currentFragmentView ;
+        TextView localTextView = new TextView(getContext());
+        localTextView.setTextSize(30.0F);
+        localTextView.setGravity(17);
+        localTextView.setText("LiveFragment");
+        return localTextView;
     }
 }
