@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
+import net.steamcrafted.materialiconlib.MaterialIconView;
+
 import org.live.R;
 
 import me.majiajie.pagerbottomtabstrip.item.BaseTabItem;
@@ -17,15 +20,15 @@ import me.majiajie.pagerbottomtabstrip.item.BaseTabItem;
 
 public class LocalIconItemView extends BaseTabItem {
 
-    private int mCheckedDrawable;   //被选中时的图标
+    private MaterialDrawableBuilder.IconValue defaultIcon ;     //默认的图标
 
-    private int mDefaultDrawable;   //默认的图标
+    private MaterialDrawableBuilder.IconValue checkedIcon ;     //被选中时的图标
 
-    private int titleDefaultColor = R.color.tab_title_default_color ;   //标题默认颜色
+    private static final int TAB_DEFAULT_COLOR = R.color.tab_default_color ;   //标题默认颜色
 
-    private int titleClickColor = R.color.tab_title_click_color ;   //选中时的标题颜色
+    private static final int TAB_CHECKED_COLOR = R.color.tab_checked_color ;   //选中时的标题颜色
 
-    private ImageView mIcon;    //图标view
+    private MaterialIconView iconView ; //图标view
 
     private TextView titleView ;    //标题view
 
@@ -35,14 +38,10 @@ public class LocalIconItemView extends BaseTabItem {
     }
 
     public LocalIconItemView(Context paramContext, AttributeSet paramAttributeSet) {
-        this(paramContext, paramAttributeSet, 0);
-    }
-
-    public LocalIconItemView(Context paramContext, AttributeSet paramAttributeSet, int iconResId) {
-        super(paramContext, paramAttributeSet, iconResId);
+        super(paramContext, paramAttributeSet) ;
         LayoutInflater.from(paramContext).inflate(R.layout.tab_item, this, true);
-        this.mIcon = ((ImageView)findViewById(R.id.iv_home_tabIcon)) ;
         this.titleView = (TextView) findViewById(R.id.tv_home_tabTitle) ;
+        this.iconView = (MaterialIconView) findViewById(R.id.iv_home_tabIcon) ;
     }
 
     public String getTitle()
@@ -52,13 +51,13 @@ public class LocalIconItemView extends BaseTabItem {
 
     /**
      *
-     * @param defaultDrawable 默认的图标资源
-     * @param checkedDrawable 选中时的图标资源
+     * @param defaultIcon 默认的图标资源
+     * @param checkedIcon 选中时的图标资源
      * @param title  标题
      */
-    public void initialize(@DrawableRes int defaultDrawable , @DrawableRes int checkedDrawable, String title) {
-        this.mDefaultDrawable = defaultDrawable ;
-        this.mCheckedDrawable = checkedDrawable ;
+    public void initialize(MaterialDrawableBuilder.IconValue defaultIcon, MaterialDrawableBuilder.IconValue checkedIcon, String title) {
+        this.defaultIcon = defaultIcon ;
+        this.checkedIcon = checkedIcon ;
         this.titleView.setText(title) ;
     }
 
@@ -67,13 +66,18 @@ public class LocalIconItemView extends BaseTabItem {
      * @param checked
      */
     public void setChecked(boolean checked) {
-        ImageView localImageView = this.mIcon;
+        MaterialIconView localImageView = this.iconView;
         if (checked) {
-            localImageView.setImageResource(this.mCheckedDrawable) ;
-            this.titleView.setTextColor(getResources().getColor(this.titleClickColor)) ;
+            localImageView.setIcon(checkedIcon) ;
+           // localImageView.setColor(TAB_CHECKED_COLOR);
+            localImageView.setColorResource(TAB_CHECKED_COLOR );
+            titleView.setTextColor(getResources().getColor(TAB_CHECKED_COLOR)) ;
+            return ;
         }
-        localImageView.setImageResource(mDefaultDrawable);
-        this.titleView.setTextColor(getResources().getColor(this.titleDefaultColor)) ;
+        localImageView.setIcon(defaultIcon) ;
+        //localImageView.setColor(TAB_DEFAULT_COLOR);
+        localImageView.setColorResource(TAB_DEFAULT_COLOR );
+        titleView.setTextColor(getResources().getColor(TAB_DEFAULT_COLOR)) ;
     }
 
     public void setHasMessage(boolean paramBoolean) {

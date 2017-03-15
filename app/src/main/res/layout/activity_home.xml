@@ -7,9 +7,9 @@
         android:id="@+id/tab_home_nav"
         android:elevation="8dp"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="#FFFFFD"
+        android:background="@color/tab_background_color"
         />
 
     <FrameLayout
