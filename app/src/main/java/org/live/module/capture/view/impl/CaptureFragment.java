@@ -17,8 +17,6 @@ import org.live.common.constants.LiveKeyConstants;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
 import org.live.module.capture.service.CaptureService;
-import org.live.module.capture.view.CaptureView;
-import org.live.module.demo.floatwindow.service.FloatWindowService;
 
 /**
  * 录屏模块
