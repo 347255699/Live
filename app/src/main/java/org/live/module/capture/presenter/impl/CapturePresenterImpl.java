@@ -25,6 +25,7 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
 
     /**
      * 开始录屏和推流
+     *
      * @param rtmpUrl
      */
     @Override
@@ -42,13 +43,7 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
 
     @Override
     public void onCapturingAndPushing() {
-        captureView.onShowCapturePauseIcon();
-    }
-
-    @Override
-    public void onStopCaptureAndPusher() {
-        captureView.onShowCapturePlayIcon();
-        captureView.onShowToastMsg("", Toast.LENGTH_SHORT);
+        captureView.onShowNotification();
     }
 
     @Override

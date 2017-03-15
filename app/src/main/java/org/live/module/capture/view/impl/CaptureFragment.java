@@ -1,5 +1,6 @@
 package org.live.module.capture.view.impl;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -12,26 +13,25 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.R;
+import org.live.common.constants.LiveKeyConstants;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
-import org.live.module.capture.presenter.CapturePresenter;
-import org.live.module.capture.presenter.impl.CapturePresenterImpl;
+import org.live.module.capture.service.CaptureService;
 import org.live.module.capture.view.CaptureView;
+import org.live.module.demo.floatwindow.service.FloatWindowService;
 
 /**
  * 录屏模块
  * Created by KAM on 2017/3/10.
  */
 
-public class CaptureFragment extends BackHandledFragment implements CaptureView {
+public class CaptureFragment extends BackHandledFragment {
+    private static final String TAG = "Global";
     private View view = null;
     private static final int ALPHHA_DEFAULT_VALUE = 50; // 默认透明度
-    private IconButtonOnClickListener listener = null;
-    private CapturePresenter presenter = null;
+    private IconButtonOnClickListener onClickListener = null;
     private String rtmpUrl = null; // 推流地址
     private CaptureActivity captureActivity = null;
-    private boolean isCapturing = false; // 录屏状态
-
     /**
      * 图标按钮
      **/
@@ -43,12 +43,27 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.view = inflater.inflate(R.layout.fragment_capture, container);
-        this.listener = new IconButtonOnClickListener();
-        this.presenter = new CapturePresenterImpl(getActivity(), this);
+        this.onClickListener = new IconButtonOnClickListener();
         this.captureActivity = (CaptureActivity) getActivity();
         this.rtmpUrl = this.captureActivity.getRtmpUrl(); // 获取推流地址
         initUIElements();
         return this.view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("Global", "on resume..");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (CaptureService.isCapturing) {
+            onShowCapturePauseIcon();
+        } else {
+            onShowCapturePlayIcon();
+        }
     }
 
     /**
@@ -65,27 +80,23 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
         cCaptureCloseButton.getBackground().setAlpha(ALPHHA_DEFAULT_VALUE);
 
         /** 监听按钮点击事件 **/
-        cCaptureStatusButton.setOnClickListener(listener);
-        cCaptureSettingsButton.setOnClickListener(listener);
-        cCaptureCloseButton.setOnClickListener(listener);
+        cCaptureStatusButton.setOnClickListener(onClickListener);
+        cCaptureSettingsButton.setOnClickListener(onClickListener);
+        cCaptureCloseButton.setOnClickListener(onClickListener);
     }
 
-    @Override
-    public void onShowCapturePauseIcon() {
-        isCapturing = true;
+    private void onShowCapturePauseIcon() {
         cCaptureStatusButton.setIcon(MaterialDrawableBuilder.IconValue.PAUSE);
         captureActivity.getcCapturingStatusTextView().setText("正在录屏直播....");
     }
 
-    @Override
-    public void onShowCapturePlayIcon() {
-        isCapturing = false;
+    private void onShowCapturePlayIcon() {
         cCaptureStatusButton.setIcon(MaterialDrawableBuilder.IconValue.PLAY);
         captureActivity.getcCapturingStatusTextView().setText("录屏直播未开始...");
     }
 
-    @Override
-    public void onShowToastMsg(String msg, int lengthType) {
+
+    private void onShowToastMsg(String msg, int lengthType) {
         Toast.makeText(getActivity(), msg, lengthType).show();
     }
 
@@ -95,13 +106,20 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
     private class IconButtonOnClickListener extends NoDoubleClickListener {
         @Override
         protected void onNoDoubleClick(View v) {
+
             switch (v.getId()) {
-                case R.id.btn_capture_status: // 开始录屏
-                    if (isCapturing) {
-                        presenter.stopScreenCaptureAndPublish();
+                case R.id.btn_capture_status:
+                    Log.i(TAG, "The start/stop service was clicked.");
+                    Intent intent = new Intent(getActivity(), CaptureService.class);
+                    if (!CaptureService.isCapturing) {
+                        if (null != rtmpUrl) {
+                            intent.putExtra(LiveKeyConstants.Global_URL_KEY, rtmpUrl);
+                        }
+                        getActivity().startService(intent); // 开启录屏服务
+                        onShowCapturePauseIcon();
                     } else {
-                        presenter.startScreenCaptureAndPublish(rtmpUrl);
-                        Log.i("MainLog", rtmpUrl);
+                        getActivity().stopService(intent); // 关闭录屏服务
+                        onShowCapturePlayIcon();
                     }
                     break;
                 case R.id.btn_capture_settings: // 设置录屏参数

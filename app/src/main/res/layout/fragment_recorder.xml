@@ -34,6 +34,7 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="play"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
@@ -52,6 +53,7 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="camera_party_mode"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
@@ -71,6 +73,7 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="auto_fix"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -89,6 +92,7 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="flash"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -108,6 +112,7 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="volume_high"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
@@ -127,6 +132,7 @@
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="settings"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -134,6 +140,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -144,6 +151,7 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="close"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>

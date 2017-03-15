@@ -5,11 +5,5 @@
     <dimen name="custom_activity_vertical_margin">8dp</dimen>
     <dimen name="icon_recorder_size">25dp</dimen>
     <dimen name="icon_marign_bottom">10dp</dimen>
-
-    <dimen name="layout_child_offset_path">84dp</dimen>
-    <dimen name="layout_radius_path">110dp</dimen>
-
-    <dimen name="item_font_size_path">18sp</dimen>
-    <dimen name="item_circle_size_path">36dp</dimen>
-
+    <dimen name="icon_capture_tab_size">20dp</dimen>
 </resources>
