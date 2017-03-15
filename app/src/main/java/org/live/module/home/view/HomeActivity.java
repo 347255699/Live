@@ -1,17 +1,17 @@
 package org.live.module.home.view;
 
-import android.app.Fragment;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Window;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import org.live.R;
-import org.live.module.home.view.custom.FragmentPagerAdapter;
 import org.live.module.home.view.custom.LocalIconItemView;
 
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class HomeActivity extends FragmentActivity {
         fragmentList.add(meFragment) ;
 
         //创建FragmentPagerAdapter
-        FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(this.getFragmentManager()) {
+        FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(this.getSupportFragmentManager()) {
 
             @Override
             public int getCount() {
