@@ -9,4 +9,12 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
 
+    <!-- 这个系统的主题颜色 -->
+    <color name="themeColor">#2CE1B3</color>
+
+    <!-- 主页tab相关的颜色-->
+    <color name="tab_default_color">#969696</color>
+    <color name="tab_checked_color">#2CE1B3</color>
+    <color name="tab_background_color">#FFFFFD</color>
+
 </resources>
