@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.tencent.rtmp.TXLiveConstants;
 
-import org.live.module.publish.service.PublishPreferencesService;
+import org.live.common.service.PreferencesService;
 import org.live.module.publish.util.constant.PublishConstant;
 
 import java.util.Map;
@@ -73,7 +73,7 @@ public class CommonApplication extends Application {
                     bundle.putBoolean(name, (Boolean) obj);
                 }
             } // 封装参数
-            Intent intent = new Intent(this, PublishPreferencesService.class);
+            Intent intent = new Intent(this, PreferencesService.class);
             intent.putExtras(bundle);
             startService(intent); // 开启持久化服务类
         }
