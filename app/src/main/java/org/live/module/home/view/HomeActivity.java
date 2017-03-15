@@ -1,16 +1,21 @@
 package org.live.module.home.view;
 
+import android.app.Fragment;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
+
 import android.view.Window;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import org.live.R;
+import org.live.module.home.view.custom.FragmentPagerAdapter;
 import org.live.module.home.view.custom.LocalIconItemView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageBottomTabLayout;
@@ -24,7 +29,9 @@ import me.majiajie.pagerbottomtabstrip.item.BaseTabItem;
 public class HomeActivity extends FragmentActivity {
 
 
-    public static final int DEFAULT_COLOR = 0xFFFF00;
+    private List<Fragment> fragmentList = null ;    // fragment的集合，用于保存fragment
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,7 @@ public class HomeActivity extends FragmentActivity {
                 .addItem(this.newTabItem(MaterialDrawableBuilder.IconValue.ACCOUNT_OUTLINE, MaterialDrawableBuilder.IconValue.ACCOUNT, "我的")) ;
 
         NavigationController navigationController = builder.build() ;
+        //navigationController.setupWithViewPager(initFragmentPageAdapter());
         navigationController.showBottomLayout();
     }
     /**
@@ -60,6 +68,38 @@ public class HomeActivity extends FragmentActivity {
         LocalIconItemView localOnlyIconItemView = new LocalIconItemView(this);
         localOnlyIconItemView.initialize(defaultIcon, checkedIcon, title) ;
         return localOnlyIconItemView;
+    }
+
+    /**
+     *  初始化fragmentPageAdapter，并交给底部导航栏的控制器
+     */
+    public FragmentPagerAdapter initFragmentPageAdapter() {
+
+        fragmentList = new ArrayList<>(4) ;
+        HomeFragment homeFragment = new HomeFragment() ;
+        CategoryFragment categoryFragment = new CategoryFragment() ;
+        LiveFragment liveFragment = new LiveFragment() ;
+        MeFragment meFragment = new MeFragment() ;
+        fragmentList.add(homeFragment) ;
+        fragmentList.add(categoryFragment) ;
+        fragmentList.add(liveFragment) ;
+        fragmentList.add(meFragment) ;
+
+        //创建FragmentPagerAdapter
+        FragmentPagerAdapter fragmentPagerAdapter = new FragmentPagerAdapter(this.getFragmentManager()) {
+
+            @Override
+            public int getCount() {
+                return fragmentList.size() ;
+            }
+
+            @Override
+            public Fragment getItem(int position) {
+                return fragmentList.get(position);
+            }
+        } ;
+        return fragmentPagerAdapter ;
+
     }
 
 }
