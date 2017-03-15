@@ -42,6 +42,8 @@
             android:theme="@android:style/Theme.Translucent" />
         <activity android:name=".module.capture.view.impl.CaptureActivity" android:launchMode="singleTask" />
 
+        <activity android:name=".module.home.view.HomeActivity" />
+
         <!-- service -->
         <service
             android:name=".common.service.PreferencesService"
