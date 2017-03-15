@@ -7,4 +7,7 @@
     <color name="colorWall">#DCDCDC</color>
     <color name="colorDeepGray">#969696</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorPathPrimary">#E62F17</color>
+
 </resources>
