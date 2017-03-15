@@ -28,6 +28,7 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="play"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
@@ -46,6 +47,7 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="settings"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
@@ -64,6 +66,7 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="close"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>

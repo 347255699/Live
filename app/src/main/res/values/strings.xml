@@ -8,5 +8,6 @@
     <string name="touch_focus">手动对焦</string>
     <string name="definition">清晰度</string>
     <string name="capturing_status">录屏直播未开始...</string>
+    <string name="capturing_status_going">正在录屏直播...</string>
     <string name="capture_hint">温馨提示：录屏直播开始后，请点击home键退出当前界面，进行其他操作</string>
 </resources>
