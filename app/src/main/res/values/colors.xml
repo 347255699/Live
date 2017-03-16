@@ -8,9 +8,11 @@
     <color name="colorDeepGray">#969696</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
-
+    <color name="colorShallowBlack">#252121</color><!-- 浅黑 -->
     <!-- 这个系统的主题颜色 -->
     <color name="themeColor">#2CE1B3</color>
+    <!-- 比themeColor深一点点 -->
+    <color name="themeColor1">#1FC198</color>
 
     <!-- 主页tab相关的颜色-->
     <color name="tab_default_color">#969696</color>

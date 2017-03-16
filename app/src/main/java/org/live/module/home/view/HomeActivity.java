@@ -11,7 +11,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Window;
+import android.widget.Toast;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
@@ -71,7 +73,6 @@ public class HomeActivity extends FragmentActivity {
             @Override
             public void onSelected(int index, int old) {
                 Log.d(TAG, "checked："+index+", old: "+ old) ;
-                viewPager.setCurrentItem(index, true) ;
             }
 
             @Override
@@ -114,6 +115,24 @@ public class HomeActivity extends FragmentActivity {
         return new CustomFragmentPagerAdapter(getSupportFragmentManager(), fragmentList) ;
     }
 
+    private long lastExitTime = 0 ; //上次点击返回键的按钮
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if(System.currentTimeMillis() - lastExitTime > 2000) {
+                Toast.makeText(this, "再按一次退出应用",Toast.LENGTH_SHORT).show();
+                lastExitTime = System.currentTimeMillis() ;
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true ;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+
     /**
      * 自定义FragmentPagerAdapter
      */
@@ -124,13 +143,10 @@ public class HomeActivity extends FragmentActivity {
         public CustomFragmentPagerAdapter(FragmentManager fragmentManager, List<Fragment> fragmentList) {
             super(fragmentManager) ;
             this.fragmentList = fragmentList ;
-
         }
 
         @Override
         public Fragment getItem(int position) {
-
-            Log.d(TAG, "执行了getItem") ;
             return fragmentList.get(position);
         }
 

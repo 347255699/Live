@@ -1,9 +1,10 @@
 package org.live.module.play.view.impl;
 
-import android.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -33,7 +34,7 @@ public class PlayActivity extends FragmentActivity {
      *  设置默认的fragment
      */
     public void setFragmentDefault() {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction() ;
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction() ;
         fragmentTransaction.replace(R.id.rl_play_playerDump, new PlayFragment(), PlayFragment.TAG) ;
         fragmentTransaction.commit() ;
     }
@@ -42,7 +43,7 @@ public class PlayActivity extends FragmentActivity {
      *  重新加载当前的fragment
      */
     public void reLoadCurrentFragment() {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction() ;
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction() ;
         fragmentTransaction.replace(R.id.rl_play_playerDump, new PlayFragment(), PlayFragment.TAG) ;
         fragmentTransaction.commit() ;
     }
