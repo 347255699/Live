@@ -45,7 +45,8 @@
             android:background="@drawable/round_backgroud"
             android:padding="5dp"
             android:scaleType="center"
-            app:materialIcon="message_text"
+            app:materialIcon="comment_text_outline"
+            app:materialIconColor="@color/colorWhite"
             app:materialIconSize="@dimen/icon_recorder_size"
             />
 
@@ -58,6 +59,7 @@
             android:padding="5dp"
             android:scaleType="center"
             app:materialIcon="close"
+            app:materialIconColor="@color/colorWhite"
             app:materialIconSize="@dimen/icon_recorder_size"
             android:layout_alignParentRight="true"
             />
