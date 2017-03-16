@@ -52,12 +52,6 @@
             android:name=".module.capture.service.CaptureService"
             android:exported="false" />
 
-        <!-- testActivity -->
-        <activity
-            android:name=".module.demo.test.ServiceDemoActivity"
-            android:theme="@style/Theme.AppCompat">
-
-        </activity>
     </application>
 
 </manifest>

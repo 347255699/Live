@@ -1,12 +1,25 @@
 package org.live.module.capture.listener;
 
 /**
- * 录屏模型层事件监听(驱动view层ui做出相应的响应)
+ * 录屏模型层事件监听(驱动presenter层做出相应的响应)
  * Created by KAM on 2017/3/10.
  */
 
 public interface OnCaptureModelEventListener {
-    public void onCapturingAndPushing(); // 通知view当前正在录屏直播
+    /**
+     * 通知当前正在录屏和直播
+     */
+    public void onCapturingAndPushing();
 
-    public void onShowToastMsg(String msg, int lengthType); // 通知view显示提示信息
+    /**
+     * 通知当前录屏直播关闭
+     *
+     * @param isNormal true|false 是否正常关闭
+     */
+    public void onStopCaptureAndPusher(boolean isNormal);
+
+    /**
+     * 通知当前网络质量很差
+     */
+    public void onNetBusy();
 }

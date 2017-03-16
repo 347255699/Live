@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.tencent.rtmp.ITXLivePushListener;
 import com.tencent.rtmp.TXLivePushConfig;
@@ -26,16 +25,16 @@ import static com.tencent.rtmp.TXLiveConstants.PUSH_WARNING_NET_BUSY;
 public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
     private TXLivePusher mLivePusher = null;
     private TXLivePushConfig mLivePushConfig = null;
-    private OnCaptureModelEventListener listener = null;
+    private OnCaptureModelEventListener eventListener = null;
 
-    public CaptureModelImpl(Context context, OnCaptureModelEventListener listener) {
-        this.mLivePusher = new TXLivePusher(context);
-        this.mLivePushConfig = new TXLivePushConfig();
-        this.listener = listener;
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.pause_publish); // 设置等待图片
-        this.mLivePushConfig.setPauseImg(bitmap);
-        this.mLivePusher.setConfig(mLivePushConfig);
-        this.mLivePusher.setPushListener(this); // 设置监听
+    public CaptureModelImpl(Context context, OnCaptureModelEventListener eventListener) {
+        mLivePusher = new TXLivePusher(context);
+        mLivePushConfig = new TXLivePushConfig();
+        this.eventListener = eventListener;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.pause_publish); // 设置播放端等待时展示用的图片
+        mLivePushConfig.setPauseImg(bitmap);
+        mLivePusher.setConfig(mLivePushConfig);
+        mLivePusher.setPushListener(this); // 设置监听
     }
 
     /**
@@ -47,7 +46,6 @@ public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
     public void startScreenCaptureAndPublish(String rtmpUrl) {
         mLivePusher.startPusher(rtmpUrl);
         mLivePusher.startScreenCapture();
-        listener.onCapturingAndPushing(); // 通知表示器正在录屏直播
     }
 
     /**
@@ -58,19 +56,20 @@ public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
         mLivePusher.stopScreenCapture();
         mLivePusher.setPushListener(null);
         mLivePusher.stopPusher();
+        eventListener.onStopCaptureAndPusher(true); // 通知表示器已经正常关闭录屏直播
     }
 
     @Override
     public void onPushEvent(int i, Bundle bundle) {
         switch (i) {
             case PUSH_EVT_PUSH_BEGIN:
-                listener.onShowToastMsg("开始录屏直播", Toast.LENGTH_LONG); // 提示直播准备开始信息
+                eventListener.onCapturingAndPushing(); // 通知表示器正在录屏直播
                 break;
             case PUSH_ERR_NET_DISCONNECT:
-                listener.onShowToastMsg("网络断连,且经三次抢救无效,可以放弃治疗,更多重试请自行重启推流", Toast.LENGTH_LONG); // 提示网络断开
+                eventListener.onStopCaptureAndPusher(false); // 通知表示器意外关闭录屏直播，网络断开
                 break;
             case PUSH_WARNING_NET_BUSY:
-                listener.onShowToastMsg("网络状况不佳，可能影响你的粉丝观看哦！", Toast.LENGTH_LONG); // 提示网络不佳
+                eventListener.onNetBusy(); // 通知表示器当前网络差
                 break;
             default:
                 break;

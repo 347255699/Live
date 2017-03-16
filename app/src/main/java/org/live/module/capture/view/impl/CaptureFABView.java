@@ -1,23 +1,16 @@
 package org.live.module.capture.view.impl;
 
-
-import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-
-import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.R;
-import org.live.module.capture.service.CaptureService;
+import org.live.common.listener.NoDoubleClickListener;
 import org.live.module.capture.view.CaptureView;
 
 import java.lang.reflect.Field;
@@ -28,14 +21,9 @@ import java.lang.reflect.Field;
  */
 
 public class CaptureFABView extends LinearLayout implements CaptureView {
-    private CaptureService.FABOnClickListener clickListener = null;
-    private View view = null;
-    private Context context = null;
-    private MaterialDrawableBuilder.IconValue[] iconValues = {
-            MaterialDrawableBuilder.IconValue.HOME, // 主页图标
-            MaterialDrawableBuilder.IconValue.CAMERA_FRONT, // 前置摄像头
-            MaterialDrawableBuilder.IconValue.CLOSE // 关闭图标
-    };
+    private NoDoubleClickListener onClickListener;
+    private View view;
+    private Context context;
 
     /**
      * 当前浮窗的宽度
@@ -63,10 +51,6 @@ public class CaptureFABView extends LinearLayout implements CaptureView {
     private WindowManager windowManager;
 
     /**
-     * 小悬浮窗的参数
-     */
-    private WindowManager.LayoutParams cParams;
-    /**
      * 记录当前手指位置在屏幕上的横坐标值
      */
     private float xInScreen;
@@ -86,12 +70,12 @@ public class CaptureFABView extends LinearLayout implements CaptureView {
      */
     private float yInView;
 
-    public CaptureFABView(Context context, CaptureService.FABOnClickListener clickListener) {
+    public CaptureFABView(Context context, NoDoubleClickListener onClickListener) {
         super(context);
         this.context = context;
         view = LayoutInflater.from(context).inflate(R.layout.fab_capture, this); // 填充布局
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        this.clickListener = clickListener;
+        this.onClickListener = onClickListener;
         initUIElements();
     }
 
@@ -137,7 +121,7 @@ public class CaptureFABView extends LinearLayout implements CaptureView {
             View childView = thisLinearLayout.getChildAt(i);
             if (childView instanceof MaterialIconView) {
                 childView.setAlpha(0.7f);
-                childView.setOnClickListener(clickListener);
+                childView.setOnClickListener(onClickListener);
             }
         }
         viewWidth = thisView.getLayoutParams().width;
@@ -151,19 +135,6 @@ public class CaptureFABView extends LinearLayout implements CaptureView {
      */
     public void setCaptureFABViewParams(WindowManager.LayoutParams captureFABViewParams) {
         this.captureFABViewParams = captureFABViewParams;
-    }
-
-    /**
-     * 显示通知栏
-     */
-    @Override
-    public void onShowNotification() {
-        CaptureService.cNm.notify(CaptureService.NOTIFICATION_ID, CaptureService.cN);
-    }
-
-    @Override
-    public void onShowToastMsg(String msg, int lengthType) {
-        Toast.makeText(context, msg, lengthType).show();
     }
 
     /**
@@ -184,18 +155,6 @@ public class CaptureFABView extends LinearLayout implements CaptureView {
             }
         }
         return statusBarHeight;
-    }
-
-    /**
-     * 创建图标
-     */
-    private Drawable createIcon(MaterialDrawableBuilder.IconValue iconValue) {
-        Drawable iconDrawable = MaterialDrawableBuilder.with(context)
-                .setIcon(iconValue)
-                .setColor(Color.BLACK)
-                .setToActionbarSize()
-                .build();
-        return iconDrawable;
     }
 
 }

@@ -5,8 +5,10 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+import org.live.common.listener.NoDoubleClickListener;
 import org.live.module.capture.service.CaptureService;
 import org.live.module.capture.view.impl.CaptureFABView;
+import org.live.module.capture.view.impl.CaptureFragment;
 
 /**
  * 系统WindowManager工具类
@@ -33,8 +35,9 @@ public class WindowManagerUtil {
      * 创建录屏悬浮窗视图，初始位置为屏幕的右部中间位置。
      *
      * @param context 必须为应用程序的Context.
+     * @param fabOnClickListener
      */
-    public static void createCaptureFABView(Context context, CaptureService.FABOnClickListener fabOnClickListener) {
+    public static void createCaptureFABView(Context context, NoDoubleClickListener fabOnClickListener) {
         WindowManager windowManager = getWindowManager(context);
         int screenWidth = windowManager.getDefaultDisplay().getWidth();
         int screenHeight = windowManager.getDefaultDisplay().getHeight();

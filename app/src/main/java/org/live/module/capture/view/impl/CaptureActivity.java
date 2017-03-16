@@ -2,7 +2,6 @@ package org.live.module.capture.view.impl;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -11,8 +10,6 @@ import org.live.R;
 import org.live.common.constants.LiveKeyConstants;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.BackHandledInterface;
-import org.live.module.capture.util.constant.CaptureConstant;
-import org.w3c.dom.Text;
 
 /**
  * 录屏主活动窗口
@@ -33,16 +30,6 @@ public class CaptureActivity extends FragmentActivity implements BackHandledInte
         requestWindowFeature(Window.FEATURE_NO_TITLE); // 隐藏标题
         setContentView(R.layout.activity_capture);
         initUIElements();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     /**

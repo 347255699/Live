@@ -6,20 +6,19 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-import android.view.View;
 
 import org.live.R;
 import org.live.common.constants.LiveKeyConstants;
-import org.live.common.listener.NoDoubleClickListener;
+import org.live.module.capture.listener.OnCaptureServiceStatusListener;
 import org.live.module.capture.presenter.CapturePresenter;
 import org.live.module.capture.presenter.impl.CapturePresenterImpl;
-import org.live.module.capture.util.WindowManagerUtil;
 import org.live.module.capture.util.constant.CaptureConstant;
 import org.live.module.capture.view.impl.CaptureActivity;
 
@@ -32,43 +31,27 @@ public class CaptureService extends Service {
     private static final String TAG = "Global";
     public static final int NOTIFICATION_ID = "CaptureService".hashCode(); // 录屏通知栏唯一标识
     public static boolean isCapturing = false; // 是否在录屏直播
-    public static NotificationManager cNm = null; // 通知栏管理
-    public static Notification cN = null; // 录屏通知栏
-    private String rtmpUrl = null;
-    private CapturePresenter presenter = null;
+    public NotificationManager cNm; // 通知栏管理
+    public Notification cN; // 录屏通知栏
+    private String rtmpUrl = null; // 推流地址
+    private CapturePresenter presenter;
+    private OnCaptureServiceStatusListener serviceStatusListener; // 服务停止回掉接口
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        this.rtmpUrl = intent.getStringExtra(LiveKeyConstants.Global_URL_KEY);
-        this.isCapturing = true;
+        rtmpUrl = intent.getStringExtra(LiveKeyConstants.Global_URL_KEY); // 获取推流地址
         initNotification(); // 初始化通知栏
-
-        handler.post(new CaptureThread(this)); // 启动录屏服务
-        //cNm.notify(NOTIFICATION_ID, cN); // 发送服务启动通知
-        return super.onStartCommand(intent, flags, startId);
+        captureHandler.post(new CaptureThread(this)); // 开始录屏直播
+        return new CaptureBinder();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "CaptureService was destroyed.");
-        cNm.cancel(NOTIFICATION_ID); // 取消通知
-        CaptureService.isCapturing = false;
-        WindowManagerUtil.removeCaptureFABView(getApplicationContext()); // 清除浮窗
+        CaptureService.isCapturing = false; // 置换录屏状态
         presenter.stopScreenCaptureAndPublish(); // 关闭录屏直播
         /** 释放先关资源 **/
-        cNm = null;
-        cN = null;
-        presenter = null;
-
-        startActivity(new Intent(this, CaptureActivity.class)); // 返回主页
-
+        super.onDestroy();
     }
 
     /**
@@ -105,24 +88,33 @@ public class CaptureService extends Service {
         return pendingIntent;
     }
 
+
     /**
-     * 处理浮窗按钮事件
+     * 处理录屏直播服务状态信息
      */
-    private Handler handler = new Handler() {
+    private Handler captureHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.arg1) {
-                case CaptureConstant.CAPTURE_FAB_EVENT_CLOSE_SERVICE:
-
-                    stopSelf(); // 关闭服务
+                case CaptureConstant.CAPTURE_STATUS_SERVICE_CLOSE_NORMAL:
+                    serviceStatusListener.onServiceStop(true); // 通知activity录屏服务已关闭
+                    cNm.cancel(NOTIFICATION_ID); // 清除通知
+                    Log.i(TAG, "service close normal");
                     break;
-                case CaptureConstant.CAPTURE_FAB_EVENT_CAMERA_FRONT:
-                    Log.i(TAG, "启动前置摄像头...");
+                case CaptureConstant.CAPTURE_STATUS_SERVICE_START_NORMAL:
+                    isCapturing = true; // 置换录屏状态
+                    serviceStatusListener.onServiceStart(); // 通知activity录屏已开始
+                    cNm.notify(NOTIFICATION_ID, cN); // 发送通知
+                    Log.i(TAG, "service start");
                     break;
-                case CaptureConstant.CAPTURE_FAB_EVENT_TO_HOME:
-                    Log.i(TAG, "跳转至主页...");
+                case CaptureConstant.CAPTURE_STATUS_SERVICE_NET_BUSY:
+                    serviceStatusListener.onServiceNetBusy(); // 通知activity网络质量差
+                    Log.i(TAG, "net busy");
                     break;
-                case CaptureConstant.CAPTURE_FAB_EVENT_LOCK_PRIVATE:
-                    Log.i(TAG, "开启隐私模式...");
+                case CaptureConstant.CAPTURE_STATYS_SERVICE_CLOSE_ABNORMALITY:
+                    serviceStatusListener.onServiceStop(false); // 通知activity网络断开
+                    cNm.cancel(NOTIFICATION_ID); // 清除通知
+                    Log.i(TAG, "service close abnormality");
+                    break;
                 default:
                     break;
             }
@@ -141,37 +133,31 @@ public class CaptureService extends Service {
 
         @Override
         public void run() {
-            Message msg = handler.obtainMessage();
-            WindowManagerUtil.createCaptureFABView(getApplicationContext(), new FABOnClickListener()); // 创建浮窗
-            presenter = new CapturePresenterImpl(context, WindowManagerUtil.captureFABView);
+            presenter = new CapturePresenterImpl(context, captureHandler);
             presenter.startScreenCaptureAndPublish(rtmpUrl); // 开始录屏直播
         }
     }
 
     /**
-     * 防双击点击事件监听
+     * 录屏Binder
      */
-    public class FABOnClickListener extends NoDoubleClickListener {
-        @Override
-        protected void onNoDoubleClick(View v) {
-            Message msg = handler.obtainMessage();
-            switch (v.getId()) {
-                case R.id.fab_capture_home:
-                    msg.arg1 = CaptureConstant.CAPTURE_FAB_EVENT_TO_HOME;
-                    break;
-                case R.id.fab_capture_lock:
-                    msg.arg1 = CaptureConstant.CAPTURE_FAB_EVENT_LOCK_PRIVATE;
-                    break;
-                case R.id.fab_capture_close:
-                    msg.arg1 = CaptureConstant.CAPTURE_FAB_EVENT_CLOSE_SERVICE;
-                    break;
-                case R.id.fab_capture_camera_front:
-                    msg.arg1 = CaptureConstant.CAPTURE_FAB_EVENT_CAMERA_FRONT;
-                    break;
-                default:
-                    break;
-            }
-            handler.sendMessage(msg);
+    public class CaptureBinder extends Binder {
+        /**
+         * 获取当前Service的实例
+         *
+         * @return
+         */
+        public CaptureService getCaptureService() {
+            return CaptureService.this;
         }
+    }
+
+    /**
+     * 设置服务状态回掉
+     *
+     * @param serviceStatusListener
+     */
+    public void setServiceStatusListener(OnCaptureServiceStatusListener serviceStatusListener) {
+        this.serviceStatusListener = serviceStatusListener;
     }
 }

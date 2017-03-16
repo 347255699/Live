@@ -7,7 +7,14 @@ package org.live.module.capture.model;
 
 public interface CaptureModel {
 
-    public void startScreenCaptureAndPublish(String rtmpUrl); // 开始录屏和推流
+    /**
+     * 开始录屏和直播
+     * @param rtmpUrl 推流地址
+     */
+    public void startScreenCaptureAndPublish(String rtmpUrl);
 
-    public void stopScreenCaptureAndPublish(); // 停止录屏和推流
+    /**
+     * 停止录屏和直播
+     */
+    public void stopScreenCaptureAndPublish();
 }
