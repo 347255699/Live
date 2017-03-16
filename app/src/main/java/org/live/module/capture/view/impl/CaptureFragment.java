@@ -37,12 +37,14 @@ public class CaptureFragment extends BackHandledFragment {
     private String rtmpUrl; // 推流地址
     private CaptureActivity captureActivity;
     private static boolean isPrivateMode = false; // 是否是隐私模式
+    private static boolean isPreviewing = false; // 是否在预览前置摄像头
     /**
      * 图标按钮
      **/
     private MaterialIconView cCaptureStatusButton = null; // 录屏状态转换按钮
     private MaterialIconView cCaptureSettingsButton = null; // 录屏参数设置按钮
     private MaterialIconView cCaptureCloseButton = null; // 录屏关闭按钮
+    private boolean isCapturing = false;
 
     @Nullable
     @Override
@@ -53,6 +55,18 @@ public class CaptureFragment extends BackHandledFragment {
         rtmpUrl = captureActivity.getRtmpUrl(); // 获取推流地址
         initUIElements();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        if (CaptureService.isCapturing != isCapturing) {
+            if (CaptureService.isCapturing) {
+                showCapturePauseView();
+            } else {
+                showCapturePlayView();
+            }
+        }
+        super.onStart();
     }
 
     /**
@@ -78,6 +92,7 @@ public class CaptureFragment extends BackHandledFragment {
      * 更改控件状态为录播状态
      */
     private void showCapturePauseView() {
+        isCapturing = true;
         cCaptureStatusButton.setIcon(MaterialDrawableBuilder.IconValue.PAUSE);
         captureActivity.getcCapturingStatusTextView().setText("正在录屏直播....");
     }
@@ -86,6 +101,7 @@ public class CaptureFragment extends BackHandledFragment {
      * 更改控件状态为未录播状态
      */
     private void showCapturePlayView() {
+        isCapturing = false;
         cCaptureStatusButton.setIcon(MaterialDrawableBuilder.IconValue.PLAY);
         captureActivity.getcCapturingStatusTextView().setText("录屏直播未开始...");
     }
@@ -195,9 +211,6 @@ public class CaptureFragment extends BackHandledFragment {
                                     } else {
                                         captureService.triggerPrivateMode(false);
                                     }
-                                    break;
-                                case R.id.fab_capture_close:
-                                    Log.i(TAG, "close");
                                     break;
                                 case R.id.fab_capture_camera_front:
                                     Log.i(TAG, "camera_front");

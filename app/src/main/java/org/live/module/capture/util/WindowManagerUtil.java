@@ -25,6 +25,16 @@ public class WindowManagerUtil {
     private static WindowManager.LayoutParams captureFABViewParams = null;
 
     /**
+     * 录屏前置摄像头预览视图
+     */
+    //public static CaptureCameraPreviewView captureCameraPreviewView = null;
+
+    /**
+     * 录屏前置摄像头预览视图参数
+     */
+    //private static WindowManager.LayoutParams captureCameraPreviewViewParams = null;
+
+    /**
      * 用于控制在屏幕上添加或移除悬浮窗
      */
     private static WindowManager windowManager = null;
@@ -32,7 +42,7 @@ public class WindowManagerUtil {
     /**
      * 创建录屏悬浮窗视图，初始位置为屏幕的右部中间位置。
      *
-     * @param context 必须为应用程序的Context.
+     * @param context            必须为应用程序的Context.
      * @param fabOnClickListener
      */
     public static void createCaptureFABView(Context context, NoDoubleClickListener fabOnClickListener) {
@@ -50,7 +60,7 @@ public class WindowManagerUtil {
                 captureFABViewParams.gravity = Gravity.LEFT | Gravity.TOP;
                 captureFABViewParams.width = CaptureFABView.viewWidth;
                 captureFABViewParams.height = CaptureFABView.viewHeight;
-                captureFABViewParams.x = screenWidth;
+                captureFABViewParams.x = 0;
                 captureFABViewParams.y = screenHeight / 2;
             }
             captureFABView.setCaptureFABViewParams(captureFABViewParams);
@@ -83,4 +93,43 @@ public class WindowManagerUtil {
             captureFABView = null;
         }
     }
+
+    /**
+     * 创建前置摄像头预览视图
+     */
+/*
+    public static void createCaptureCameraPreviewView(Context context) {
+        WindowManager windowManager = getWindowManager(context);
+        int screenWidth = windowManager.getDefaultDisplay().getWidth();
+        int screenHeight = windowManager.getDefaultDisplay().getHeight();
+        if (captureCameraPreviewView == null) {
+            captureCameraPreviewView = new CaptureCameraPreviewView(context);
+            if (captureCameraPreviewViewParams == null) {
+                captureCameraPreviewViewParams = new WindowManager.LayoutParams();
+                captureCameraPreviewViewParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+                captureCameraPreviewViewParams.format = PixelFormat.RGBA_8888;
+                captureCameraPreviewViewParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+                captureCameraPreviewViewParams.gravity = Gravity.LEFT | Gravity.TOP;
+                captureCameraPreviewViewParams.width = CaptureCameraPreviewView.viewWidth;
+                captureCameraPreviewViewParams.height = CaptureCameraPreviewView.viewHeight;
+                captureCameraPreviewViewParams.x = 0;
+                captureCameraPreviewViewParams.y = 0;
+            }
+            captureCameraPreviewView.setCaptureCameraPreviewViewParams(captureCameraPreviewViewParams);
+            windowManager.addView(captureCameraPreviewView, captureCameraPreviewViewParams); // 创建浮窗
+        }
+    }
+*/
+
+    /**
+     * 移除前置摄像头预览视图
+     */
+   /* public static void removeCaptureCameraPreviewView(Context context) {
+        if (captureCameraPreviewView != null) {
+            WindowManager windowManager = getWindowManager(context);
+            windowManager.removeView(captureCameraPreviewView);
+            captureCameraPreviewView = null;
+        }
+    }*/
 }

@@ -40,7 +40,9 @@
         <activity
             android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"
             android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".module.capture.view.impl.CaptureActivity" android:launchMode="singleTask" />
+        <activity
+            android:name=".module.capture.view.impl.CaptureActivity"
+            android:launchMode="singleTask" />
 
         <activity android:name=".module.home.view.HomeActivity" />
 
@@ -48,10 +50,6 @@
         <service
             android:name=".common.service.PreferencesService"
             android:exported="false" />
-        <service
-            android:name=".module.capture.service.CaptureService"
-            android:exported="false" />
-
     </application>
 
 </manifest>
