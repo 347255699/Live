@@ -17,4 +17,9 @@ public interface CaptureModel {
      * 停止录屏和直播
      */
     public void stopScreenCaptureAndPublish();
+
+    /**
+     * 设置隐私模式
+     */
+    public void triggerPrivateMode(boolean isPrivateMode);
 }

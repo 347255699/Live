@@ -55,6 +55,13 @@ public class CaptureService extends Service {
     }
 
     /**
+     * 设置隐私模式
+     */
+    public void triggerPrivateMode(boolean isPrivateMode) {
+        presenter.triggerPrivateMode(isPrivateMode);
+    }
+
+    /**
      * 初始化通知栏
      */
     private void initNotification() {
@@ -88,7 +95,6 @@ public class CaptureService extends Service {
         return pendingIntent;
     }
 
-
     /**
      * 处理录屏直播服务状态信息
      */
@@ -114,6 +120,12 @@ public class CaptureService extends Service {
                     serviceStatusListener.onServiceStop(false); // 通知activity网络断开
                     cNm.cancel(NOTIFICATION_ID); // 清除通知
                     Log.i(TAG, "service close abnormality");
+                    break;
+                case CaptureConstant.CAPTURE_SERVICE_IS_PRIVATE_MODE_FALSE:
+                    serviceStatusListener.onPrivateModeStatus(false);
+                    break;
+                case CaptureConstant.CAPTURE_SERVICE_IS_PRIVATE_MODE_TRUE:
+                    serviceStatusListener.onPrivateModeStatus(true);
                     break;
                 default:
                     break;

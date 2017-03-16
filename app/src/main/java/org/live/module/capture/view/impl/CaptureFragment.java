@@ -36,6 +36,7 @@ public class CaptureFragment extends BackHandledFragment {
     private IconButtonOnClickListener onClickListener;
     private String rtmpUrl; // 推流地址
     private CaptureActivity captureActivity;
+    private static boolean isPrivateMode = false; // 是否是隐私模式
     /**
      * 图标按钮
      **/
@@ -108,6 +109,7 @@ public class CaptureFragment extends BackHandledFragment {
 
             switch (v.getId()) {
                 case R.id.btn_capture_status:
+                    cCaptureStatusButton.setEnabled(false);
                     Intent intent = new Intent(getActivity(), CaptureService.class);
                     if (!CaptureService.isCapturing) {
                         if (null != rtmpUrl) {
@@ -117,6 +119,7 @@ public class CaptureFragment extends BackHandledFragment {
                     } else {
                         getActivity().unbindService(conn); // 解绑录屏服务
                     }
+                    cCaptureStatusButton.setEnabled(true);
                     break;
                 case R.id.btn_capture_settings: // 设置录屏参数
                     Log.i("MainLog", "capture_settings");
@@ -167,6 +170,7 @@ public class CaptureFragment extends BackHandledFragment {
             captureService.setServiceStatusListener(new OnCaptureServiceStatusListener() {
                 @Override
                 public void onServiceStop(boolean isNormal) {
+                    WindowManagerUtil.removeCaptureFABView(getActivity().getApplicationContext()); // 清除浮窗
                     showCapturePlayView();
                     if (isNormal) {
                         showToastMsg("录屏直播已关闭", Toast.LENGTH_SHORT);
@@ -178,16 +182,19 @@ public class CaptureFragment extends BackHandledFragment {
                 @Override
                 public void onServiceStart() {
                     Log.i(TAG, "onServiceStart");
-     /*               WindowManagerUtil.createCaptureFABView(getActivity().getApplicationContext(), new NoDoubleClickListener() {
+                    WindowManagerUtil.createCaptureFABView(getActivity().getApplicationContext(), new NoDoubleClickListener() {
                         @Override
                         protected void onNoDoubleClick(View v) {
                             switch (v.getId()) {
                                 case R.id.fab_capture_home:
-                                    Log.i(TAG, captureService.toString());
-                                    Log.i(TAG, "home");
+                                    startActivity(new Intent(getActivity().getApplicationContext(), CaptureActivity.class)); // 前往主页
                                     break;
                                 case R.id.fab_capture_lock:
-                                    Log.i(TAG, "lock");
+                                    if (!isPrivateMode) {
+                                        captureService.triggerPrivateMode(true);
+                                    } else {
+                                        captureService.triggerPrivateMode(false);
+                                    }
                                     break;
                                 case R.id.fab_capture_close:
                                     Log.i(TAG, "close");
@@ -199,14 +206,25 @@ public class CaptureFragment extends BackHandledFragment {
                                     break;
                             }
                         }
-                    }); // 创建浮窗*/
+                    }); // 创建浮窗
                     showCapturePauseView(); // 置换当前视图为录屏状态
                     showToastMsg("开始录屏直播", Toast.LENGTH_SHORT);
                 }
 
                 @Override
                 public void onServiceNetBusy() {
+
                     showToastMsg("网络质量差", Toast.LENGTH_SHORT); // 提示网络质量差
+                }
+
+                @Override
+                public void onPrivateModeStatus(boolean isPrivateMode) {
+                    CaptureFragment.isPrivateMode = isPrivateMode;
+                    if (isPrivateMode) {
+                        WindowManagerUtil.captureFABView.cPrivateLockFAB.setIcon(MaterialDrawableBuilder.IconValue.LOCK);
+                    } else {
+                        WindowManagerUtil.captureFABView.cPrivateLockFAB.setIcon(MaterialDrawableBuilder.IconValue.LOCK_OPEN);
+                    }
                 }
             });
         }

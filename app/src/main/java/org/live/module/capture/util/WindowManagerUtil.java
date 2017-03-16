@@ -6,9 +6,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 
 import org.live.common.listener.NoDoubleClickListener;
-import org.live.module.capture.service.CaptureService;
 import org.live.module.capture.view.impl.CaptureFABView;
-import org.live.module.capture.view.impl.CaptureFragment;
 
 /**
  * 系统WindowManager工具类

@@ -22,4 +22,11 @@ public interface OnCaptureModelEventListener {
      * 通知当前网络质量很差
      */
     public void onNetBusy();
+
+    /**
+     * 通知当前是否为隐私模式
+     *
+     * @param isPrivateMode
+     */
+    public void onPrivateModeStatus(boolean isPrivateMode);
 }

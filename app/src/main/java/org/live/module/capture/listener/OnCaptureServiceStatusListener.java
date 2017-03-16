@@ -21,4 +21,11 @@ public interface OnCaptureServiceStatusListener {
      */
     public void onServiceNetBusy();
 
+    /**
+     * 通知当前是否为隐私模式
+     *
+     * @param isPrivateMode
+     */
+    public void onPrivateModeStatus(boolean isPrivateMode);
+
 }

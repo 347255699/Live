@@ -10,5 +10,7 @@ public class CaptureConstant {
     public static final int CAPTURE_STATYS_SERVICE_CLOSE_ABNORMALITY = 3004; // 不正常关闭录屏直播服务，由网络断开引起
     public static final int CAPTURE_STATUS_SERVICE_START_NORMAL = 3002; // 服务开启
     public static final int CAPTURE_STATUS_SERVICE_NET_BUSY = 3003; // 网络质量差
+    public static final int CAPTURE_SERVICE_IS_PRIVATE_MODE_FALSE = 3005; // 非隐私模式
+    public static final int CAPTURE_SERVICE_IS_PRIVATE_MODE_TRUE = 3006; // 隐私模式
 
 }

@@ -24,7 +24,7 @@ public class CaptureFABView extends LinearLayout implements CaptureView {
     private NoDoubleClickListener onClickListener;
     private View view;
     private Context context;
-
+    public MaterialIconView cPrivateLockFAB;
     /**
      * 当前浮窗的宽度
      */
@@ -117,11 +117,14 @@ public class CaptureFABView extends LinearLayout implements CaptureView {
         View thisView = view.findViewById(R.id.ll_capture_fab);
         thisView.setAlpha(0.7f);
         LinearLayout thisLinearLayout = (LinearLayout) findViewById(R.id.ll_capture_fab_frame);
+        thisLinearLayout.getBackground().setAlpha(50);
+
+        cPrivateLockFAB = (MaterialIconView) findViewById(R.id.fab_capture_lock);
         for (int i = 0; i < thisLinearLayout.getChildCount(); i++) {
             View childView = thisLinearLayout.getChildAt(i);
             if (childView instanceof MaterialIconView) {
-                childView.setAlpha(0.7f);
-                childView.setOnClickListener(onClickListener);
+                childView.getBackground().setAlpha(30); // 设置透明度
+                childView.setOnClickListener(onClickListener); // 绑定按钮点击事件监听
             }
         }
         viewWidth = thisView.getLayoutParams().width;

@@ -16,4 +16,9 @@ public interface CapturePresenter {
      * 停止录屏直播
      */
     public void stopScreenCaptureAndPublish();
+
+    /**
+     * 设置隐私模式
+     */
+    public void triggerPrivateMode(boolean isPrivateMode);
 }

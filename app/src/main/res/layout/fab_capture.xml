@@ -3,22 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_capture_fab"
     android:layout_width="138dip"
-    android:layout_height="50dip"
-    android:background="@drawable/linearlayout_fab_backgroud"
+    android:layout_height="60dip"
     android:orientation="vertical">
 
-    <TextView
+    <net.steamcrafted.materialiconlib.MaterialIconView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:text="@string/capturing_status_going"
-        android:textColor="@color/colorWhite"
-        android:textSize="12sp" />
+        android:background="@color/colorShallowBlue"
+        android:padding="2dp"
+        android:scaleType="center"
+        app:materialIcon="arrow_expand_all"
+        app:materialIconColor="@color/colorWhite"
+        app:materialIconSize="15dp" />
 
     <LinearLayout
+        android:id="@+id/ll_capture_fab_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ll_capture_fab_frame"
+        android:background="@color/colorShallowBlue"
         android:orientation="horizontal">
 
         <net.steamcrafted.materialiconlib.MaterialIconView
@@ -43,12 +45,13 @@
             app:materialIcon="lock_open"
             app:materialIconColor="@color/colorWhite"
             app:materialIconSize="@dimen/icon_capture_tab_size" />
+
         <net.steamcrafted.materialiconlib.MaterialIconView
             android:id="@+id/fab_capture_camera_front"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_backgroud"
             android:layout_marginStart="5dp"
+            android:background="@drawable/round_backgroud"
             android:padding="5dp"
             android:scaleType="center"
             app:materialIcon="camera_front"

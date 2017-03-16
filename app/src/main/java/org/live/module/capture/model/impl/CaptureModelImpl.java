@@ -1,6 +1,7 @@
 package org.live.module.capture.model.impl;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,7 +32,9 @@ public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
         mLivePusher = new TXLivePusher(context);
         mLivePushConfig = new TXLivePushConfig();
         this.eventListener = eventListener;
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.pause_publish); // 设置播放端等待时展示用的图片
+        Resources res= context.getResources();
+
+        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.pause_publish); // 设置播放端等待时展示用的图片
         mLivePushConfig.setPauseImg(bitmap);
         mLivePusher.setConfig(mLivePushConfig);
         mLivePusher.setPushListener(this); // 设置监听
@@ -57,6 +60,22 @@ public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
         mLivePusher.setPushListener(null);
         mLivePusher.stopPusher();
         eventListener.onStopCaptureAndPusher(true); // 通知表示器已经正常关闭录屏直播
+    }
+
+    /**
+     * 设置隐私模式
+     *
+     * @param isPrivateMode true|false 是否为隐私模式
+     * @return
+     */
+    @Override
+    public void triggerPrivateMode(boolean isPrivateMode) {
+        if (isPrivateMode) {
+            mLivePusher.pausePusher(); // 开启隐私模式
+        } else {
+            mLivePusher.resumePusher(); // 关闭隐私模式
+        }
+        eventListener.onPrivateModeStatus(isPrivateMode); // 通知表示器当前是否是隐私模式
     }
 
     @Override

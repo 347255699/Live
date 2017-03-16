@@ -1,6 +1,7 @@
 package org.live.module.capture.presenter.impl;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 
@@ -48,6 +49,11 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
         captureModel.stopScreenCaptureAndPublish();
     }
 
+    @Override
+    public void triggerPrivateMode(boolean isPrivateMode) {
+        captureModel.triggerPrivateMode(isPrivateMode);
+    }
+
     /**
      * 通知正在录屏直播
      */
@@ -63,9 +69,9 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
      */
     @Override
     public void onStopCaptureAndPusher(boolean isNormal) {
-        if(isNormal){
+        if (isNormal) {
             sendHandlerMsg(CaptureConstant.CAPTURE_STATUS_SERVICE_CLOSE_NORMAL);
-        }else{
+        } else {
             sendHandlerMsg(CaptureConstant.CAPTURE_STATYS_SERVICE_CLOSE_ABNORMALITY);
         }
 
@@ -77,6 +83,15 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
     @Override
     public void onNetBusy() {
         sendHandlerMsg(CaptureConstant.CAPTURE_STATUS_SERVICE_NET_BUSY);
+    }
+
+    @Override
+    public void onPrivateModeStatus(boolean isPrivateMode) {
+        if (isPrivateMode) {
+            sendHandlerMsg(CaptureConstant.CAPTURE_SERVICE_IS_PRIVATE_MODE_TRUE);
+        } else {
+            sendHandlerMsg(CaptureConstant.CAPTURE_SERVICE_IS_PRIVATE_MODE_FALSE);
+        }
     }
 
     /**
