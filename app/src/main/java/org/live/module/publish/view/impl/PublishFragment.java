@@ -1,5 +1,6 @@
 package org.live.module.publish.view.impl;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -43,7 +44,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     private static final String TAG = "PublishFragment";
     private View view = null;
     private IconButtonOnClickListener listener = null;
-    private static final int ALPHHA_DEFAULT_VALUE = 50; // 默认透明度
+    private static final int ALPHHA_DEFAULT_VALUE = 20; // 默认透明度
     private TXCloudVideoView iPreviewVideoView = null; // 直播预览视图
     private PublishPresenter recorderPresenter = null;
     private String rtmpUrl = null; // 测试用例
@@ -255,7 +256,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     @Override
     public boolean onBackPressed() {
         if (isRecording) {
-            onShowToastMessage("正在直播，不能退出当前界面！", Toast.LENGTH_SHORT);
+            onShowToastMessage("正在直播，请先关闭直播...", Toast.LENGTH_SHORT);
             return true;
         }
         return false;
@@ -464,4 +465,15 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         }
         return definition;
     }
+
+    /**
+     * 监听系统参数变化
+     * @param newConfig
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        int mobileRotation = this.getActivity().getWindowManager().getDefaultDisplay().getRotation();
+        recorderPresenter.onDisplayRotationChanged(mobileRotation);
+    }
+
 }

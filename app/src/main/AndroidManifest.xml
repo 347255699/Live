@@ -50,6 +50,9 @@
         <service
             android:name=".common.service.PreferencesService"
             android:exported="false" />
+        <service
+            android:name=".module.capture.service.CaptureService"
+            android:exported="false" />
     </application>
 
 </manifest>

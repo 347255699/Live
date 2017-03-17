@@ -16,7 +16,7 @@ import com.tencent.rtmp.ui.TXCloudVideoView;
 
 import org.live.module.publish.listener.OnPublishModelEventListener;
 import org.live.module.publish.model.PublishModel;
-import org.live.module.publish.service.PublishPreferencesService;
+import org.live.common.service.PreferencesService;
 import org.live.module.publish.util.constant.PublishConstant;
 
 import java.util.HashMap;
@@ -147,8 +147,8 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
     public boolean switchCamera(boolean isFrontCamera) {
         livePusher.switchCamera();
         boolean result = (isFrontCamera) ? false : true; // 更新摄像头切换信息
-        String cameraInfo = (!isFrontCamera) ? "前置摄像头" : "后置摄像头";
-        listener.onToastMsg(cameraInfo + "开启", Toast.LENGTH_SHORT); // 通知presenter摄像头切换信息并在ui提示
+        /*String cameraInfo = (!isFrontCamera) ? "前置摄像头" : "后置摄像头";*/
+   /*     listener.onToastMsg(cameraInfo + "开启", Toast.LENGTH_SHORT); // 通知presenter摄像头切换信息并在ui提示*/
         return result;
     }
 
@@ -295,7 +295,7 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
      */
     @Override
     public void refreshPreferences() {
-        Intent intent = new Intent(context, PublishPreferencesService.class);
+        Intent intent = new Intent(context, PreferencesService.class);
         intent.putExtras(getBundle());
         context.startService(intent); // 开启参数持久化服务类
     }

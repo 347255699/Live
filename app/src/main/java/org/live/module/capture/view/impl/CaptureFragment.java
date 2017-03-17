@@ -13,6 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.flyco.animation.BaseAnimatorSet;
+import com.flyco.animation.FadeExit.FadeExit;
+import com.flyco.animation.FlipEnter.FlipVerticalSwingEnter;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.widget.MaterialDialog;
+import com.flyco.dialog.widget.NormalDialog;
+
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
@@ -23,6 +30,8 @@ import org.live.common.listener.NoDoubleClickListener;
 import org.live.module.capture.listener.OnCaptureServiceStatusListener;
 import org.live.module.capture.service.CaptureService;
 import org.live.module.capture.util.WindowManagerUtil;
+import org.live.module.play.view.impl.PlayActivity;
+import org.live.module.play.view.impl.PlayFragment;
 
 /**
  * 录屏模块
@@ -37,7 +46,6 @@ public class CaptureFragment extends BackHandledFragment {
     private String rtmpUrl; // 推流地址
     private CaptureActivity captureActivity;
     private static boolean isPrivateMode = false; // 是否是隐私模式
-    private static boolean isPreviewing = false; // 是否在预览前置摄像头
     /**
      * 图标按钮
      **/
@@ -141,7 +149,9 @@ public class CaptureFragment extends BackHandledFragment {
                     Log.i("MainLog", "capture_settings");
                     break;
                 case R.id.btn_capture_close: // 关闭当前界面
-                    getActivity().unbindService(conn); // 解绑录屏服务
+                    if(CaptureService.isCapturing){
+                        getActivity().unbindService(conn); // 解绑录屏服务
+                    }
                     getActivity().finish();
                     break;
                 default:
@@ -212,8 +222,27 @@ public class CaptureFragment extends BackHandledFragment {
                                         captureService.triggerPrivateMode(false);
                                     }
                                     break;
-                                case R.id.fab_capture_camera_front:
-                                    Log.i(TAG, "camera_front");
+                                case R.id.fab_capture_close:
+                                    BaseAnimatorSet bas_in = new FlipVerticalSwingEnter();  //动画，弹出提示框的动画
+                                    BaseAnimatorSet bas_out = new FadeExit();                //关闭提示框的动画
+                                    final MaterialDialog dialog = new MaterialDialog(getActivity());
+                                    dialog.content("确认关闭录屏直播?");
+                                    dialog.btnNum(2).btnText("取消","确认").btnTextColor(NormalDialog.STYLE_TWO);
+                                    dialog.showAnim(bas_in)
+                                            .dismissAnim(bas_out)
+                                            .show();
+                                    dialog.setOnBtnClickL(new OnBtnClickL() {
+                                        @Override
+                                        public void onBtnClick() {  // 确认
+                                            dialog.dismiss();
+                                        }
+                                    }, new OnBtnClickL() {
+                                        @Override
+                                        public void onBtnClick() {  // 取消
+                                            getActivity().unbindService(conn); // 解绑录屏服务
+                                            dialog.dismiss();
+                                        }
+                                    });
                                     break;
                                 default:
                                     break;

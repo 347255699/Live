@@ -119,9 +119,14 @@ public class PublishPresenterImpl implements PublishPresenter, OnPublishModelEve
 
     }
 
+    /**
+     * 监听横竖屏变化
+     *
+     * @param mobileRotation
+     */
     @Override
     public void onDisplayRotationChanged(int mobileRotation) {
-
+        recorderModel.onDisplayRotationChanged(mobileRotation);
     }
 
     /**
