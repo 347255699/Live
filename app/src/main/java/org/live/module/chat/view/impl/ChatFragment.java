@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.live.R;
+import org.live.common.constants.LiveKeyConstants;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.util.NetworkUtils;
 import org.live.module.chat.listener.ChatMsgCallBack;
@@ -50,23 +51,28 @@ public class ChatFragment extends BackHandledFragment {
     private boolean scrollBottomFlag = true; // 滚动条标记，判断滚动条是否在底部
     private LinearLayout cLastChatRecordView; // 最后一条消息记录视图
     private TextView cLastChatRecordFromUser; // 最后一条消息记录来自用户
+    private TextView cLastChatRecord; // 最后一条消息记录
     private ChatService chatService = null; // 聊天服务实体
     private View view; // 当前view
     private Typeface typeFace; // 字体样式
+    private String wsUrl = null; // 服务器地址
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chat, container);
+        wsUrl = ((ChatActivity) getActivity()).getUrl(); // 获取服务器地址
         initUIElements();
-        if (NetworkUtils.isConnected(getActivity())) {
-            getActivity().bindService(new Intent(getActivity(), ChatService.class), conn, Context.BIND_AUTO_CREATE); // 绑定聊天服务
+        if (NetworkUtils.isConnected(getActivity()) && wsUrl != null) {
+            Intent intent = new Intent(getActivity(), ChatService.class);
+            intent.putExtra(LiveKeyConstants.Global_URL_KEY, wsUrl);
+            getActivity().bindService(intent, conn, Context.BIND_AUTO_CREATE); // 绑定聊天服务
             IntentFilter filter = new IntentFilter();
             filter.addAction(ChatService.ACTION);
             filter.setPriority(Integer.MAX_VALUE);
             getActivity().registerReceiver(chatReceiver, filter); // 注册广播接收器
         } else {
-            showToastMsg("网络无法连接...", Toast.LENGTH_SHORT);
+            showToastMsg("网络无法连接或请求服务地址有误...", Toast.LENGTH_SHORT);
         }
         typeFace = Typeface.createFromAsset(getActivity().getAssets(), "fonts/AndroidClockMono-Thin.ttf"); // 外部字体目录
         Log.i(TAG, chatService + "");
@@ -90,17 +96,18 @@ public class ChatFragment extends BackHandledFragment {
         cUnreadMsgHintTextView = (TextView) view.findViewById(R.id.tv_chat_hint_msg);
         cLastChatRecordView = (LinearLayout) view.findViewById(R.id.ll_chat_record_last);
         cLastChatRecordFromUser = (TextView) view.findViewById(R.id.tv_chat_from_user_last);
+        cLastChatRecord = (TextView) view.findViewById(R.id.tv_chat_record_last);
         cMsgEditText = (EditText) view.findViewById(R.id.et_chat_msg);
         cMsgSendButton = (Button) view.findViewById(R.id.btn_chat_send);
 
         cUnreadMsgHintTextView.setTypeface(typeFace);// 应用字体
         cLastChatRecordFromUser.setTypeface(typeFace);
-        cLastChatRecordFromUser.setTypeface(typeFace);
+        cLastChatRecord.setTypeface(typeFace);
         cMsgEditText.setTypeface(typeFace);
 
         adapter = new ChatRecordAdapter(getActivity());
         cRecordsListView.setAdapter(adapter);
-        addLastRecord("用户");
+        addLastRecord("测试用户");
 
         /**
          * 绑定未读消息提示按钮
@@ -122,14 +129,15 @@ public class ChatFragment extends BackHandledFragment {
         cMsgSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (NetworkUtils.isConnected(getActivity())) {
+                if (NetworkUtils.isConnected(getActivity()) && wsUrl != null) {
                     chatService.sendMsg(cMsgEditText.getText().toString()); // 发送消息
-                    cMsgEditText.setText("");
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(cMsgEditText.getWindowToken(), 0); // 隐藏软键盘
                 } else {
-                    showToastMsg("网络无法连接，消息无法发送...", Toast.LENGTH_SHORT);
+                    showToastMsg("网络无法连接或请求服务地址有误，消息无法发送...", Toast.LENGTH_SHORT);
+                    addRecord("测试用：" + cMsgEditText.getText().toString());
                 }
+                cMsgEditText.setText("");
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(cMsgEditText.getWindowToken(), 0); // 隐藏软键盘
             }
         });
 
@@ -195,7 +203,7 @@ public class ChatFragment extends BackHandledFragment {
      * @param lengthType
      */
     private void showToastMsg(String msg, int lengthType) {
-        Toast.makeText(getActivity(), msg, lengthType);
+        Toast.makeText(getActivity(), msg, lengthType).show();
     }
 
     /**
@@ -295,10 +303,10 @@ public class ChatFragment extends BackHandledFragment {
             final TextView msgTextView = (TextView) view.findViewById(R.id.tv_chat_record);
             userTextView.setTypeface(typeFace);
             msgTextView.setTypeface(typeFace);
-            userTextView.setText("用户" + position + ":");
+            userTextView.setText("测试用户:");
             msgTextView.setText(arr.get(position));
-            msgTextView.setTextColor(Color.GRAY);
-            userTextView.setTextColor(Color.GRAY);
+            msgTextView.setTextColor(getResources().getColor(R.color.colorWhite2));
+            userTextView.setTextColor(getResources().getColor(R.color.colorShallowBlue));
             if (position == 0) {
                 userTextView.setTextColor(Color.RED);
                 userTextView.setText(arr.get(position));

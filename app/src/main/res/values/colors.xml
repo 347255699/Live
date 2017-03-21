@@ -12,6 +12,7 @@
     <color name="colorShallowBlue">#5CACEE</color><!-- 浅蓝 -->
     <color name="colorBlue">#1874CD</color><!-- 深蓝 -->
     <color name="colorWhite2">#FFFAFA</color>
+    <color name="colorGold">#DAA520</color>
     <!-- 这个系统的主题颜色 -->
     <color name="themeColor">#2CE1B3</color>
     <!-- 比themeColor深一点点 -->

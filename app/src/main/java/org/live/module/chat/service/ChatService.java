@@ -14,6 +14,8 @@ import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 
+import org.live.common.constants.LiveConstants;
+import org.live.common.constants.LiveKeyConstants;
 import org.live.module.chat.listener.ChatMsgCallBack;
 
 import java.util.concurrent.ExecutionException;
@@ -25,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ChatService extends Service {
     private static final String TAG = "Global";
-    private String wsUrl = "ws://192.168.253.2:8080/websocket"; // websocket请求地址
+    private String wsUrl = null; // websocket请求地址
     private ChatMsgCallBack chatMsgCallBack; // 消息回调
     private Handler cHandler;
     private static final int MSG_SUCCESS = 0;//获取消息成功的标识
@@ -38,8 +40,8 @@ public class ChatService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         initChatMsgHandler();
+        wsUrl = intent.getStringExtra(LiveKeyConstants.Global_URL_KEY);
         buildWebSocketConnecting(); // 建立连接
-        Log.i(TAG, "onBind");
         return new ChatBinder();
     }
 

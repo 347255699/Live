@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
 
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -31,6 +32,7 @@
                 android:id="@+id/tv_chat_from_user_last"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/themeColor1"
                 android:textSize="15sp" />
 
             <TextView
@@ -39,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="来了"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorGold"
                 android:textSize="15sp" />
         </LinearLayout>
 
@@ -96,8 +98,8 @@
             android:layout_width="wrap_content"
             android:layout_height="36dip"
             android:layout_weight="1"
-            android:textColor="@color/colorWhite"
             android:background="@drawable/selector_blue_corners_button"
-            android:text="发 送" />
+            android:text="发 送"
+            android:textColor="@color/colorWhite" />
     </LinearLayout>
 </RelativeLayout>
