@@ -27,6 +27,7 @@ import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
+import org.live.common.util.NetworkUtils;
 import org.live.module.publish.presenter.PublishPresenter;
 import org.live.module.publish.presenter.impl.PublishPresenterImpl;
 import org.live.module.publish.util.constant.PublishConstant;
@@ -271,14 +272,18 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         protected void onNoDoubleClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_recording_status:
-                    if (!isRecording) {
-                        if (rtmpUrl != null) {
-                            recorderPresenter.startPusher(rtmpUrl);
+                    if (NetworkUtils.isConnected(getActivity())) {
+                        if (!isRecording) {
+                            if (rtmpUrl != null) {
+                                recorderPresenter.startPusher(rtmpUrl);
+                            } else {
+                                onShowToastMessage("地址出错！", Toast.LENGTH_SHORT);
+                            }
                         } else {
-                            onShowToastMessage("地址出错！", Toast.LENGTH_SHORT);
+                            recorderPresenter.stopRtmpPublish();
                         }
                     } else {
-                        recorderPresenter.stopRtmpPublish();
+                        onShowToastMessage("网络无法连接", Toast.LENGTH_SHORT);
                     }
                     break;
                 case R.id.btn_camera_switch:
@@ -468,6 +473,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
 
     /**
      * 监听系统参数变化
+     *
      * @param newConfig
      */
     @Override

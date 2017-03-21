@@ -27,6 +27,7 @@ import org.live.R;
 import org.live.common.constants.LiveKeyConstants;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
+import org.live.common.util.NetworkUtils;
 import org.live.module.capture.listener.OnCaptureServiceStatusListener;
 import org.live.module.capture.service.CaptureService;
 import org.live.module.capture.util.WindowManagerUtil;
@@ -133,23 +134,27 @@ public class CaptureFragment extends BackHandledFragment {
 
             switch (v.getId()) {
                 case R.id.btn_capture_status:
-                    cCaptureStatusButton.setEnabled(false);
-                    Intent intent = new Intent(getActivity(), CaptureService.class);
-                    if (!CaptureService.isCapturing) {
-                        if (null != rtmpUrl) {
-                            intent.putExtra(LiveKeyConstants.Global_URL_KEY, rtmpUrl);
+                    if (NetworkUtils.isConnected(getActivity())) {
+                        cCaptureStatusButton.setEnabled(false);
+                        Intent intent = new Intent(getActivity(), CaptureService.class);
+                        if (!CaptureService.isCapturing) {
+                            if (null != rtmpUrl) {
+                                intent.putExtra(LiveKeyConstants.Global_URL_KEY, rtmpUrl);
+                            }
+                            getActivity().bindService(intent, conn, Context.BIND_AUTO_CREATE); // 绑定录屏服务
+                        } else {
+                            getActivity().unbindService(conn); // 解绑录屏服务
                         }
-                        getActivity().bindService(intent, conn, Context.BIND_AUTO_CREATE); // 绑定录屏服务
+                        cCaptureStatusButton.setEnabled(true);
                     } else {
-                        getActivity().unbindService(conn); // 解绑录屏服务
+                        showToastMsg("网络无法连接...", Toast.LENGTH_SHORT);
                     }
-                    cCaptureStatusButton.setEnabled(true);
                     break;
                 case R.id.btn_capture_settings: // 设置录屏参数
                     Log.i("MainLog", "capture_settings");
                     break;
                 case R.id.btn_capture_close: // 关闭当前界面
-                    if(CaptureService.isCapturing){
+                    if (CaptureService.isCapturing) {
                         getActivity().unbindService(conn); // 解绑录屏服务
                     }
                     getActivity().finish();
@@ -227,7 +232,7 @@ public class CaptureFragment extends BackHandledFragment {
                                     BaseAnimatorSet bas_out = new FadeExit();                //关闭提示框的动画
                                     final MaterialDialog dialog = new MaterialDialog(getActivity());
                                     dialog.content("确认关闭录屏直播?");
-                                    dialog.btnNum(2).btnText("取消","确认").btnTextColor(NormalDialog.STYLE_TWO);
+                                    dialog.btnNum(2).btnText("取消", "确认").btnTextColor(NormalDialog.STYLE_TWO);
                                     dialog.showAnim(bas_in)
                                             .dismissAnim(bas_out)
                                             .show();

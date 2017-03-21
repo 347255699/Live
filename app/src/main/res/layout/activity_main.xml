@@ -9,57 +9,79 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.live.module.demo.MainActivity">
-    
+
+    <LinearLayout
+        android:id="@+id/ll_global_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试链接：" />
+
+        <EditText
+            android:id="@+id/et_demo_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_edittext"
+            android:hint="如：192.168.1.1/live/stream01" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_global_url_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_global_url"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="链接前缀：" />
+
+        <RadioGroup
+            android:id="@+id/rg_prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_rtmp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="rtmp" />
+
+            <RadioButton
+                android:id="@+id/rb_http"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="http" />
+
+            <RadioButton
+                android:id="@+id/rb_ws"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ws" />
+        </RadioGroup>
+    </LinearLayout>
+
     <ListView
         android:id="@+id/lv_demo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ll_global_url_type"
         android:divider="@color/colorGray"
         android:dividerHeight="1dp"
-        android:fadeScrollbars="true"
-        android:visibility="gone"
-        />
-
-    <EditText
-        android:id="@+id/et_main_inputPushIp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="推流地址"
-        android:text="rtmp://123.207.19.234/live/stream01"
-        />
-
-    <Button
-        android:id="@+id/btn_main_live"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:text="直播"
-        android:layout_below="@id/et_main_inputPushIp"
-        />
-
-    <Button
-        android:id="@+id/btn_main_record"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:text="直播"
-        android:layout_below="@id/et_main_inputPushIp"
-        android:layout_toRightOf="@id/btn_main_live"
-        />
-
-    <EditText
-        android:id="@+id/et_mian_inputPlayIp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="拉流地址"
-        android:layout_below="@id/btn_main_live"
-        android:text="rtmp://123.207.19.234/live/stream01"
-        />
-
-    <Button
-        android:id="@+id/btn_main_play"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="播放"
-        android:layout_below="@id/et_mian_inputPlayIp"
-        />
+        android:fadeScrollbars="true" />
 
 </RelativeLayout>

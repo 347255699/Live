@@ -30,7 +30,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".module.demo.MainActivity">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".module.publish.view.impl.PublishActivity" />
         <activity android:name=".module.play.view.impl.PlayActivity" />
@@ -43,11 +46,7 @@
         <activity android:name=".module.home.view.HomeActivity" />
 
         <activity android:name=".module.chat.view.impl.ChatActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <!-- service -->
         <service
