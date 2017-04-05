@@ -1,8 +1,8 @@
-package org.live.module.home.view;
+package org.live.module.home.view.impl;
 
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +12,14 @@ import android.view.ViewGroup;
 import org.live.R;
 
 /**
- *  分类直播的页面
+ *  主页fragment
  *
  * Created by Mr.wang on 2017/3/14.
  */
 
-public class CategoryFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
-    public static final String TAG = "CategoryFragment" ;
+    public static final String TAG = "HOME" ;
 
     private View currentFragmentView = null ;   //当前的fragment视图
 
@@ -27,9 +27,8 @@ public class CategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "执行了onCreateView") ;
-        currentFragmentView = inflater.inflate(R.layout.fragment_category, null) ;
+        currentFragmentView = inflater.inflate(R.layout.fragment_home, null) ;
         return currentFragmentView ;
-
     }
 
 }

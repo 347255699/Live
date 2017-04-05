@@ -1,4 +1,4 @@
-package org.live.module.home.view;
+package org.live.module.home.view.impl;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import org.live.R;
 
 public class LiveFragment extends Fragment {
 
-    public static final String TAG = "LiveFragment" ;
+    public static final String TAG = "HOME" ;
 
     private View currentFragmentView = null ;   //当前的fragment视图
 

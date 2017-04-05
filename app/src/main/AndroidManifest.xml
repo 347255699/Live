@@ -43,7 +43,7 @@
         <activity
             android:name=".module.capture.view.impl.CaptureActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".module.home.view.HomeActivity" />
+        <activity android:name=".module.home.view.impl.HomeActivity" />
 
         <activity android:name=".module.chat.view.impl.ChatActivity">
 

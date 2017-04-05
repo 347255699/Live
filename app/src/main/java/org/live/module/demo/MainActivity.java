@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
             "org.live.module.capture.view.impl.CaptureActivity",
             "org.live.module.play.view.impl.PlayActivity",
             "org.live.module.chat.view.impl.ChatActivity",
-            "org.live.module.home.view.HomeActivity"
+            "org.live.module.home.view.impl.HomeActivity"
     }; // 定义目标界面Activity
     private static final String[] M_PARAMS = {
             "rtmp://123.207.19.234/live/stream01",

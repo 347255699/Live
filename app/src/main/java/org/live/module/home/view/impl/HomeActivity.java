@@ -1,4 +1,4 @@
-package org.live.module.home.view;
+package org.live.module.home.view.impl;
 
 import android.os.Bundle;
 
@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -35,7 +34,7 @@ import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
  */
 public class HomeActivity extends FragmentActivity {
 
-    public static final String TAG = "HomeActivity" ;
+    public static final String TAG = "HOME" ;
 
     private List<Fragment> fragmentList = null ;    // fragment的集合，用于保存fragment
 
