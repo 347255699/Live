@@ -5,28 +5,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * Created by wangzhancheng on 2017/4/4.
+ * Created by wangzhancheng on 2017/4/6.
  */
 
-public class CategoryItemDecoration extends RecyclerView.ItemDecoration {
+public class LiveRoomItemDecoration extends RecyclerView.ItemDecoration {
 
+    private int bottomSpace = 30 ;  //距离底部的间距
 
-    private int bottomSpace = 25 ;  //距离底部的间距
+    private int rowSpace = 10 ;   //行内间距
 
-    private int rowSpace = 7 ;   //行内间距
-
-    public CategoryItemDecoration() {
-
+    public LiveRoomItemDecoration() {
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-
         outRect.left = rowSpace;
         outRect.right = rowSpace;
         outRect.bottom = bottomSpace;
-
     }
-
 
 }

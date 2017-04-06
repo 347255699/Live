@@ -1,35 +1,31 @@
 package org.live.module.home.view.impl;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.nfc.Tag;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.live.R;
-import org.live.common.constants.LiveConstants;
-import org.live.common.util.ImageCache;
 
-import org.live.module.constants.HomeConstants;
+import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.domain.CategoryDataModel;
+import org.live.module.home.domain.LiveCategoryVo;
 import org.live.module.home.presenter.CategoryPresenter;
 import org.live.module.home.view.custom.CategoryGridAdapter;
 import org.live.module.home.view.custom.CategoryItemDecoration;
+import org.live.module.home.view.custom.OnItemClickListener;
 
 
 /**
@@ -123,6 +119,21 @@ public class CategoryFragment extends Fragment {
                 categoryRecyclerView.refreshComplete();
             }
         });
+
+        adapter.setListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //开启一个Activity展示该直播分类下的直播间
+               LiveCategoryVo vo = adapter.categoryList.get(position) ;
+                Intent intent = new Intent(getContext(), SingleCategoryActivity.class) ;
+                intent.putExtra(HomeConstants.CATEGORY_ID_KEY, vo.getId()) ;
+                intent.putExtra(HomeConstants.CATEGORY_NAME_KEY, vo.getCategoryName()) ;
+                startActivity(intent);
+            }
+        });
+
+
+
     }
 
 

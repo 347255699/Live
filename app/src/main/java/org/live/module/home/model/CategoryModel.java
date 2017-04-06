@@ -7,14 +7,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.AsyncHttpRequest;
 import com.koushikdutta.async.http.AsyncHttpResponse;
 
 import org.live.common.constants.LiveConstants;
 import org.live.common.util.JsonUtils;
-import org.live.module.constants.HomeConstants;
+import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.domain.CategoryDataModel;
 
 /**

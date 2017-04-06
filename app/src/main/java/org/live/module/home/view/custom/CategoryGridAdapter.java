@@ -17,6 +17,8 @@ import org.live.module.home.domain.LiveCategoryVo;
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 /**
  *  直播分类的recycleview适配器
  * Created by Mr.wang on 2017/4/5.
@@ -28,10 +30,19 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
 
     private LayoutInflater mInflater ;
 
+    /**
+     * 数据集合
+     */
     public List<LiveCategoryVo> categoryList ;
 
+    /**
+     *  item的监听事件监听器
+     */
     private OnItemClickListener listener ;
 
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener ;
+    }
 
     public CategoryGridAdapter(Context context) {
         this.mContext = context ;
@@ -43,8 +54,15 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
     @Override
     public LiveCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = mInflater.inflate(R.layout.item_category, parent, false) ;
-        LiveCategoryViewHolder viewHolder = new LiveCategoryViewHolder(itemView) ;
+        final View itemView = mInflater.inflate(R.layout.item_category, parent, false) ;
+        final LiveCategoryViewHolder viewHolder = new LiveCategoryViewHolder(itemView) ;
+        //itemView设置点击事件，并回调自定义的点击事件
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(itemView, viewHolder.getAdapterPosition() -1) ;
+            }
+        });
         return viewHolder ;
     }
 
@@ -52,7 +70,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
     public void onBindViewHolder(LiveCategoryViewHolder holder, int position) {
         LiveCategoryVo vo = categoryList.get(position) ;
         holder.getCategoryNameView().setText(vo.getCategoryName()) ;
-        Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP + vo.getCoverUrl()).into(holder.getCoverImgView()) ;
+        Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP + vo.getCoverUrl()).bitmapTransform(new RoundedCornersTransformation(mContext, 25, 5)).into(holder.getCoverImgView()) ;
     }
 
     @Override
@@ -68,12 +86,12 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         /**
          * 分类封面
          */
-        private ImageView coverImgView;
-
+        private ImageView coverImgView ;
         /**
          * 分类名称
          */
-        private TextView categoryNameView;
+        private TextView categoryNameView ;
+
 
         public LiveCategoryViewHolder(View itemView) {
             super(itemView);
@@ -85,27 +103,14 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             return coverImgView;
         }
 
-        public void setCoverImgView(ImageView coverImgView) {
-            this.coverImgView = coverImgView;
-        }
-
         public TextView getCategoryNameView() {
             return categoryNameView;
         }
 
-        public void setCategoryNameView(TextView categoryNameView) {
-            this.categoryNameView = categoryNameView;
-        }
-    }
-
-    /**
-     * recycleview中view的点击事件
-     */
-    public interface OnItemClickListener {
-
-        void onItemClick(View view, LiveCategoryVo vo) ;
 
     }
+
+
 
 }
 

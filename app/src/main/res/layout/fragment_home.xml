@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:layout_height="match_parent">
 
     <!--标题栏-->
     <RelativeLayout
+        android:id="@+id/rl_home_top"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/themeColor1">
@@ -33,12 +33,17 @@
             />
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="这是首页的fragment"
-        android:textSize="30dp"
-        />
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/rv_home_liveRoomHold"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_home_top"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        >
+
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
 
 </RelativeLayout>

@@ -57,6 +57,8 @@
             android:exported="false" />
         <service android:name=".module.chat.service.ChatService" />
 
+        <activity android:name=".module.home.view.impl.SingleCategoryActivity"/>
+
     </application>
 
 </manifest>
