@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+    <!-- 学号/工号输入框 -->
+    <EditText
+        android:id="@+id/et_login_account"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:textColorHint="@color/colorGray"
+        android:hint="输入账户"
+        android:textCursorDrawable="@drawable/shape_cursor_color" />
+    <!-- 密码输入框 -->
+    <EditText
+        android:id="@+id/et_login_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:textColorHint="@color/colorGray"
+        android:hint="输入密码"
+
+        android:inputType="textPassword"
+        android:textCursorDrawable="@drawable/shape_cursor_color" />
+
+    <TextView
+        android:id="@+id/tv_login_forget_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="20dp"
+        android:textSize="12sp"
+        android:text="忘记密码"
+        android:textColor="@color/themeColor" />
+
+    <Button
+        android:id="@+id/btn_login_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_green_corners_button"
+        android:text="登录"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="@color/colorWhite" />
+    <!--style=”?android:attr/borderlessButtonStyle”-->
+    <Button
+        android:id="@+id/btn_login_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_white_corners_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="注册"
+        android:textColor="@color/colorDeepGray" />
+</LinearLayout>

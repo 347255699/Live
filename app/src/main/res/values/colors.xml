@@ -3,9 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorGray">#CCCCCC</color>
-    <color name="colorWall">#DCDCDC</color>
-    <color name="colorDeepGray">#969696</color>
+    <color name="colorGray">#b3b3b3</color>
+    <color name="colorWall">#ebebeb</color>
+    <color name="colorDeepGray">#807f7f</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorShallowBlack">#494444</color><!-- 浅黑 -->

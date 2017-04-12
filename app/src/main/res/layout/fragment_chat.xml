@@ -98,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="36dip"
             android:layout_weight="1"
-            android:background="@drawable/selector_blue_corners_button"
+            android:background="@drawable/selector_green_corners_button"
             android:text="发 送"
             android:textColor="@color/colorWhite" />
     </LinearLayout>

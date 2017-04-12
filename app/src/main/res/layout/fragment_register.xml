@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+    <!-- 学号/工号输入框 -->
+    <EditText
+        android:id="@+id/et_register_account"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:hint="请输入账户"
+        android:textColorHint="@color/colorGray"
+        android:textCursorDrawable="@drawable/shape_cursor_color" />
+    <!-- 昵称输入框 -->
+    <EditText
+        android:id="@+id/et_register_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:hint="请输入昵称"
+        android:textColorHint="@color/colorGray"
+        android:textCursorDrawable="@drawable/shape_cursor_color" />
+    <!-- 密码输入框 -->
+    <EditText
+        android:id="@+id/et_register_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:hint="请输入密码"
+        android:inputType="textPassword"
+        android:textColorHint="@color/colorGray"
+        android:textCursorDrawable="@drawable/shape_cursor_color" />
+    <!-- 确认密码输入框 -->
+    <EditText
+        android:id="@+id/et_register_repassword"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:inputType="textPassword"
+        android:hint="请确认密码"
+        android:textColorHint="@color/colorGray"
+        android:textCursorDrawable="@drawable/shape_cursor_color" />
+    <Button
+        android:id="@+id/btn_register_submit"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_green_corners_button"
+        android:text="同意服务条款并注册"
+        android:textColor="@color/colorWhite" />
+    <TextView
+        android:id="@+id/tv_service_clause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:text="《高校直播服务条款》"
+        android:textColor="@color/themeColor" />
+</LinearLayout>

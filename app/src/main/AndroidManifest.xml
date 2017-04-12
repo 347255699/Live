@@ -22,6 +22,11 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".common.application.CommonApplication"
         android:allowBackup="true"
@@ -29,12 +34,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".module.demo.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".module.demo.MainActivity" />
         <activity android:name=".module.publish.view.impl.PublishActivity" />
         <activity android:name=".module.play.view.impl.PlayActivity" />
         <activity
@@ -44,10 +44,7 @@
             android:name=".module.capture.view.impl.CaptureActivity"
             android:launchMode="singleTask" />
         <activity android:name=".module.home.view.impl.HomeActivity" />
-
-        <activity android:name=".module.chat.view.impl.ChatActivity">
-
-        </activity>
+        <activity android:name=".module.chat.view.impl.ChatActivity" />
         <!-- service -->
         <service
             android:name=".common.service.PreferencesService"
@@ -56,8 +53,18 @@
             android:name=".module.capture.service.CaptureService"
             android:exported="false" />
         <service android:name=".module.chat.service.ChatService" />
+        <service
+            android:name=".module.login.service.HttpService"
+            android:exported="false" />
 
-        <activity android:name=".module.home.view.impl.SingleCategoryActivity"/>
+        <activity android:name=".module.home.view.impl.SingleCategoryActivity" />
+        <activity android:name=".module.login.view.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

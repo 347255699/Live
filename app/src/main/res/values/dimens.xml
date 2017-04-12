@@ -2,7 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="custom_activity_vertical_margin">8dip</dimen>
+    <dimen name="custom_activity_horizontal_margin">8dp</dimen>
+    <dimen name="custom_activity_vertical_margin">8dp</dimen>
     <dimen name="icon_recorder_size">25dp</dimen>
     <dimen name="icon_marign_bottom">10dp</dimen>
     <dimen name="icon_capture_tab_size">20dp</dimen>

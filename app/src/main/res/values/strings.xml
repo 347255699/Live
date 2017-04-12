@@ -10,4 +10,11 @@
     <string name="capturing_status">录屏直播未开始...</string>
     <string name="capturing_status_going">正在录屏直播...</string>
     <string name="capture_hint">温馨提示：录屏直播开始后，请点击home键退出当前界面，进行其他操作</string>
+    <string name="login_title">登录</string>
+    <string name="service_clause_title">高校直播用户注册协议</string>
+    <string name="service_clause_hint">
+        请务必认真阅读和理解本《用户服务协议》(以下简称协议)中规定的所有权利和限制，除非您接受本《协议》条款，
+        否则您无权注册、登录、使用或以任何方式使用本《协议》所涉及的相关服务。您一旦注册、登录、使用或以任何方式使用本《协议》所涉及的的相关服务的行为将视为对本《协议》的接收，
+        即表示您同意接受本《协议》中的条款的约束。如果您不同意本《协议》中条款请不要注册、登录或使用本《协议》相关服务。本《协议》是您（或称为“用户”）与高校直播应用提供商（下称“高校直播”）之间的法律协议。
+    </string>
 </resources>

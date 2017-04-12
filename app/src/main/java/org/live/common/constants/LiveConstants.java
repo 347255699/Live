@@ -43,8 +43,4 @@ public class LiveConstants {
      */
     public static final String FLV_TYPE_SUFFIX = ".flv" ;
 
-
-
-
-
 }

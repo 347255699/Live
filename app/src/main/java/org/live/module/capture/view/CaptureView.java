@@ -7,7 +7,4 @@ package org.live.module.capture.view;
 
 public interface CaptureView {
 
-
-
-
 }
