@@ -1,30 +1,30 @@
-package org.live.module.login.view;
+package org.live.module.login.view.impl;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import org.live.R;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.BackHandledInterface;
-import org.live.module.login.OnFragmentReplaceListener;
-import org.w3c.dom.Text;
+import org.live.module.home.view.impl.HomeActivity;
+import org.live.module.login.listener.OnLoginActivityEventListener;
+import org.live.module.login.presenter.LoginPresenter;
+import org.live.module.login.presenter.impl.LoginPresenterImpl;
+import org.live.module.login.view.LoginView;
 
 
 /**
  * 登陆模块主活动窗口
  */
-public class LoginActivity extends AppCompatActivity implements BackHandledInterface, OnFragmentReplaceListener {
+public class LoginActivity extends AppCompatActivity implements BackHandledInterface, OnLoginActivityEventListener, LoginView {
     private static final String TAG = "Global";
     private BackHandledFragment mBackHandedFragment;
     private String currentFragmentFlag = "login"; // 当前fragment标记
@@ -46,14 +46,23 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
      */
     private ServiceClauseFragment mServiceClauseFragment = null;
 
+    /**
+     * 加载框
+     */
+    private ProgressBar mLoginProgressBar;
+
+    private LoginPresenter loginPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        this.loginPresenter = new LoginPresenterImpl(this, this);
         initUIElement();
         if (savedInstanceState == null) {
             setDefaultFragment();
         }
+
     }
 
     /**
@@ -76,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
      */
     private void initUIElement() {
         mLoginTitleTextView = (TextView) findViewById(R.id.tv_login_title);
+        mLoginProgressBar = (ProgressBar) findViewById(R.id.pb_login);
         initActionBar();
     }
 
@@ -115,6 +125,10 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
         this.mBackHandedFragment = selectedFragment;
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 
     @Override
     public void onBackPressed() {
@@ -180,6 +194,68 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
      */
     public void setTitle(String title) {
         mLoginTitleTextView.setText(title);
+    }
+
+    /**
+     * 取得表示器
+     *
+     * @return
+     */
+    @Override
+    public LoginPresenter getLoginPresenter() {
+        return this.loginPresenter;
+    }
+
+    /**
+     * 隐藏加载框
+     */
+    @Override
+    public void hideProgressBar() {
+        mLoginProgressBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * 显示加载框
+     */
+    @Override
+    public void showProgressBar() {
+        mLoginProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 提示信息
+     *
+     * @param msg
+     */
+    @Override
+    public void showToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 前往首页
+     */
+    @Override
+    public void toHome() {
+        startActivity(new Intent(this, HomeActivity.class));
+    }
+
+    /**
+     * 返回至上一个fragment
+     */
+    @Override
+    public void popBackStack() {
+        getFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void toLogin() {
+
+    }
+
+    @Override
+    public void finishSelf() {
+        this.finish() ;
     }
 
 }

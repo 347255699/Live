@@ -1,9 +1,6 @@
-package org.live.module.login.view;
+package org.live.module.login.view.impl;
 
-import android.content.ComponentName;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.live.R;
-import org.live.common.constants.RequestMethod;
 import org.live.common.listener.BackHandledFragment;
-import org.live.module.login.OnFragmentReplaceListener;
-import org.live.module.login.service.HttpService;
-import org.live.module.login.util.Validator;
+import org.live.module.login.listener.OnLoginActivityEventListener;
+import org.live.module.login.presenter.LoginPresenter;
+import org.live.module.login.util.constant.LoginConstant;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,7 +25,6 @@ import java.util.Map;
  */
 
 public class ForgetPasswordFragment extends BackHandledFragment implements View.OnClickListener {
-    private String url = "http://10.20.197.154:8080/app/login";
     private static final String TAG = "Global";
     /**
      * 成员编号输入框
@@ -55,26 +47,22 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
      */
     private Button fResetButton;
     private View view;
-    private OnFragmentReplaceListener fragmentReplaceListener;
-    private HttpService.HttpServiceBinder httpServiceBinder;
+    private OnLoginActivityEventListener loginActivityEventListener;
+    private LoginPresenter loginPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_forget_password, container, false);
-        if (getActivity() instanceof OnFragmentReplaceListener) {
-            fragmentReplaceListener = (OnFragmentReplaceListener) getActivity();
+        if (getActivity() instanceof OnLoginActivityEventListener) {
+            this.loginActivityEventListener = (OnLoginActivityEventListener) getActivity();
         }
+        this.loginPresenter = loginActivityEventListener.getLoginPresenter(); // 取得登陆模块表示器
         initUIElement();
-        fragmentReplaceListener.setTitle("找回密码"); // 设置标题
+        loginActivityEventListener.setTitle("找回密码"); // 设置标题
         return view;
     }
 
-    @Override
-    public void onStop() {
-        getActivity().unbindService(connection); // 解绑http服务
-        super.onStop();
-    }
 
     /**
      * 初始化UI控件
@@ -90,7 +78,7 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
 
     @Override
     public boolean onBackPressed() {
-        fragmentReplaceListener.setTitle("登陆"); // 设置标题
+        loginActivityEventListener.setTitle("登陆"); // 设置标题
         return false;
     }
 
@@ -101,40 +89,20 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
                 if (validateForm()) {
                     Map<String, Object> params = new HashMap<String, Object>();
                     params.put("account", fMemberNoEditText.getText().toString());
-                    params.put("password", fPasswordEditText.getText().toString());
+                    params.put("newPassword", fPasswordEditText.getText().toString());
                     params.put("realName", fRealNameEditText.getText().toString());
-                    JSONObject jsonObject = httpServiceBinder.request(url, RequestMethod.POST, params);
-
                     try {
-                        if (jsonObject.getInt("status") == 1) {
-                            // 重置成功
-                        } else {
-                            // 重置失败
-                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show(); // 显示错误提示
-                        }
-                    } catch (JSONException e) {
+                        loginActivityEventListener.showProgressBar();
+                        loginPresenter.httpRequest(LoginConstant.MODEL_TYPE_FORGET_PASSWORD, params); // 请求重置密码
+                        loginActivityEventListener.hideProgressBar();
+                    } catch (Exception e) {
                         Log.e(TAG, e.getMessage());
+                        loginActivityEventListener.hideProgressBar();
                     }
                 }
                 break;
         }
     }
-
-    /**
-     * service链接
-     */
-    private ServiceConnection connection = new ServiceConnection() {
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            httpServiceBinder = (HttpService.HttpServiceBinder) service;
-        }
-    };
-
 
     /**
      * 检验表单
@@ -181,7 +149,6 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
         } // 构建校验规则组
 
 
-        Validator validator = new Validator(getActivity());
-        return validator.validate(vals, labels, rules); // 开启校验
+        return loginPresenter.validateForm(vals, labels, rules); // 开启校验
     }
 }

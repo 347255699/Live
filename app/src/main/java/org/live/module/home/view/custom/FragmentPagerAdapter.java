@@ -55,15 +55,15 @@ import android.view.ViewGroup;
  * {@sample frameworks/support/samples/Support4Demos/src/com/example/android/supportv4/app/FragmentPagerSupport.java
  *      complete}
  *
- * <p>The <code>R.layout.fragment_pager</code> resource of the top-level fragment is:
+ * <p>The <code>R.logout.fragment_pager</code> resource of the top-level fragment is:
  *
- * {@sample frameworks/support/samples/Support4Demos/res/layout/fragment_pager.xml
+ * {@sample frameworks/support/samples/Support4Demos/res/logout/fragment_pager.xml
  *      complete}
  *
- * <p>The <code>R.layout.fragment_pager_list</code> resource containing each
- * individual fragment's layout is:
+ * <p>The <code>R.logout.fragment_pager_list</code> resource containing each
+ * individual fragment's logout is:
  *
- * {@sample frameworks/support/samples/Support4Demos/res/layout/fragment_pager_list.xml
+ * {@sample frameworks/support/samples/Support4Demos/res/logout/fragment_pager_list.xml
  *      complete}
  */
 public abstract class FragmentPagerAdapter extends PagerAdapter {

@@ -13,6 +13,7 @@
     <color name="colorBlue">#1874CD</color><!-- 深蓝 -->
     <color name="colorWhite2">#f8f4f4</color>
     <color name="colorGold">#DAA520</color>
+    <color name="colorRed">#f90303</color>
     <!-- 这个系统的主题颜色 -->
     <color name="themeColor">#2CE1B3</color>
     <!-- 比themeColor深一点点 -->

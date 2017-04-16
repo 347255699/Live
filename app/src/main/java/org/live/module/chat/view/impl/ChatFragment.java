@@ -297,7 +297,7 @@ public class ChatFragment extends BackHandledFragment {
         public View getView(final int position, View view, ViewGroup arg2) {
             // TODO Auto-generated method stub
             if (view == null) {
-                view = inflater.inflate(R.layout.item_listview_chat, null);
+                view = inflater.inflate(R.layout.item_chat_record, null);
             }
             final TextView userTextView = (TextView) view.findViewById(R.id.tv_chat_from_user);
             final TextView msgTextView = (TextView) view.findViewById(R.id.tv_chat_record);

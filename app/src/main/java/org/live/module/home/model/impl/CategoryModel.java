@@ -1,4 +1,4 @@
-package org.live.module.home.model;
+package org.live.module.home.model.impl;
 
 
 

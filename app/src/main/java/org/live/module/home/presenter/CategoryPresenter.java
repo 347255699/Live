@@ -3,7 +3,7 @@ package org.live.module.home.presenter;
 import android.content.Context;
 import android.os.Handler;
 
-import org.live.module.home.model.CategoryModel;
+import org.live.module.home.model.impl.CategoryModel;
 
 /**
  * Created by Mr.wang on 2017/4/4.

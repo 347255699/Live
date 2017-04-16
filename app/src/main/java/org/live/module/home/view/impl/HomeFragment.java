@@ -16,6 +16,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import org.live.R;
 import org.live.module.home.domain.LiveCategoryVo;
 import org.live.module.home.domain.LiveRoomVo;
+import org.live.module.home.view.MeView;
 import org.live.module.home.view.custom.CategoryGridAdapter;
 import org.live.module.home.view.custom.LiveRoomGridAdapter;
 import org.live.module.home.view.custom.LiveRoomItemDecoration;
@@ -26,7 +27,7 @@ import org.live.module.home.view.custom.LiveRoomItemDecoration;
  * Created by Mr.wang on 2017/3/14.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
 
     public static final String TAG = "HOME" ;
 

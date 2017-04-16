@@ -1,10 +1,6 @@
-package org.live.module.login.view;
+package org.live.module.login.view.impl;
 
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,23 +11,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.live.R;
-import org.live.common.constants.RequestMethod;
 import org.live.common.listener.BackHandledFragment;
-import org.live.common.util.JsonUtils;
-import org.live.module.home.view.impl.HomeActivity;
-import org.live.module.login.OnFragmentReplaceListener;
-import org.live.module.login.domain.MobileUserVo;
-import org.live.module.login.service.HttpService;
-import org.live.module.login.util.Validator;
+import org.live.module.login.listener.OnLoginActivityEventListener;
+import org.live.module.login.presenter.LoginPresenter;
+import org.live.module.login.util.constant.LoginConstant;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static android.content.Context.BIND_AUTO_CREATE;
 
 /**
  * 登录模块
@@ -42,9 +31,7 @@ public class LoginFragment extends BackHandledFragment implements View.OnClickLi
 
     private static final String TAG = "Global";
     private View view;
-    private OnFragmentReplaceListener fragmentReplaceListener;
-    private HttpService.HttpServiceBinder httpServiceBinder;
-    private String url = "http://10.20.197.154:8080/app/login";
+    private OnLoginActivityEventListener loginActivityEventListener;
     /**
      * 注册按钮
      */
@@ -66,25 +53,22 @@ public class LoginFragment extends BackHandledFragment implements View.OnClickLi
      * 表单提交按钮
      */
     private Button lSubmitButton;
+    /**
+     * 登陆模块表示器引用
+     */
+    private LoginPresenter loginPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_login, container, false);
-        if (getActivity() instanceof OnFragmentReplaceListener) {
-            fragmentReplaceListener = (OnFragmentReplaceListener) getActivity();
+        if (getActivity() instanceof OnLoginActivityEventListener) {
+            this.loginActivityEventListener = (OnLoginActivityEventListener) getActivity();
         }
-        fragmentReplaceListener.setTitle("登录"); // 设置标题
+        loginActivityEventListener.setTitle("登录"); // 设置标题
+        this.loginPresenter = loginActivityEventListener.getLoginPresenter(); // 取得登陆模块表示器
         initUIElement();
-        Intent bindIntent = new Intent(getActivity(), HttpService.class);
-        getActivity().bindService(bindIntent, connection, BIND_AUTO_CREATE); // 绑定http服务
         return view;
-    }
-
-    @Override
-    public void onStop() {
-        getActivity().unbindService(connection); // 解绑http服务
-        super.onStop();
     }
 
     /**
@@ -118,52 +102,29 @@ public class LoginFragment extends BackHandledFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login_register:
-                fragmentReplaceListener.replaceToRegisterFragment();
+                loginActivityEventListener.replaceToRegisterFragment();
                 break; // 替换为注册模块
 
             case R.id.tv_login_forget_password:
-                fragmentReplaceListener.replaceToForgetPasswordFragment();
+                loginActivityEventListener.replaceToForgetPasswordFragment();
                 break; // 替换为忘记密码模块
             case R.id.btn_login_submit:
                 if (validateForm()) {
                     Map<String, Object> params = new HashMap<String, Object>();
                     params.put("account", lAccountEditText.getText().toString());
                     params.put("password", lPasswordEditText.getText().toString());
-                    JSONObject jsonObject = httpServiceBinder.request(url, RequestMethod.POST, params);
-
                     try {
-                        if (jsonObject.getInt("status") == 1) {
-                            MobileUserVo mobileUserVo = JsonUtils.fromJson(jsonObject.getJSONObject("data").toString(), MobileUserVo.class); // 提取数据
-                            // 服务器校验通过，跳转至主页
-                            Intent intent = new Intent(getActivity(), HomeActivity.class);
-                            // 携带参数至主页,未完成
-                            startActivity(intent);
-                        } else {
-                            // 校验失败
-                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show(); // 显示错误提示
-                        }
-                    } catch (JSONException e) {
+                        loginActivityEventListener.showProgressBar();
+                        loginPresenter.httpRequest(LoginConstant.MODEL_TYPE_LOGIN, params); // 登陆请求
+                        loginActivityEventListener.hideProgressBar();
+                    } catch (Exception e) {
                         Log.e(TAG, e.getMessage());
+                        loginActivityEventListener.hideProgressBar();
                     }
                 }
                 break;
         }
     }
-
-    /**
-     * service链接
-     */
-    private ServiceConnection connection = new ServiceConnection() {
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            httpServiceBinder = (HttpService.HttpServiceBinder) service;
-        }
-    };
 
     /**
      * 检验表单
@@ -201,8 +162,7 @@ public class LoginFragment extends BackHandledFragment implements View.OnClickLi
         } // 构建校验规则组
 
 
-        Validator validator = new Validator(getActivity());
-        return validator.validate(vals, labels, rules); // 开启校验
+        return loginPresenter.validateForm(vals, labels, rules); // 开启校验
     }
 
 
