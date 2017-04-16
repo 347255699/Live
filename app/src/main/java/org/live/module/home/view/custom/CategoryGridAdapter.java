@@ -60,7 +60,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(itemView, viewHolder.getAdapterPosition() -1) ;
+                listener.onItemClick(itemView, viewHolder.getAdapterPosition()) ;
             }
         });
         return viewHolder ;

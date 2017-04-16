@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="center"
-            app:materialIcon="eye"
+            app:materialIcon="eye_outline"
             android:paddingTop="2dp"
             app:materialIconColor="@color/colorGray"
             app:materialIconSize="18dp"

@@ -33,17 +33,22 @@
             />
     </RelativeLayout>
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/rv_home_liveRoomHold"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/sl_home_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/rl_home_top"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        >
+        android:layout_marginTop="10dp">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_home_liveRoomHold"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+        </android.support.v7.widget.RecyclerView>
 
-    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </RelativeLayout>

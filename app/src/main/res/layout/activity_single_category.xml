@@ -5,6 +5,7 @@
 
     <!--标题栏-->
     <RelativeLayout
+        android:id="@+id/rl_singleCategory_top"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/themeColor1">
@@ -31,7 +32,17 @@
             android:textSize="20dp"
             android:layout_centerInParent="true"
             />
-
     </RelativeLayout>
+    
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/rv_singleCategory_liveRoomHold"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_below="@id/rl_singleCategory_top">
+
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
 </RelativeLayout>
