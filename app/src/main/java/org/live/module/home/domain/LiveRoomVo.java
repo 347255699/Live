@@ -30,7 +30,7 @@ public class LiveRoomVo {
     /**
      *  在线人数
      */
-    private long onlineCount ;
+    private int onlineCount ;
 
     /**
      *  正在直播的标记
@@ -69,11 +69,11 @@ public class LiveRoomVo {
         this.anchorName = anchorName;
     }
 
-    public long getOnlineCount() {
+    public int getOnlineCount() {
         return onlineCount;
     }
 
-    public void setOnlineCount(long onlineCount) {
+    public void setOnlineCount(int onlineCount) {
         this.onlineCount = onlineCount;
     }
 

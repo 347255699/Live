@@ -45,14 +45,23 @@
         android:numColumns="3">
     </org.live.common.view.ForbidReloadGridView>-->
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/rv_category_hold"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/sl_category_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/rl_category_top"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp">
-    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+        android:layout_marginTop="10dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_category_hold"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp">
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 
 </RelativeLayout>
