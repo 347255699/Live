@@ -2,14 +2,21 @@ package org.live.module.login.view.impl;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Instrumentation;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import org.live.R;
 import org.live.common.listener.BackHandledFragment;
@@ -96,14 +103,14 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
         Toolbar lToolbar = (Toolbar) findViewById(R.id.tb_login);
         lToolbar.setTitle("");
         setSupportActionBar(lToolbar);
-      /*  lToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.CLOSE, Color.WHITE));
+       /* lToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.CLOSE, Color.WHITE));
         lToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-
+                backThread.start(); // 模拟返回键点击
             }
         });*/
+
     }
 
     /**
@@ -112,14 +119,15 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
      * @param
      * @return
      */
-  /*  private Drawable getIconDrawable(MaterialDrawableBuilder.IconValue iconValue, int color) {
+    private Drawable getIconDrawable(MaterialDrawableBuilder.IconValue iconValue, int color) {
         Drawable drawable = MaterialDrawableBuilder.with(this) // provide a context
                 .setIcon(iconValue) // provide an icon
                 .setColor(color) // set the icon color
                 .setToActionbarSize() // set the icon size
                 .build(); // Finally call build
         return drawable;
-    }*/
+    }
+
     @Override
     public void setSelectedFragment(BackHandledFragment selectedFragment) {
         this.mBackHandedFragment = selectedFragment;
@@ -255,7 +263,24 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
 
     @Override
     public void finishSelf() {
-        this.finish() ;
+        this.finish();
     }
 
+    /**
+     * 返回键点击线程
+     */
+    Thread backThread = new Thread() {
+
+        public void run() {       //这个方法是不能写在你的主线程里面的，所以你要自己开个线程用来执行
+
+            Instrumentation inst = new Instrumentation();
+
+            try {
+                inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+            } catch (Exception e) {
+                Log.e("Global", e.getMessage());
+            }
+
+        }
+    };
 }

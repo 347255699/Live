@@ -1,7 +1,6 @@
 package org.live.module.login.model.impl;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Handler;
 import android.os.Message;
@@ -31,7 +30,7 @@ import java.util.Map;
 
 public class LoginModelImpl implements LoginModel {
     private Context context;
-    private String url = "http://10.20.197.154:8080/app"; // 请求地址
+    private String url = LiveConstants.REMOTE_SERVER_HTTP_IP + "/app"; // 请求地址
     private LoginModelListener listener;
     /**
      * 业务类型{login|register|forgetPassword}
@@ -93,8 +92,8 @@ public class LoginModelImpl implements LoginModel {
         AppDbUtils dbUtils = new AppDbUtils(context, "live", 1);
         Cursor cursor = dbUtils.findOne("select * from live_mobile_user", null);
         if (cursor.getCount() > 0) {
-            String account = cursor.getString(0);
-            String password = cursor.getString(1);
+            String account = cursor.getString(cursor.getColumnIndex("account"));
+            String password = cursor.getString(cursor.getColumnIndex("password"));
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("account", account);
             params.put("password", password);
@@ -155,8 +154,9 @@ public class LoginModelImpl implements LoginModel {
                     if (result != null) {
                         try {
                             if (1 == result.getInt("status")) {
+                                MobileUserVo mobileUserVo = JsonUtils.fromJson(result.getJSONObject("data").toString(), MobileUserVo.class); // 取出用户数据
+                                saveUserData(mobileUserVo);
                                 listener.toHome(); // 前往首页
-
                             } else {
                                 listener.showToast("密码过期");
                                 listener.toLogin(); // 前往登录页
@@ -196,12 +196,15 @@ public class LoginModelImpl implements LoginModel {
         public void run() {
             AppDbUtils dbUtils = new AppDbUtils(context, "live", 1);
             Cursor cursor = dbUtils.findOne("select * from live_mobile_user where account = ?", new String[]{mobileUserVo.getAccount()}); // 查询用户信息
-            if (cursor.getCount() == 0) {
-                Log.i("Global", "------------>>持久化用户数据");
+            Object[] mobileUsers = null;
+            Object[] liveRooms = null;
+            MobileUserVo.LiveRoomInUserVo liveRoomInUserVo = null;
+            if (mobileUserVo != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String birthday = sdf.format(mobileUserVo.getBirthday());
                 mobileUserVo.getBirthday();
-                Object[] mobileUsers = new Object[]{
+                mobileUsers = new Object[]{
+                        mobileUserVo.getUserId(),
                         mobileUserVo.getAccount(),
                         mobileUserVo.getPassword(),
                         mobileUserVo.getNickname(),
@@ -212,18 +215,58 @@ public class LoginModelImpl implements LoginModel {
                         mobileUserVo.getSex(),
                         birthday,
                         mobileUserVo.isAnchorFlag()};
-                dbUtils.save("insert into live_mobile_user values(?,?,?,?,?,?,?,?,?,?)", mobileUsers); // 保存用户信息
                 if (mobileUserVo.isAnchorFlag()) {
                     // 确认为主播
-                    MobileUserVo.LiveRoomInUserVo liveRoomInUserVo = mobileUserVo.getLiveRoomVo();
-                    Object[] liveRooms = new Object[]{liveRoomInUserVo.getCategoryId(),
+                    liveRoomInUserVo = mobileUserVo.getLiveRoomVo();
+                    liveRooms = new Object[]{liveRoomInUserVo.getCategoryId(),
                             liveRoomInUserVo.getCategoryName(),
                             liveRoomInUserVo.getRoomId(),
+                            liveRoomInUserVo.getRoomNum(),
                             liveRoomInUserVo.getRoomName(),
                             liveRoomInUserVo.getRoomCoverUrl(),
                             liveRoomInUserVo.getRoomLabel(),
+                            liveRoomInUserVo.isBanLiveFlag(),
                             liveRoomInUserVo.getDescription()};
-                    dbUtils.save("insert into live_room values(?,?,?,?,?,?,?)", liveRooms); // 保存用户的直播房间信息
+
+                }
+            }
+            if (cursor.getCount() == 0 && mobileUsers != null) {
+                Log.i("Global", "------------>>持久化用户数据");
+
+                dbUtils.save("insert into live_mobile_user values(?,?,?,?,?,?,?,?,?,?,?)", mobileUsers); // 保存用户信息
+                if (mobileUserVo.isAnchorFlag() && liveRooms != null) {
+                    dbUtils.save("insert into live_room values(?,?,?,?,?,?,?,?,?)", liveRooms); // 保存用户的直播房间信息
+                }
+            }
+            if (cursor.getCount() == 1 && mobileUsers != null) {
+                Log.i("Global", "------------>>更改用户数据");
+                dbUtils.save("update live_mobile_user set " +
+                        "user_id = ?, " +
+                        "account = ?, " +
+                        "password = ?, " +
+                        "nickname = ?, " +
+                        "head_img_url = ?, " +
+                        "email = ?, " +
+                        "mobile_number = ?, " +
+                        "real_name = ?, " +
+                        "sex = ?, " +
+                        "birthday = ?, " +
+                        "anchor_flag = ? " +
+                        "where user_id = '"+ mobileUserVo.getUserId() +"'", mobileUsers); // 更新用户信息
+                if (mobileUserVo.isAnchorFlag() && liveRooms != null) {
+                    dbUtils.save("update live_room set " +
+                            "category_id = ?, " +
+                            "category_name = ?, " +
+                            "room_id = ?, " +
+                            "room_num = ?, " +
+                            "room_name = ?, " +
+                            "room_cover_url = ?, " +
+                            "live_room_url = ?, " +
+                            "room_label = ?, " +
+                            "ban_live_flag = ?, " +
+                            "description = ?, " +
+                            "where room_id = '"+ liveRoomInUserVo.getRoomId() +"'", liveRooms); // 更新用户的直播房间信息
+
                 }
             }
             dbUtils.close(); // 释放资源

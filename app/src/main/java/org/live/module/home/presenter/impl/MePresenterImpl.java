@@ -1,6 +1,9 @@
 package org.live.module.home.presenter.impl;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 
 import org.live.module.home.listener.MeModelListener;
 import org.live.module.home.model.MeModel;
@@ -45,6 +48,21 @@ public class MePresenterImpl implements MePresenter, MeModelListener {
         meModel.logout(account, roomId);
     }
 
+    @Override
+    public void cropHeadImg(Uri uri) {
+        meModel.cropHeadImg(uri);
+    }
+
+    @Override
+    public String setPicToSd(Bitmap bitmap) {
+        return meModel.setPicToSd(bitmap);
+    }
+
+    @Override
+    public void postHeadImg(String fileName, String userId) {
+        meModel.postHeadImag(fileName, userId);
+    }
+
     /**
      * 前往登陆页
      */
@@ -59,5 +77,28 @@ public class MePresenterImpl implements MePresenter, MeModelListener {
     @Override
     public void finishSelf() {
         meView.finishSelf();
+    }
+
+    @Override
+    public void cropHeadImg(Intent intent, int requestCode) {
+        meView.cropHeadImg(intent, requestCode);
+    }
+
+    /**
+     * 显示提示信息
+     *
+     * @param msg
+     */
+    @Override
+    public void showToast(String msg) {
+        meView.showToast(msg);
+    }
+
+    /**
+     * 设置头像
+     */
+    @Override
+    public void setHeadImg() {
+        meView.setHeadImg();
     }
 }

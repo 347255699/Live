@@ -59,6 +59,12 @@ public class Validator {
                             errorKey = key;
                         }
                         break;
+                    case "matchRegEx":
+                        if (!matchRegEx(val, (String) ruleVal)) {
+                            result = false;
+                            errorKey = key;
+                        }
+                        break;
                 }
                 if (!result && errorKey != null) {
                     showErrorMsg(labels.get(errorKey) + "错误，" + errorMsg); // 显示错误信息
@@ -142,6 +148,9 @@ public class Validator {
         Matcher matcher = pattern.matcher(str);
         // 字符串是否与正则表达式相匹配
         boolean rs = matcher.matches();
+        if (!rs) {
+            errorMsg = "不符合格式";
+        }
         return rs;
     }
 

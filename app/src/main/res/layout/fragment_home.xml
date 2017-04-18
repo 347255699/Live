@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:text="最新直播"
             android:textColor="@color/colorWhite"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:layout_centerInParent="true"
             />
         <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -44,8 +44,8 @@
             android:id="@+id/rv_home_liveRoomHold"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp">
         </android.support.v7.widget.RecyclerView>
 
     </android.support.v4.widget.SwipeRefreshLayout>

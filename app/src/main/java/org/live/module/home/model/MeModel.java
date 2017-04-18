@@ -1,5 +1,8 @@
 package org.live.module.home.model;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import org.live.module.login.domain.MobileUserVo;
 
 import java.util.Map;
@@ -20,14 +23,23 @@ public interface MeModel {
 
     /**
      * 注销
+     *
      * @param account 账号
      */
     public void logout(String account, String roomId);
 
     /**
-     * 修改用户信息
-     *
-     * @param params
+     * 裁剪头像
      */
-    public void editUserInfo(Map<String, Object> params);
+    public void cropHeadImg(Uri uri);
+
+    /**
+     * 上传头像
+     */
+    public void postHeadImag(String filePath, String userId);
+
+    /**
+     * 保存图片至sd卡
+     */
+    public String setPicToSd(Bitmap bitmap);
 }

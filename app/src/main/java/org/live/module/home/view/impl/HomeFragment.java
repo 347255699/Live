@@ -3,7 +3,9 @@ package org.live.module.home.view.impl;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +35,13 @@ public class HomeFragment extends Fragment{
 
     private View currentFragmentView = null ;   //当前的fragment视图
 
-    private XRecyclerView liveRoomRecycleView ;
+    private RecyclerView liveRoomRecycleView ;
 
     private GridLayoutManager layoutManager = null ;    //grid布局管理器，为RecyclerView设置布局
 
     private LiveRoomGridAdapter adapter = null ;    //直播数据的适配器
+
+    private SwipeRefreshLayout refreshLayout = null ;  //下拉刷新
 
 
     @Nullable
@@ -57,16 +61,16 @@ public class HomeFragment extends Fragment{
      */
     public void initial() {
 
-        liveRoomRecycleView = (XRecyclerView) currentFragmentView.findViewById(R.id.rv_home_liveRoomHold) ;
+        refreshLayout = (SwipeRefreshLayout) currentFragmentView.findViewById(R.id.sl_home_refresh);
+        refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
+
+        liveRoomRecycleView = (RecyclerView) currentFragmentView.findViewById(R.id.rv_home_liveRoomHold) ;
 
         layoutManager = new GridLayoutManager(getContext(), 2) ;    //一行显示2列
 
         liveRoomRecycleView.setLayoutManager(layoutManager) ;
 
         liveRoomRecycleView.addItemDecoration(new LiveRoomItemDecoration()) ;
-
-        liveRoomRecycleView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);//下拉刷新动画
-        liveRoomRecycleView.setLoadingMoreProgressStyle(ProgressStyle.Pacman); //上拉加载动画
 
         adapter = new LiveRoomGridAdapter(getContext()) ;
         liveRoomRecycleView.setAdapter(adapter) ;

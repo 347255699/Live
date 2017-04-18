@@ -1,5 +1,8 @@
 package org.live.module.home.presenter;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import org.live.module.login.domain.MobileUserVo;
 
 /**
@@ -24,4 +27,21 @@ public interface MePresenter {
      */
     public void logout(String account, String roomId);
 
+    /**
+     * 裁剪头像
+     *
+     * @param uri 头像地址
+     */
+    public void cropHeadImg(Uri uri);
+
+    /**
+     * 保存图片至sd卡
+     */
+    public String setPicToSd(Bitmap bitmap);
+
+    /**
+     * @param fileName
+     * @param userId   上传头像
+     */
+    public void postHeadImg(String fileName, String userId);
 }

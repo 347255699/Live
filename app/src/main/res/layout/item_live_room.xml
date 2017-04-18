@@ -2,17 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
-    android:paddingTop="2dp"
-    android:paddingLeft="2dp"
-    android:paddingRight="2dp"
-    >
+    android:background="@color/colorWhite">
 
     <!--直播间封面-->
     <ImageView
         android:id="@+id/iv_live_liveCover"
         android:layout_width="200dp"
-        android:layout_height="120dp"
+        android:layout_height="130dp"
         android:src="@drawable/bg"
         android:scaleType="fitXY"
         />
@@ -22,9 +18,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_live_liveCover"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         android:textColor="@color/colorShallowBlack"
-        android:textSize="15dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:textSize="14sp"
         android:text="城院篮球赛事"
         />
     <!-- 主播名称 -->
@@ -34,8 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_live_liveName"
         android:textColor="@color/colorGray"
-        android:textSize="12dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
+        android:paddingLeft="2dp"
+        android:textSize="12sp"
         android:text="城院帅逼"
         />
 
@@ -44,7 +43,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@id/tv_live_liveName"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
+        android:paddingRight="2dp"
         android:layout_alignParentRight="true"
         >
         <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -53,9 +53,9 @@
             android:layout_height="wrap_content"
             android:scaleType="center"
             app:materialIcon="eye_outline"
-            android:paddingTop="2dp"
+            android:paddingTop="1dp"
             app:materialIconColor="@color/colorGray"
-            app:materialIconSize="18dp"
+            app:materialIconSize="17dp"
             android:layout_marginRight="3dp"
             />
         <!-- 直播在线人数 -->
@@ -64,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorGray"
+            android:textSize="12sp"
             android:text="1113"
             />
 

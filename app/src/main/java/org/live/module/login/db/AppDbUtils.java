@@ -32,6 +32,9 @@ public class AppDbUtils {
 
     /**
      * 查询记录
+     *
+     * @param sql
+     * @param params
      */
     public Cursor findOne(String sql, String[] params) {
         Cursor cursor = writableDatabase.rawQuery(sql, params);

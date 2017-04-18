@@ -18,7 +18,7 @@ public class LiveConstants {
     public static final String HTTP_PREFIX = "http://";
 
     /**
-     * 远程服务器的端口
+     * http远程服务器的端口
      */
     public static final String REMOTE_PORT = "8080";
 

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +18,13 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
-import com.flyco.animation.BaseAnimatorSet;
-import com.flyco.animation.FadeExit.FadeExit;
-import com.flyco.animation.FlipEnter.FlipVerticalSwingEnter;
-import com.flyco.dialog.listener.OnBtnClickL;
-import com.flyco.dialog.widget.MaterialDialog;
-import com.flyco.dialog.widget.NormalDialog;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 
 import org.live.R;
 import org.live.common.constants.LiveConstants;
 import org.live.module.home.listener.OnHomeActivityEventListener;
-import org.live.module.home.view.MeView;
 import org.live.module.login.domain.MobileUserVo;
-import org.live.module.login.view.impl.LoginActivity;
-import org.live.module.play.view.impl.PlayActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,10 +78,16 @@ public class MeFragment extends Fragment {
         if (getActivity() instanceof OnHomeActivityEventListener) {
             this.homeActivityEventListener = (OnHomeActivityEventListener) getActivity();
         }
-        this.mobileUserVo = homeActivityEventListener.getUserData(); // 取得用户数据
-        initUIElement();
+
         return currentFragmentView;
 
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        this.mobileUserVo = homeActivityEventListener.getUserData(); // 取得用户数据
+        initUIElement();
     }
 
     /**
@@ -118,37 +118,73 @@ public class MeFragment extends Fragment {
         mMeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(TAG, "" + position);
+                switch (position) {
+                    case 0:
+                        Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+                        startActivity(intent); // 跳转至用户信息编辑窗口
+                        break;
+                }
             }
         }); // 绑定列表项点击事件
 
         mLogoutLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BaseAnimatorSet bas_in = new FlipVerticalSwingEnter();  //动画，弹出提示框的动画
-                BaseAnimatorSet bas_out = new FadeExit();                //关闭提示框的动画
-                final MaterialDialog dialog = new MaterialDialog(getActivity());
-                dialog.content("确定要注销登录吗？ ");
-                dialog.btnNum(2).btnText("取消", "确认").btnTextColor(NormalDialog.STYLE_TWO);
-                dialog.showAnim(bas_in)
-                        .dismissAnim(bas_out)
-                        .show();
-                dialog.setOnBtnClickL(new OnBtnClickL() {
+
+                DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite2)
+                        .setContentHolder(new ViewHolder(R.layout.dialog_me_logout))
+                        .setGravity(Gravity.CENTER)
+                        .create();
+                dialog.show();
+                View dialogView = dialog.getHolderView();
+                dialogView.findViewById(R.id.btn_me_logout).setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onBtnClick() {  //取消
-                        dialog.dismiss();
-                    }
-                }, new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {  //确定
-                        dialog.dismiss();
+                    public void onClick(View v) {
                         homeActivityEventListener.logout(); // 注销登陆
+                    }
+                });
+                dialogView.findViewById(R.id.btn_me_exit).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        homeActivityEventListener.exit(); // 退出应用
                     }
                 });
 
             }
         }); // 绑定退出登录选项
 
+        mHeadImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHeadImgChooseTypeDialog();
+            }
+        }); // 绑定更换头像操作
+    }
+
+    /**
+     * 显示头像获取方式对话框
+     */
+    private void showHeadImgChooseTypeDialog() {
+        final DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite2)
+                .setContentHolder(new ViewHolder(R.layout.dialog_me_choose_type))
+                .setGravity(Gravity.CENTER)
+                .create();
+        dialog.show();
+        final View dialogView = dialog.getHolderView();
+        dialogView.findViewById(R.id.btn_me_gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeActivityEventListener.chooseHeadImgFromGallery();
+                dialog.dismiss();
+            }
+        });// 从相册中选取
+        dialogView.findViewById(R.id.btn_me_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeActivityEventListener.chooseHeadImgFromCamera();
+                dialog.dismiss();
+            }
+        });// 拍摄照片
     }
 
     /**
@@ -167,5 +203,20 @@ public class MeFragment extends Fragment {
         return list;
     }
 
+    /**
+     * 取得头像显示视图
+     *
+     * @return
+     */
+    public ImageView getMHeadImageView() {
+        return this.mHeadImageView;
+    }
 
+    /**
+     * 重新刷新数据
+     */
+    public void reLoadData() {
+        mAccountTextView.setText("ID: " + homeActivityEventListener.getUserData().getAccount());
+        mNicknameTextView.setText(homeActivityEventListener.getUserData().getNickname());
+    }
 }

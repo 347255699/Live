@@ -3,12 +3,13 @@ package org.live.module.home.view.impl;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
@@ -30,7 +31,9 @@ public class SingleCategoryActivity extends Activity {
 
     private TextView categoryNameTextView ; //直播分类名称的textview
 
-    private XRecyclerView liveRoomRecycleView ;
+    private SwipeRefreshLayout refreshLayout ;  //下拉刷新
+
+    private RecyclerView liveRoomRecycleView ;
 
     private String categoryName ;   //分类名称
 
@@ -57,10 +60,13 @@ public class SingleCategoryActivity extends Activity {
      */
     private void initial() {
 
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.sl_singleCategory_refresh);
+        refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
+
         backToCategoryBtn = (MaterialIconView) findViewById(R.id.btn_return_singleCategory) ;
         categoryNameTextView = (TextView) findViewById(R.id.tv_categoryName_singleCategory) ;
 
-        liveRoomRecycleView = (XRecyclerView) findViewById(R.id.rv_singleCategory_liveRoomHold);
+        liveRoomRecycleView = (RecyclerView) findViewById(R.id.rv_singleCategory_liveRoomHold);
         //设置布局
         liveRoomRecycleView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2)) ;
         //设置tiem之间的边距
@@ -92,19 +98,13 @@ public class SingleCategoryActivity extends Activity {
 
         liveRoomRecycleView.setAdapter(adapter) ;
 
-        liveRoomRecycleView.setLoadingListener(new XRecyclerView.LoadingListener() {
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                liveRoomRecycleView.refreshComplete();
-            }
 
-            @Override
-            public void onLoadMore() {
-                liveRoomRecycleView.refreshComplete();
             }
         });
-
-
 
 
 

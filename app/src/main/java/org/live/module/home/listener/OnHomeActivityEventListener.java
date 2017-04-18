@@ -17,4 +17,19 @@ public interface OnHomeActivityEventListener {
      * 取得用户数据
      */
     public MobileUserVo getUserData();
+
+    /**
+     * 退出应用
+     */
+    public void exit();
+
+    /**
+     * 从相册选择头像
+     */
+    public void chooseHeadImgFromGallery();
+
+    /**
+     * 拍摄头像
+     */
+    public void chooseHeadImgFromCamera();
 }

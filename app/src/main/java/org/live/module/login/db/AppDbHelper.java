@@ -23,6 +23,7 @@ public class AppDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String mobile_user = "create table live_mobile_user(" +
+                "user_id varchar(64)," +
                 "account varchar(64)," +
                 "password varchar(64)," +
                 "nickname varchar(64)," +
@@ -32,15 +33,17 @@ public class AppDbHelper extends SQLiteOpenHelper {
                 "real_name varchar(64)," +
                 "sex char(1)," +
                 "birthday varchar(64)," +
-                "anchorFlag boolean" +
+                "anchor_flag boolean" +
                 ")";
         String live_room = "create table live_room(" +
                 "category_id varchar(64)," +
                 "category_name varchar(64)," +
                 "room_id varchar(64)," +
+                "room_num varchar(64)," +
                 "room_name varchar(64)," +
                 "room_cover_url varchar(64)," +
                 "room_label varchar(64)," +
+                "ban_live_flag boolean," +
                 "description text" +
                 ")";
         db.execSQL(mobile_user);

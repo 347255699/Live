@@ -7,7 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,9 +42,11 @@ public class CategoryFragment extends Fragment {
 
     private View currentFragmentView = null;   //当前的fragment视图
 
-    private XRecyclerView categoryRecyclerView = null;  //
+    private RecyclerView categoryRecyclerView = null;  //
 
     private GridLayoutManager layoutManager = null;    //grid布局管理器，为RecyclerView设置布局
+
+    private SwipeRefreshLayout refreshLayout = null;   //下拉刷新
 
     private CategoryGridAdapter adapter = null;    //分类数据的适配器
 
@@ -69,14 +73,14 @@ public class CategoryFragment extends Fragment {
      */
     public void initial() {
 
-        categoryRecyclerView = (XRecyclerView) currentFragmentView.findViewById(R.id.rv_category_hold);
+        refreshLayout = (SwipeRefreshLayout) currentFragmentView.findViewById(R.id.sl_category_refresh);
+        refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
+
+        categoryRecyclerView = (RecyclerView) currentFragmentView.findViewById(R.id.rv_category_hold);
 
         layoutManager = new GridLayoutManager(getContext(), 3);   //一行显示3列
         categoryRecyclerView.setLayoutManager(layoutManager);
         categoryRecyclerView.addItemDecoration(new CategoryItemDecoration()); //设置行间距
-
-        categoryRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);//下拉刷新动画
-        categoryRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.Pacman); //上拉加载动画
 
         adapter = new CategoryGridAdapter(getContext());
         categoryRecyclerView.setAdapter(adapter);  //设置适配器
@@ -100,27 +104,22 @@ public class CategoryFragment extends Fragment {
                         Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_LONG).show();
                     }
                 }
+                refreshLayout.setRefreshing(false) ;    //隐藏刷新
                 adapter.notifyDataSetChanged();
-                categoryRecyclerView.refreshComplete();
             }
         };
 
         presenter = new CategoryPresenter(getContext(), handler);
         presenter.loadCategoryData();  //初始化数据
 
-        categoryRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.loadCategoryData();
-            }
-
-            @Override
-            public void onLoadMore() {
-                Log.d(TAG, "上拉加载");
-                adapter.notifyDataSetChanged();
-                categoryRecyclerView.refreshComplete();
+                presenter.loadCategoryData() ;
             }
         });
+
+
 
         adapter.setListener(new OnItemClickListener() {
             @Override

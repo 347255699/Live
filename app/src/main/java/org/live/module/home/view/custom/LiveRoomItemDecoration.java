@@ -10,7 +10,7 @@ import android.view.View;
 
 public class LiveRoomItemDecoration extends RecyclerView.ItemDecoration {
 
-    private int bottomSpace = 30 ;  //距离底部的间距
+    private int bottomSpace = 35 ;  //距离底部的间距
 
     private int rowSpace = 12 ;   //行内间距
 

@@ -36,8 +36,11 @@ public class HttpRequestUtils {
      * @return
      */
     public static void requestHttp(String url, String type, Map<String, Object> params, final Handler handler, final int what) throws Exception {
+
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         for (String key : params.keySet()) {
+            String _key = key;
+            String _val = (String) params.get(key);
             pairs.add(new BasicNameValuePair(key, (String) params.get(key)));
         } // 构建参数
 
