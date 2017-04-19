@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
         Toolbar lToolbar = (Toolbar) findViewById(R.id.tb_login);
         lToolbar.setTitle("");
         setSupportActionBar(lToolbar);
-        lToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.ARROW_LEFT, Color.WHITE));
+        lToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.CHEVRON_LEFT, Color.WHITE));
         lToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,11 +120,11 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
      * @return
      */
     private Drawable getIconDrawable(MaterialDrawableBuilder.IconValue iconValue, int color) {
-        Drawable drawable = MaterialDrawableBuilder.with(this) // provide a context
-                .setIcon(iconValue) // provide an icon
-                .setColor(color) // set the icon color
-                .setToActionbarSize() // set the icon size
-                .build(); // Finally call build
+        Drawable drawable = MaterialDrawableBuilder.with(this)
+                .setIcon(iconValue)
+                .setColor(color)
+                .setToActionbarSize()
+                .build();
         return drawable;
     }
 

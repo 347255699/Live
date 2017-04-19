@@ -55,16 +55,16 @@ public class HttpRequestUtils {
                 request = new AsyncHttpRequest(Uri.parse(url), RequestMethod.POST);
                 break;
             case RequestMethod.DELETE:
-                request = new AsyncHttpRequest(Uri.parse(url), RequestMethod.POST);
-                pairs.add(new BasicNameValuePair("_method", RequestMethod.DELETE));
+                request = new AsyncHttpRequest(Uri.parse(url), RequestMethod.DELETE);
+                //pairs.add(new BasicNameValuePair("_method", RequestMethod.));
                 break;
             case RequestMethod.PUT:
-                request = new AsyncHttpRequest(Uri.parse(url), RequestMethod.POST);
-                pairs.add(new BasicNameValuePair("_method", RequestMethod.PUT));
+                request = new AsyncHttpRequest(Uri.parse(url), RequestMethod.PUT);
+                //pairs.add(new BasicNameValuePair("_method", RequestMethod.));
                 break;
             case RequestMethod.PATH:
-                request = new AsyncHttpRequest(Uri.parse(url), RequestMethod.POST);
-                pairs.add(new BasicNameValuePair("_method", RequestMethod.PATH));
+                request = new AsyncHttpRequest(Uri.parse(url), RequestMethod.PATH);
+                //pairs.add(new BasicNameValuePair("_method", RequestMethod.));
                 break;
         } // 调整请求类型以支持restfult风格
 

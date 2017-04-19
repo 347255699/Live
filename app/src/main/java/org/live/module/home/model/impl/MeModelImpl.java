@@ -22,6 +22,7 @@ import org.live.common.util.SimpleResponseModel;
 import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.model.MeModel;
 import org.live.module.home.view.MeView;
+import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.login.db.AppDbUtils;
 import org.live.module.login.domain.MobileUserVo;
 
@@ -272,6 +273,9 @@ public class MeModelImpl implements MeModel {
                     if (result != null) {
                         SimpleResponseModel model = JsonUtils.fromJson(result, SimpleResponseModel.class);
                         if (model.getStatus() == 1) {
+                            MobileUserVo mobileUserVo = HomeActivity.mobileUserVo;
+                            mobileUserVo.setHeadImgUrl((String) model.getData());
+                            HomeActivity.mobileUserVo = mobileUserVo;
                             meView.setHeadImg(); // 设置头像
                         } else {
                             meView.showToast(model.getMessage());

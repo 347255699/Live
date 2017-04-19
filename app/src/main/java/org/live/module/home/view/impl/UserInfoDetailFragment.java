@@ -1,22 +1,13 @@
 package org.live.module.home.view.impl;
 
-import android.app.Fragment;
-import android.app.Instrumentation;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
-import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import org.live.R;
 import org.live.common.listener.BackHandledFragment;

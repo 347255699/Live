@@ -18,7 +18,7 @@
             android:scaleType="center"
             app:materialIcon="chevron_left"
             app:materialIconColor="@color/colorWhite"
-            app:materialIconSize="40dp"
+            app:materialIconSize="35dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             />

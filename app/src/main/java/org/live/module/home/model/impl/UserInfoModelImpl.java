@@ -54,7 +54,7 @@ public class UserInfoModelImpl implements UserInfoModel {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(key, val);
         try {
-            HttpRequestUtils.requestHttp(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/user/" + HomeActivity.mobileUserVo.getUserId(), "POST", params, editUserInfoResponseHandler, HomeConstants.HTTP_RESPONSE_RESULT_EDDIT_USER_INFO_CODE); // 发送修改请求
+            HttpRequestUtils.requestHttp(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/user/" + HomeActivity.mobileUserVo.getUserId(), "PUT", params, editUserInfoResponseHandler, HomeConstants.HTTP_RESPONSE_RESULT_EDDIT_USER_INFO_CODE); // 发送修改请求
         } catch (Exception e) {
             Log.e("Global", e.getMessage());
         }

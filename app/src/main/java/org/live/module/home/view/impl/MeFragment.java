@@ -216,7 +216,9 @@ public class MeFragment extends Fragment {
      * 重新刷新数据
      */
     public void reLoadData() {
-        mAccountTextView.setText("ID: " + homeActivityEventListener.getUserData().getAccount());
-        mNicknameTextView.setText(homeActivityEventListener.getUserData().getNickname());
+        if(mAccountTextView != null && mNicknameTextView != null){
+            mAccountTextView.setText("ID: " + homeActivityEventListener.getUserData().getAccount());
+            mNicknameTextView.setText(homeActivityEventListener.getUserData().getNickname());
+        }
     }
 }

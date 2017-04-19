@@ -116,7 +116,7 @@ public class UserInfoActivity extends AppCompatActivity implements BackHandledIn
     public void initActionBar(View view, int toolBarId) {
         Toolbar uToolbar = (Toolbar) view.findViewById(toolBarId);
         uToolbar.setTitle("");
-        uToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.ARROW_LEFT, Color.WHITE));
+        uToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.CHEVRON_LEFT, Color.WHITE));
         uToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
