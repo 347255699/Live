@@ -39,4 +39,9 @@ public interface OnUserInfoActivityListener {
     public void replaceUserInfoEditFragment(String key, String val);
 
     public UserInfoPresenter getUserInfoPresenter();
+
+    /**
+     * 关闭软键盘
+     */
+    public void closeKeyboard();
 }

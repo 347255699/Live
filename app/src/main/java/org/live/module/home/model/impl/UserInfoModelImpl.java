@@ -74,7 +74,7 @@ public class UserInfoModelImpl implements UserInfoModel {
         Map<String, Map<String, Object>> rules = new HashMap<String, Map<String, Object>>();// 字符组对应的规则组
         vals.put(key, val);
         labels.put(key, label);
-        Map<String, Object> rule = new HashMap<String, Object>();
+        Map<String, Object> rule = new LinkedHashMap<String, Object>();
         switch (key) {
             case "nickname":
                 rule.put("maxLength", 10);
@@ -123,6 +123,7 @@ public class UserInfoModelImpl implements UserInfoModel {
                             }
                             HomeActivity.mobileUserVo = mobileUserVo; // 刷新缓存
                             modelListener.showToast(jsonObject.getString("message"));
+                            modelListener.closeKeyboard(); // 关闭软键盘
                             modelListener.back(); // 返回
                         } else {
                             modelListener.showToast(jsonObject.getString("message"));

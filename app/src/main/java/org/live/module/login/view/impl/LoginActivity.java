@@ -103,13 +103,13 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
         Toolbar lToolbar = (Toolbar) findViewById(R.id.tb_login);
         lToolbar.setTitle("");
         setSupportActionBar(lToolbar);
-       /* lToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.CLOSE, Color.WHITE));
+        lToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.ARROW_LEFT, Color.WHITE));
         lToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backThread.start(); // 模拟返回键点击
+                new BackThread().start(); // 模拟返回键点击
             }
-        });*/
+        });
 
     }
 
@@ -269,10 +269,8 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
     /**
      * 返回键点击线程
      */
-    Thread backThread = new Thread() {
-
+    class BackThread extends Thread {
         public void run() {       //这个方法是不能写在你的主线程里面的，所以你要自己开个线程用来执行
-
             Instrumentation inst = new Instrumentation();
 
             try {
@@ -282,5 +280,5 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
             }
 
         }
-    };
+    }
 }

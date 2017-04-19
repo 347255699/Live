@@ -13,11 +13,12 @@ import org.live.module.home.view.UserInfoView;
  * Created by KAM on 2017/4/18.
  */
 
-public class UserInfoPresenterImpl implements UserInfoModelListener, UserInfoPresenter{
+public class UserInfoPresenterImpl implements UserInfoModelListener, UserInfoPresenter {
 
     private UserInfoModel userInfoModel;
     private UserInfoView userInfoView;
-    public UserInfoPresenterImpl(Context context, UserInfoView userInfoView){
+
+    public UserInfoPresenterImpl(Context context, UserInfoView userInfoView) {
         this.userInfoModel = new UserInfoModelImpl(context, this);
         this.userInfoView = userInfoView;
     }
@@ -30,6 +31,11 @@ public class UserInfoPresenterImpl implements UserInfoModelListener, UserInfoPre
     @Override
     public void showToast(String msg) {
         userInfoView.showToast(msg);
+    }
+
+    @Override
+    public void closeKeyboard() {
+        userInfoView.closeKeyboard();
     }
 
     @Override

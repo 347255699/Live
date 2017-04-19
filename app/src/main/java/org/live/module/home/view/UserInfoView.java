@@ -6,6 +6,20 @@ package org.live.module.home.view;
  */
 
 public interface UserInfoView {
+    /**
+     * 返回
+     */
     public void back();
+
+    /**
+     * 显示提示信息
+     *
+     * @param msg
+     */
     public void showToast(String msg);
+
+    /**
+     * 关闭软键盘
+     */
+    public void closeKeyboard();
 }

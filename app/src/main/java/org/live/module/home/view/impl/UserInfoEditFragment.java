@@ -99,6 +99,11 @@ public class UserInfoEditFragment extends BackHandledFragment {
 
                 if (isPassed && !itemVal.equals(uUserInfoItemEditView.getText().toString())) {
                     userInfoActivityListener.getUserInfoPresenter().editUserInfo(itemKey, uUserInfoItemEditView.getText().toString()); // 修改信息
+                }else{
+                    if(itemVal.equals(uUserInfoItemEditView.getText().toString())){
+                        userInfoActivityListener.closeKeyboard(); // 关闭软键盘
+                        userInfoActivityListener.back(); // 返回
+                    }
                 }
                 Log.i(TAG, "保存按钮被点击了：" + itemKey + ":" + uUserInfoItemEditView.getText().toString());
             }

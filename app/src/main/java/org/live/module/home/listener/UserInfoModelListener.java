@@ -13,7 +13,13 @@ public interface UserInfoModelListener {
 
     /**
      * 显示提示消息
+     *
      * @param msg
      */
     public void showToast(String msg);
+
+    /**
+     * 关闭软键盘
+     */
+    public void closeKeyboard();
 }

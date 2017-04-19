@@ -82,7 +82,10 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         if (fragmentList.get(fragmentIndex) instanceof MeFragment) {
             meFragment = (MeFragment) fragmentList.get(fragmentIndex);
         }
-        meFragment.reLoadData(); // 刷新数据
+        if(meFragment != null){
+            meFragment.reLoadData(); // 刷新数据
+        }
+
     }
 
     /**
