@@ -224,6 +224,7 @@ public class LoginModelImpl implements LoginModel {
                             liveRoomInUserVo.getRoomNum(),
                             liveRoomInUserVo.getRoomName(),
                             liveRoomInUserVo.getRoomCoverUrl(),
+                            liveRoomInUserVo.getLiveRoomUrl(),
                             liveRoomInUserVo.getRoomLabel(),
                             liveRoomInUserVo.isBanLiveFlag(),
                             liveRoomInUserVo.getDescription()};
@@ -235,7 +236,7 @@ public class LoginModelImpl implements LoginModel {
 
                 dbUtils.save("insert into live_mobile_user values(?,?,?,?,?,?,?,?,?,?,?)", mobileUsers); // 保存用户信息
                 if (mobileUserVo.isAnchorFlag() && liveRooms != null) {
-                    dbUtils.save("insert into live_room values(?,?,?,?,?,?,?,?,?)", liveRooms); // 保存用户的直播房间信息
+                    dbUtils.save("insert into live_room values(?,?,?,?,?,?,?,?,?,?)", liveRooms); // 保存用户的直播房间信息
                 }
             }
             if (cursor.getCount() == 1 && mobileUsers != null) {
@@ -264,7 +265,7 @@ public class LoginModelImpl implements LoginModel {
                             "live_room_url = ?, " +
                             "room_label = ?, " +
                             "ban_live_flag = ?, " +
-                            "description = ?, " +
+                            "description = ? " +
                             "where room_id = '"+ liveRoomInUserVo.getRoomId() +"'", liveRooms); // 更新用户的直播房间信息
 
                 }

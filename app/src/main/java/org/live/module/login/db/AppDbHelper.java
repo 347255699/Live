@@ -42,6 +42,7 @@ public class AppDbHelper extends SQLiteOpenHelper {
                 "room_num varchar(64)," +
                 "room_name varchar(64)," +
                 "room_cover_url varchar(64)," +
+                "live_room_url varchar(64),"+
                 "room_label varchar(64)," +
                 "ban_live_flag boolean," +
                 "description text" +
