@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我的直播"
+            android:text=""
             android:textColor="@color/colorWhite"
             android:textSize="22dp"
             android:layout_centerInParent="true"
