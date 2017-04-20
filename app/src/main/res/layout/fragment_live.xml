@@ -2,31 +2,112 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:background="@drawable/bg">
 
     <!--标题栏-->
-    <!--标题栏-->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/themeColor1">
+    <!--   <android.support.v7.widget.Toolbar
+           android:id="@+id/tb_live"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="?attr/colorPrimary"
+           android:minHeight="?attr/actionBarSize">
 
+           <TextView
+               android:id="@+id/tv_user_info_title"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:text="我的直播"
+               android:textColor="@color/colorWhite"
+               android:textSize="20sp" />
+       </android.support.v7.widget.Toolbar>-->
+
+    <!--    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/default_cover"
+                />
+        </LinearLayout>-->
+    <!--
         <TextView
+            android:id="@+id/tv_live_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@color/colorWhite"
-            android:textSize="22dp"
             android:layout_centerInParent="true"
-            />
-    </RelativeLayout>
+            android:text="您暂且还不是主播喔，快快点击下列按钮"
+            android:textSize="20dp" />-->
 
+    <!-- <LinearLayout
+           android:id="@+id/ll_live_be_anchor"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@id/tb_live"
+           android:layout_marginTop="@dimen/activity_vertical_margin"
 
+           android:background="@drawable/selector_ll_corners"
+
+           android:clickable="true"
+           android:orientation="horizontal">
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+
+               android:layout_marginLeft="@dimen/activity_horizontal_margin"
+               android:layout_marginRight="@dimen/activity_horizontal_margin"
+               android:paddingBottom="5dp"
+               android:paddingTop="5dp">
+
+               <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                   android:id="@+id/icon_live_camera_front"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_centerVertical="true"
+                   android:background="@color/colorWhite"
+                   app:materialIcon="camera_front"
+                   app:materialIconColor="@color/themeColor"
+                   app:materialIconSize="30dp" />
+
+               <TextView
+                   android:id="@+id/tv_live_be_anchor"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_centerVertical="true"
+                   android:layout_marginLeft="40dp"
+                   android:text="我要当主播"
+                   android:textColor="@color/colorDeepGray"
+                   android:textSize="16sp" />
+
+               <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                   android:id="@+id/icon_demo_chevron_right"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentRight="true"
+                   android:layout_centerVertical="true"
+                   android:padding="5dp"
+                   android:scaleType="center"
+                   app:materialIcon="chevron_right"
+                   app:materialIconColor="@color/colorGray"
+                   app:materialIconSize="@dimen/icon_recorder_size" />
+           </RelativeLayout>
+
+       </LinearLayout>-->
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="这是直播的fragment"
-        android:textSize="30dp"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/selector_green_corners_button"
+        android:clickable="true"
+        android:text="我要当主播"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp" />
 </RelativeLayout>
