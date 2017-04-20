@@ -62,7 +62,7 @@
         <activity android:name=".module.home.view.impl.SingleCategoryActivity" />
         <activity
             android:name=".module.login.view.impl.LoginActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask"/>
         <activity android:name=".module.login.view.impl.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -70,7 +70,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.home.view.impl.UserInfoActivity"></activity>
+        <activity android:name=".module.home.view.impl.UserInfoActivity"/>
     </application>
 
 </manifest>
