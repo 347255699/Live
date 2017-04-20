@@ -211,7 +211,7 @@ public class MeModelImpl implements MeModel {
     @Override
     public void postHeadImag(String filePath, String userId) {
 
-        AsyncHttpPost put = new AsyncHttpPost(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/headImg/" + userId);
+        AsyncHttpPut put = new AsyncHttpPut(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/headImg/" + userId);
         MultipartFormDataBody body = new MultipartFormDataBody();
         body.addFilePart("file", new File(filePath));
         put.setBody(body);
