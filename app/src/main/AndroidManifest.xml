@@ -30,6 +30,25 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!-- 个推sdk的权限。-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <!-- 支持iBeancon 需要蓝牙权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!-- 支持个推3.0 电子围栏功能 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 浮动通知权限 -->
+    <uses-permission android:name="getui.permission.GetuiService.${applicationId}"/>
+
+    <permission
+        android:name="getui.permission.GetuiService.${applicationId}"
+        android:protectionLevel="normal"/>
+
     <application
         android:name=".common.application.CommonApplication"
         android:allowBackup="true"
@@ -59,6 +78,14 @@
             android:exported="false" />
         <service android:name=".module.chat.service.ChatService" />
 
+        <!-- 个推初始化服务 -->
+        <service android:name=".module.login.service.InitPushService"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":pushservice"/>
+        <!-- 接收个推消息的服务 -->
+        <service android:name=".module.login.service.ReceiveIntentService" />
+
         <activity android:name=".module.home.view.impl.SingleCategoryActivity" />
         <activity
             android:name=".module.login.view.impl.LoginActivity"
@@ -71,6 +98,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".module.home.view.impl.UserInfoActivity"></activity>
+
+
     </application>
 
 </manifest>

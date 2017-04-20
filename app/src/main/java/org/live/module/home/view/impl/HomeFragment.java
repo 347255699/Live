@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.live.R;
 import org.live.module.home.domain.LiveCategoryVo;

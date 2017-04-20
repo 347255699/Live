@@ -7,9 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.igexin.sdk.PushManager;
+
 import org.live.R;
 import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.login.presenter.impl.LoginPresenterImpl;
+import org.live.module.login.service.InitPushService;
+import org.live.module.login.service.ReceiveIntentService;
 import org.live.module.login.view.LoginView;
 
 /**
@@ -20,6 +24,10 @@ public class SplashActivity extends AppCompatActivity implements LoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        //启动个推
+        PushManager.getInstance().initialize(this.getApplicationContext(), InitPushService.class) ;
+        PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), ReceiveIntentService.class) ;
 
         new Handler().postDelayed(new NextActivity(this, this), 1500); // 延迟两秒跳转至下个页面
 

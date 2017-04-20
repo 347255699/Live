@@ -14,7 +14,10 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        jcenter();
+        maven {
+            url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/"
+        }
     }
 }
 
