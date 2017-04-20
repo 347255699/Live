@@ -59,6 +59,11 @@
             android:exported="false" />
         <service android:name=".module.chat.service.ChatService" />
 
+        <!-- 个推初始化service -->
+        <service android:name=".module.login.service.InitPushService" />
+        <!-- 个推的订阅service -->
+        <service android:name=".module.login.service.ReceiveIntentService" />
+
         <activity android:name=".module.home.view.impl.SingleCategoryActivity" />
         <activity
             android:name=".module.login.view.impl.LoginActivity"
