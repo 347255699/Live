@@ -116,7 +116,7 @@ public class MeModelImpl implements MeModel {
 
             }
             if (mobileUserVo.isAnchorFlag()) {
-                MobileUserVo.LiveRoomInUserVo liveRoomVo = mobileUserVo.getLiveRoomVo();
+                MobileUserVo.LiveRoomInUserVo liveRoomVo = mobileUserVo.newInstantLiveRoomVo();
                 cursor = dbUtils.findOne("select * from live_room", null);
                 if (cursor.getCount() > 0) {
                     for (String name2 : cursor.getColumnNames()) {
