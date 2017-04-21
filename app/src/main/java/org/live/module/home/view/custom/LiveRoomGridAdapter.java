@@ -11,12 +11,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import org.live.R;
+import org.live.common.constants.LiveConstants;
 import org.live.module.home.domain.LiveCategoryVo;
 import org.live.module.home.domain.LiveRoomVo;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
@@ -29,6 +32,15 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
     private Context mContext ;
 
     private LayoutInflater mInflater ;
+
+    //图片圆角
+    private RoundedCornersTransformation roundedCornersTransformation ;
+
+    //图片朦胧处理
+    private BlurTransformation blurTransformation ;
+
+    //
+    private GrayscaleTransformation grayscaleTransformation ;
 
     /**
      * 数据集合
@@ -45,6 +57,10 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
         this.mContext = context ;
         liveRoomList = new LinkedList<LiveRoomVo>() ;
         mInflater = LayoutInflater.from(context) ;
+
+        roundedCornersTransformation =  new RoundedCornersTransformation(mContext, 30, 5) ;
+        blurTransformation = new BlurTransformation(context, 8) ;
+        grayscaleTransformation = new GrayscaleTransformation(context) ;
     }
 
 
@@ -59,7 +75,7 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
             @Override
             public void onClick(View v) {
                 if(listener != null) {
-                    listener.onItemClick(itemView, viewHolder.getAdapterPosition() -1) ;
+                    listener.onItemClick(itemView, viewHolder.getAdapterPosition()) ;
                 }
             }
         });
@@ -69,8 +85,15 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
     @Override
     public void onBindViewHolder(LiveRoomViewHolder holder, int position) {
         LiveRoomVo vo = liveRoomList.get(position) ;
-        //图片圆角
-        Glide.with(mContext).load(new Integer(vo.getLiveRoomCoverUrl()) ).bitmapTransform(new RoundedCornersTransformation(mContext, 40, 5)).into(holder.getLiveCoverImageView()) ;
+
+        if(vo.isLiveFlag()) {
+            Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
+                    .bitmapTransform(roundedCornersTransformation).into(holder.getLiveCoverImageView()) ;
+        } else {
+            Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
+                    .bitmapTransform(roundedCornersTransformation, grayscaleTransformation, blurTransformation).into(holder.getLiveCoverImageView()) ;
+        }
+
         holder.getLiveRoomNameTextView().setText(vo.getLiveRoomName()) ;
         holder.getAnchorNameTextView().setText(vo.getAnchorName()) ;
         holder.getOnlineCountTextView().setText(vo.getOnlineCount()+"") ;

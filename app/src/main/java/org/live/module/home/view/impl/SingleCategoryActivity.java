@@ -3,6 +3,8 @@ package org.live.module.home.view.impl;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +16,14 @@ import android.widget.Toast;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.R;
+import org.live.common.util.SimpleResponseModel;
 import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.domain.LiveRoomVo;
+import org.live.module.home.presenter.LiveRoomPresenter;
 import org.live.module.home.view.custom.LiveRoomGridAdapter;
 import org.live.module.home.view.custom.LiveRoomItemDecoration;
+
+import java.util.List;
 
 /**
  *  展示某直播分类下的直播间
@@ -35,11 +41,15 @@ public class SingleCategoryActivity extends Activity {
 
     private RecyclerView liveRoomRecycleView ;
 
+    private LiveRoomGridAdapter adapter ;
+
     private String categoryName ;   //分类名称
 
     private String categoryId ;     //分类id
 
+    private LiveRoomPresenter presenter ;
 
+    private Handler handler ;
 
 
     @Override
@@ -50,9 +60,9 @@ public class SingleCategoryActivity extends Activity {
         categoryId = intent.getStringExtra(HomeConstants.CATEGORY_ID_KEY) ;
         categoryName = intent.getStringExtra(HomeConstants.CATEGORY_NAME_KEY) ;
         initial() ;
-
-
-
+        newInstanceHandler() ;
+        presenter = new LiveRoomPresenter(getBaseContext(), handler) ;
+        presenter.loadLiveRoomDataByCategoryId(categoryId) ;    //预先加载数据
     }
 
     /**
@@ -71,9 +81,11 @@ public class SingleCategoryActivity extends Activity {
         liveRoomRecycleView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2)) ;
         //设置tiem之间的边距
         liveRoomRecycleView.addItemDecoration(new LiveRoomItemDecoration()) ;
+        //设置适配器
+        adapter = new LiveRoomGridAdapter(getBaseContext()) ;   //
+        liveRoomRecycleView.setAdapter(adapter) ;
 
-        categoryNameTextView.setText(categoryName) ;
-        Toast.makeText(getApplicationContext(), categoryId, Toast.LENGTH_SHORT).show() ;
+        categoryNameTextView.setText(categoryName) ;    //设置分类名称
 
         backToCategoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,34 +94,42 @@ public class SingleCategoryActivity extends Activity {
             }
         }) ;
 
-        LiveRoomGridAdapter adapter = new LiveRoomGridAdapter(getBaseContext()) ;   //
-
-        LiveRoomVo vo = new LiveRoomVo() ;
-        vo.setAnchorName("我是城院大帅比") ;
-        vo.setLiveRoomName("欢迎欢迎") ;
-        vo.setLiveRoomId("11111") ;
-        vo.setOnlineCount(111) ;
-        vo.setLiveRoomCoverUrl(R.drawable.bg+"") ;
-        adapter.liveRoomList.add(vo) ;
-        adapter.liveRoomList.add(vo) ;
-        adapter.liveRoomList.add(vo) ;
-        adapter.liveRoomList.add(vo) ;
-        adapter.liveRoomList.add(vo) ;
-
-        liveRoomRecycleView.setAdapter(adapter) ;
-
-
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                presenter.loadLiveRoomDataByCategoryId(categoryId) ;
             }
         });
-
-
-
-
-
-
     }
+
+
+    public void newInstanceHandler() {
+        this.handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == HomeConstants.LOAD_LIVE_ROOM_SUCCESS_FLAG) { //数据加载成功
+                    SimpleResponseModel<List<LiveRoomVo>> dataModel = (SimpleResponseModel<List<LiveRoomVo>>) msg.obj;
+                    if(dataModel.getStatus() == 1) {
+                        adapter.liveRoomList.clear() ;    //先清空之间的直播间数据
+                        List<LiveRoomVo> liveRoomVos = dataModel.getData();
+                        if(liveRoomVos == null || liveRoomVos.size() == 0) {    //没有直播间信息
+
+                            adapter.notifyDataSetChanged() ;
+                        } else {
+                            adapter.liveRoomList.addAll(liveRoomVos) ;
+                            adapter.notifyDataSetChanged() ;
+                        }
+
+                    } else {
+                        Toast.makeText(getBaseContext(), "服务器繁忙！", Toast.LENGTH_LONG).show() ;
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), "连接服务器失败！", Toast.LENGTH_LONG).show() ;
+                }
+                refreshLayout.setRefreshing(false) ;    //隐藏刷新控件
+            }
+        } ;
+    }
+
+
 }

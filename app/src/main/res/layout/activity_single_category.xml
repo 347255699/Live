@@ -50,6 +50,6 @@
 
         </android.support.v7.widget.RecyclerView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>1
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

@@ -1,5 +1,7 @@
 package org.live.module.home.domain;
 
+
+
 /**
  * 直播间的vo
  *
@@ -13,9 +15,19 @@ public class LiveRoomVo {
     private String liveRoomId ;
 
     /**
+     *  房间号
+     */
+    private String roomNum ;
+
+    /**
      *  直播间封面
      */
     private String liveRoomCoverUrl ;
+
+    /**
+     * 直播地址
+     */
+    private String liveRoomUrl ;
 
     /**
      * 直播间名称
@@ -36,6 +48,20 @@ public class LiveRoomVo {
      *  正在直播的标记
      */
     private boolean liveFlag ;
+
+    public LiveRoomVo() {
+    }
+
+    public LiveRoomVo(String liveRoomId, String roomNum, String liveRoomCoverUrl, String liveRoomUrl, String liveRoomName, String anchorName, int onlineCount, boolean liveFlag) {
+        this.liveRoomId = liveRoomId;
+        this.roomNum = roomNum ;
+        this.liveRoomCoverUrl = liveRoomCoverUrl;
+        this.liveRoomUrl = liveRoomUrl;
+        this.liveRoomName = liveRoomName;
+        this.anchorName = anchorName;
+        this.onlineCount = onlineCount;
+        this.liveFlag = liveFlag;
+    }
 
     public String getLiveRoomId() {
         return liveRoomId;
@@ -83,5 +109,21 @@ public class LiveRoomVo {
 
     public void setLiveFlag(boolean liveFlag) {
         this.liveFlag = liveFlag;
+    }
+
+    public String getLiveRoomUrl() {
+        return liveRoomUrl;
+    }
+
+    public void setLiveRoomUrl(String liveRoomUrl) {
+        this.liveRoomUrl = liveRoomUrl;
+    }
+
+    public String getRoomNum() {
+        return roomNum;
+    }
+
+    public void setRoomNum(String roomNum) {
+        this.roomNum = roomNum;
     }
 }

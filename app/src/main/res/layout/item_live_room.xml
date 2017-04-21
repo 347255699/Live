@@ -32,7 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_live_liveName"
         android:textColor="@color/colorGray"
-        android:layout_marginTop="3dp"
         android:paddingLeft="2dp"
         android:textSize="12sp"
         android:text="城院帅逼"
@@ -43,7 +42,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@id/tv_live_liveName"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="1dp"
         android:paddingRight="2dp"
         android:layout_alignParentRight="true"
         >

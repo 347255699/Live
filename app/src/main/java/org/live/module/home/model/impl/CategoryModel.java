@@ -40,7 +40,7 @@ public class CategoryModel {
             public void onCompleted(Exception e, AsyncHttpResponse response, String result) {
                 Message message = Message.obtain() ;
                 if (e != null) {
-                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage()) ;
                     message.what = HomeConstants.LOAD_CATEGORY_EXCEPTION_FLAG ;
                     handler.sendMessage(message) ;
                     return;
