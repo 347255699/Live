@@ -27,8 +27,8 @@ public class ApplyAnchorPresenterImpl implements ApplyAnchorPresenter, ApplyAnch
     }
 
     @Override
-    public void validateInputItem(Map<String, String> labels, Map<String, String> vals) {
-        applyAnchorModel.validateInputItem(labels, vals);
+    public boolean validateInputItem(Map<String, String> labels, Map<String, Object> vals) {
+        return applyAnchorModel.validateInputItem(labels, vals);
     }
 
     @Override

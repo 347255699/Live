@@ -50,13 +50,15 @@ public class ApplyAnchorModelImpl implements ApplyAnchorModel {
      * 校验输入项
      *
      * @param labels
-     * @param vals
+     * @param valsMap
      * @return
      */
     @Override
-    public boolean validateInputItem(Map<String, String> labels, Map<String, String> vals) {
+    public boolean validateInputItem(Map<String, String> labels, Map<String, Object> valsMap) {
         Map<String, Map<String, Object>> rules = new HashMap<String, Map<String, Object>>(); // 校验规则组
-        for (String key : vals.keySet()) {
+        Map<String, String> vals = new LinkedHashMap<>();
+        for (String key : labels.keySet()) {
+            vals.put(key, (String) valsMap.get(key));
             Map<String, Object> rule = new LinkedHashMap<String, Object>(); // 校验规则
             switch (key) {
                 case "file":
@@ -138,7 +140,8 @@ public class ApplyAnchorModelImpl implements ApplyAnchorModel {
             if (msg.what == AnchorConstants.HTTP_RESPONSE_RESULT_REQUEST_CATEGORY_CODE) {
                 String result = (String) msg.obj;
                 if (result != null) {
-                    SimpleResponseModel model = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<LiveCategoryVo>>>(){}.getType()) ;
+                    SimpleResponseModel model = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<LiveCategoryVo>>>() {
+                    }.getType());
                     if (model.getStatus() == 1) {
                         List<LiveCategoryVo> liveCategoryVos = (List<LiveCategoryVo>) model.getData();
                         modelListener.showCategoryList(liveCategoryVos); // 显示列表

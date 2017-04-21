@@ -160,7 +160,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/tv_apply_anchor_id_card"
+            android:id="@+id/iv_apply_anchor_id_card"
             android:layout_width="175dp"
             android:layout_height="100dp"
             android:layout_marginLeft="20dp"

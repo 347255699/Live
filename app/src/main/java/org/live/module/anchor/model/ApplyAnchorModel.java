@@ -14,7 +14,7 @@ public interface ApplyAnchorModel {
     /**
      * 校验输入项
      */
-    public boolean validateInputItem(Map<String, String> labels, Map<String, String> vals);
+    public boolean validateInputItem(Map<String, String> labels, Map<String, Object> vals);
 
     /**
      * 提交主播信息
