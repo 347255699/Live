@@ -39,7 +39,7 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
     //图片朦胧处理
     private BlurTransformation blurTransformation ;
 
-    //
+    //图片灰度处理
     private GrayscaleTransformation grayscaleTransformation ;
 
     /**
@@ -59,7 +59,7 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
         mInflater = LayoutInflater.from(context) ;
 
         roundedCornersTransformation =  new RoundedCornersTransformation(mContext, 30, 5) ;
-        blurTransformation = new BlurTransformation(context, 8) ;
+        blurTransformation = new BlurTransformation(context, 6) ;
         grayscaleTransformation = new GrayscaleTransformation(context) ;
     }
 

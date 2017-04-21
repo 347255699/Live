@@ -4,35 +4,41 @@
     android:layout_height="match_parent">
 
     <!--标题栏-->
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/rl_singleCategory_top"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/themeColor1">
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
 
         <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/btn_return_singleCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:scaleType="center"
             app:materialIcon="chevron_left"
             app:materialIconColor="@color/colorWhite"
-            app:materialIconSize="35dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            />
+            app:materialIconSize="35dp" />
 
         <TextView
-            android:id="@+id/tv_categoryName_singleCategory"
+            android:id="@+id/tv_title_singleCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="类别名称"
             android:textColor="@color/colorWhite"
-            android:textSize="20dp"
-            android:layout_centerInParent="true"
-            />
-    </RelativeLayout>
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/iv_singleCategory_notFound"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:src="@drawable/hint_404"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/rl_singleCategory_top"
+        android:visibility="gone" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sl_singleCategory_refresh"
@@ -40,16 +46,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/rl_singleCategory_top"
         android:layout_marginTop="10dp">
-    
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_singleCategory_liveRoomHold"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="2dp"
             android:paddingRight="2dp">
-
         </android.support.v7.widget.RecyclerView>
-
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

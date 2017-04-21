@@ -36,6 +36,11 @@ public class LiveRoomModel {
 
     protected static String url = LiveConstants.REMOTE_SERVER_HTTP_IP +"/app/liveroom" ;
 
+    /**
+     * 用户关注的直播间的url
+     */
+    protected static String attentionLiveRoomUrl = LiveConstants.REMOTE_SERVER_HTTP_IP +"/app/user/liveroom" ;
+
     private Context context ;
 
     private Handler handler ;
@@ -93,7 +98,31 @@ public class LiveRoomModel {
                 handler.sendMessage(message) ;
             }
         }) ;
+    }
 
+    /**
+     * 加载用户关注的直播间
+     */
+    public void loadAttentionLiveRoomByUserId(String userId) {
+
+        AsyncHttpGet request = new AsyncHttpGet(attentionLiveRoomUrl+"?userId="+userId) ;
+        AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback() {
+            @Override
+            public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
+                Message message = Message.obtain() ;
+                if(e != null) {
+                    Log.e(TAG, e.getMessage()) ;
+                    message.what = HomeConstants.LOAD_LIVE_ROOM_EXCEPTION_FLAG ;
+                    handler.sendMessage(message) ;
+                    return ;
+                }
+                Log.d(TAG, "result-->" + result) ;
+                ResponseModel<List<LiveRoomVo>> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<LiveRoomVo>>>(){}.getType()) ;
+                message.obj = dataModel ;
+                message.what = HomeConstants.LOAD_LIVE_ROOM_SUCCESS_FLAG ;
+                handler.sendMessage(message) ;
+            }
+        }) ;
 
     }
 

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -51,6 +52,8 @@ public class HomeFragment extends Fragment{
 
     private Handler handler ;
 
+    private ImageView notFoundResultView ;  //未找到直播间的view
+
 
     @Nullable
     @Override
@@ -70,6 +73,7 @@ public class HomeFragment extends Fragment{
      */
     public void initial() {
 
+        notFoundResultView = (ImageView) currentFragmentView.findViewById(R.id.iv_home_notFound);
         refreshLayout = (SwipeRefreshLayout) currentFragmentView.findViewById(R.id.sl_home_refresh);
         refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
 
@@ -113,9 +117,10 @@ public class HomeFragment extends Fragment{
                         adapter.liveRoomList.clear() ;    //先清空之间的直播间数据
                         List<LiveRoomVo> liveRoomVos = dataModel.getData();
                         if(liveRoomVos == null || liveRoomVos.size() == 0) {    //没有直播间信息
-
+                            notFoundResultView.setVisibility(ImageView.VISIBLE) ;
                             adapter.notifyDataSetChanged() ;
                         } else {
+                            notFoundResultView.setVisibility(ImageView.GONE) ;
                             adapter.liveRoomList.addAll(liveRoomVos) ;
                             adapter.notifyDataSetChanged() ;
                         }

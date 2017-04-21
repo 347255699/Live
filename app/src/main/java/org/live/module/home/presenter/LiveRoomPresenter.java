@@ -34,4 +34,11 @@ public class LiveRoomPresenter {
         liveRoomModel.loadLiveRoomDataByCategoryId(categoryId) ;
     }
 
+    /**
+     * 加载用户关注的直播间
+     */
+    public void loadAttentionLiveRoomByUserId(String userId) {
+        liveRoomModel.loadAttentionLiveRoomByUserId(userId) ;
+    }
+
 }

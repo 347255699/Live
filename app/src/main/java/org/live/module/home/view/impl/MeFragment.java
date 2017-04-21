@@ -23,6 +23,7 @@ import com.orhanobut.dialogplus.ViewHolder;
 
 import org.live.R;
 import org.live.common.constants.LiveConstants;
+import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.listener.OnHomeActivityEventListener;
 import org.live.module.login.domain.MobileUserVo;
 
@@ -122,6 +123,13 @@ public class MeFragment extends Fragment {
                     case 0:
                         Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                         startActivity(intent); // 跳转至用户信息编辑窗口
+                        break;
+
+                    case 1: //点击我的收藏
+                        Intent intent1 = new Intent(getActivity(), SingleCategoryActivity.class) ;
+                        intent1.putExtra(HomeConstants.ENTER_SINGLE_CATEGORY_KEY, HomeConstants.ATTENTION_LIVEROOM) ;
+                        intent1.putExtra(HomeConstants.ATTENTION_LIVEROOM_USER_ID, mobileUserVo.getUserId()) ;
+                        startActivity(intent1);
                         break;
                 }
             }

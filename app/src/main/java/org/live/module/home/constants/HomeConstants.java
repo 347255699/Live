@@ -37,6 +37,11 @@ public class HomeConstants {
     public static final String CATEGORY_ID_KEY = "categoryIdKey";
 
     /**
+     * 关注直播间的用户id
+     */
+    public static final String ATTENTION_LIVEROOM_USER_ID = "userIdKey" ;
+
+    /**
      * 调用系统相册功能成功时的返回标志
      */
     public static final int GALLERY_RESULT_CODE = 1001;
@@ -57,5 +62,22 @@ public class HomeConstants {
      * 用户信息修改上传响应标志码
      */
     public static final int HTTP_RESPONSE_RESULT_EDDIT_USER_INFO_CODE = 4001;
+
+    /**
+     * 进入singleCategoryActivity的key
+     */
+    public static final String ENTER_SINGLE_CATEGORY_KEY = "entryKey" ;
+
+    /**
+     * 进入某分类所有直播间的展示界面，key
+     */
+    public static final String SINGLE_CATEGORY_LIVEROOM = "singleCategoryLiveRoom" ;
+
+    /**
+     *  进入关注的所有直播间的展示界面，key
+     */
+    public static final String ATTENTION_LIVEROOM = "attentionLiveRoom" ;
+
+
 
 }

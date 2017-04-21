@@ -4,20 +4,19 @@
     android:layout_height="match_parent">
 
     <!--标题栏-->
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/rl_category_top"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/themeColor1">
-
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="直播分类"
             android:textColor="@color/colorWhite"
-            android:textSize="22dp"
-            android:layout_centerInParent="true"
-            />
+            android:textSize="20sp"
+            android:layout_gravity="center" />
         <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/btn_home_search"
             android:layout_width="wrap_content"
@@ -26,24 +25,11 @@
             android:scaleType="center"
             app:materialIcon="magnify"
             app:materialIconColor="@color/colorWhite"
-            app:materialIconSize="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:layout_centerVertical="true"
-            />
-    </RelativeLayout>
+            app:materialIconSize="28dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp" />
+    </android.support.v7.widget.Toolbar>
 
-<!--    <org.live.common.view.ForbidReloadGridView
-        android:id="@+id/gv_category_hold"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/rl_category_top"
-        android:scrollbars="none"
-        android:verticalSpacing="12dp"
-        android:horizontalSpacing="8dp"
-        android:padding="7dp"
-        android:numColumns="3">
-    </org.live.common.view.ForbidReloadGridView>-->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sl_category_refresh"

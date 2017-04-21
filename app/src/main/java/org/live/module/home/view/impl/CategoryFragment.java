@@ -124,7 +124,9 @@ public class CategoryFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 //开启一个Activity展示该直播分类下的直播间
                 LiveCategoryVo vo = adapter.categoryList.get(position);
-                Intent intent = new Intent(getContext(), SingleCategoryActivity.class);
+                Intent intent = new Intent(getContext(), SingleCategoryActivity.class) ;
+                //用于是这里跳转的页面，还是我的收藏中跳转的页面
+                intent.putExtra(HomeConstants.ENTER_SINGLE_CATEGORY_KEY, HomeConstants.SINGLE_CATEGORY_LIVEROOM) ;
                 intent.putExtra(HomeConstants.CATEGORY_ID_KEY, vo.getId());
                 intent.putExtra(HomeConstants.CATEGORY_NAME_KEY, vo.getCategoryName());
                 startActivity(intent);

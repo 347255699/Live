@@ -4,20 +4,19 @@
     android:layout_height="match_parent">
 
     <!--标题栏-->
-    <RelativeLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/rl_home_top"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/themeColor1">
-
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="最新直播"
             android:textColor="@color/colorWhite"
-            android:textSize="22sp"
-            android:layout_centerInParent="true"
-            />
+            android:textSize="20sp"
+            android:layout_gravity="center" />
         <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/btn_search"
             android:layout_width="wrap_content"
@@ -26,13 +25,20 @@
             android:scaleType="center"
             app:materialIcon="magnify"
             app:materialIconColor="@color/colorWhite"
-            app:materialIconSize="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:layout_centerVertical="true"
-            />
-    </RelativeLayout>
+            app:materialIconSize="28dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp" />
+    </android.support.v7.widget.Toolbar>
 
+    <ImageView
+        android:id="@+id/iv_home_notFound"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:src="@drawable/hint_404"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/rl_home_top"
+        android:visibility="gone"
+        />
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sl_home_refresh"
         android:layout_width="wrap_content"

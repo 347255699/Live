@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.igexin.sdk.PushManager;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.AsyncHttpPost;
 import com.koushikdutta.async.http.AsyncHttpPut;
@@ -177,6 +178,7 @@ public class MeModelImpl implements MeModel {
             dbUtils.delete("delete from live_room where room_id = ?", roomId); // 若是主播则清空主播房间数据
         }
         dbUtils.close(); // 释放数据库资源
+        PushManager.getInstance().unBindAlias(context, account, true) ;  //解绑别名
         meView.finishSelf(); // 摧毁自己
         meView.toLogin(); // 前往登陆页面
 

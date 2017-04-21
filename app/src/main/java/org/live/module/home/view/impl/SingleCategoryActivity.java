@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import java.util.List;
 
 /**
  *  展示某直播分类下的直播间
+ *  展示我的收藏中的直播间
  * Created by Mr.wang on 2017/4/5.
  */
 public class SingleCategoryActivity extends Activity {
@@ -35,7 +37,7 @@ public class SingleCategoryActivity extends Activity {
 
     private MaterialIconView backToCategoryBtn ;   //返回到直播分类的btn
 
-    private TextView categoryNameTextView ; //直播分类名称的textview
+    private TextView titleTextView ; //title名称的textview
 
     private SwipeRefreshLayout refreshLayout ;  //下拉刷新
 
@@ -47,22 +49,41 @@ public class SingleCategoryActivity extends Activity {
 
     private String categoryId ;     //分类id
 
+    private String userId ;     //用户id
+
     private LiveRoomPresenter presenter ;
 
     private Handler handler ;
 
+    private ImageView notFoundResultView ;  //未找到直播间时显示的图片
+
+    private String entryTypeFlag ;  //进入的页面入口的判断
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_category) ;
         Intent intent = getIntent() ;
-        categoryId = intent.getStringExtra(HomeConstants.CATEGORY_ID_KEY) ;
-        categoryName = intent.getStringExtra(HomeConstants.CATEGORY_NAME_KEY) ;
+
+        entryTypeFlag = intent.getStringExtra(HomeConstants.ENTER_SINGLE_CATEGORY_KEY) ;
+        if(HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {  //从我的收藏中进入这个页面的
+            userId = intent.getStringExtra(HomeConstants.ATTENTION_LIVEROOM_USER_ID) ;
+        } else  {   //从主播分类中进入的
+            categoryId = intent.getStringExtra(HomeConstants.CATEGORY_ID_KEY) ;
+            categoryName = intent.getStringExtra(HomeConstants.CATEGORY_NAME_KEY) ;
+        }
+
         initial() ;
         newInstanceHandler() ;
         presenter = new LiveRoomPresenter(getBaseContext(), handler) ;
-        presenter.loadLiveRoomDataByCategoryId(categoryId) ;    //预先加载数据
+
+        //预先加载数据
+        if(HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
+            presenter.loadAttentionLiveRoomByUserId(userId) ;
+        } else {
+            presenter.loadLiveRoomDataByCategoryId(categoryId) ;
+        }
+
     }
 
     /**
@@ -70,11 +91,14 @@ public class SingleCategoryActivity extends Activity {
      */
     private void initial() {
 
+        notFoundResultView = (ImageView) findViewById(R.id.iv_singleCategory_notFound);
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.sl_singleCategory_refresh);
         refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
 
         backToCategoryBtn = (MaterialIconView) findViewById(R.id.btn_return_singleCategory) ;
-        categoryNameTextView = (TextView) findViewById(R.id.tv_categoryName_singleCategory) ;
+
+
+        titleTextView = (TextView) findViewById(R.id.tv_title_singleCategory) ;
 
         liveRoomRecycleView = (RecyclerView) findViewById(R.id.rv_singleCategory_liveRoomHold);
         //设置布局
@@ -82,10 +106,16 @@ public class SingleCategoryActivity extends Activity {
         //设置tiem之间的边距
         liveRoomRecycleView.addItemDecoration(new LiveRoomItemDecoration()) ;
         //设置适配器
-        adapter = new LiveRoomGridAdapter(getBaseContext()) ;   //
+        adapter = new LiveRoomGridAdapter(getBaseContext()) ;
         liveRoomRecycleView.setAdapter(adapter) ;
 
-        categoryNameTextView.setText(categoryName) ;    //设置分类名称
+        if(HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
+            titleTextView.setText("我的收藏") ;
+        } else {
+            titleTextView.setText(categoryName) ;
+        }
+
+
 
         backToCategoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +127,11 @@ public class SingleCategoryActivity extends Activity {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.loadLiveRoomDataByCategoryId(categoryId) ;
+                if(HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
+                    presenter.loadAttentionLiveRoomByUserId(userId) ;
+                } else {
+                    presenter.loadLiveRoomDataByCategoryId(categoryId) ;
+                }
             }
         });
     }
@@ -113,9 +147,10 @@ public class SingleCategoryActivity extends Activity {
                         adapter.liveRoomList.clear() ;    //先清空之间的直播间数据
                         List<LiveRoomVo> liveRoomVos = dataModel.getData();
                         if(liveRoomVos == null || liveRoomVos.size() == 0) {    //没有直播间信息
-
+                            notFoundResultView.setVisibility(ImageView.VISIBLE);    //未找到结果的图片显示出来
                             adapter.notifyDataSetChanged() ;
                         } else {
+                            notFoundResultView.setVisibility(ImageView.GONE);    //隐藏未找到结果的图片
                             adapter.liveRoomList.addAll(liveRoomVos) ;
                             adapter.notifyDataSetChanged() ;
                         }
