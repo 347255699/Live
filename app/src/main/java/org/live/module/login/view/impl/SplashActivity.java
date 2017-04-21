@@ -29,6 +29,8 @@ public class SplashActivity extends AppCompatActivity implements LoginView {
         PushManager.getInstance().initialize(this.getApplicationContext(), InitPushService.class) ;
         PushManager.getInstance().registerPushIntentService(this.getApplicationContext(), ReceiveIntentService.class) ;
 
+
+
         new Handler().postDelayed(new NextActivity(this, this), 1500); // 延迟两秒跳转至下个页面
 
     }

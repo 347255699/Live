@@ -30,6 +30,16 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!-- 个推sdk所需的权限，包括权限其他权限上面已经有了。 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOC" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="getui.permission.GetuiService.${applicationId}"/>
+    <permission android:name="getui.permission.GetuiService.${applicationId}"
+        android:protectionLevel="normal"/>
+
+
     <application
         android:name=".common.application.CommonApplication"
         android:allowBackup="true"

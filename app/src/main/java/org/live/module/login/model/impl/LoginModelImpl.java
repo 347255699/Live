@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.igexin.sdk.PushManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.live.common.constants.LiveConstants;
@@ -130,6 +132,8 @@ public class LoginModelImpl implements LoginModel {
                                     case LoginConstant.MODEL_TYPE_LOGIN:
                                         MobileUserVo mobileUserVo = JsonUtils.fromJson(result.getJSONObject("data").toString(), MobileUserVo.class); // 取出用户数据
                                         saveUserData(mobileUserVo); // 持久化用户信息
+                                        boolean bindSuccessFlag= PushManager.getInstance().bindAlias(context, mobileUserVo.getAccount()) ;   //绑定推送的别名
+                                        Log.d("Global", "是否绑定成功？ ---->" + bindSuccessFlag) ;
                                         listener.toHome(); // 前往首页
                                         listener.finishSelf(); // 摧毁自己
                                         break;
