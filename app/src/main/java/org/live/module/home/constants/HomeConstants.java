@@ -17,6 +17,16 @@ public class HomeConstants {
     public static final int LOAD_CATEGORY_SUCCESS_FLAG = 101;
 
     /**
+     * 加载直播间的时候，发生异常。
+     */
+    public static final int LOAD_LIVE_ROOM_EXCEPTION_FLAG = 103 ;
+
+    /**
+     * 加载直播间正确
+     */
+    public static final int LOAD_LIVE_ROOM_SUCCESS_FLAG = 104 ;
+
+    /**
      * 分类名称的key
      */
     public static final String CATEGORY_NAME_KEY = "categoryNameKey";

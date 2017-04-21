@@ -1,5 +1,7 @@
 package org.live.module.home.view.impl;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,16 +12,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Toast;
 
 
 import org.live.R;
-import org.live.module.home.domain.LiveCategoryVo;
+import org.live.common.util.ResponseModel;
+import org.live.common.util.SimpleResponseModel;
+import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.domain.LiveRoomVo;
-import org.live.module.home.view.MeView;
-import org.live.module.home.view.custom.CategoryGridAdapter;
+import org.live.module.home.presenter.LiveRoomPresenter;
 import org.live.module.home.view.custom.LiveRoomGridAdapter;
 import org.live.module.home.view.custom.LiveRoomItemDecoration;
+import org.live.module.home.view.custom.OnItemClickListener;
+
+import java.util.List;
 
 /**
  *  主页fragment
@@ -41,16 +47,21 @@ public class HomeFragment extends Fragment{
 
     private SwipeRefreshLayout refreshLayout = null ;  //下拉刷新
 
+    private LiveRoomPresenter presenter ;
+
+    private Handler handler ;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "HomeFragment执行了onCreateView") ;
         if(currentFragmentView != null) return currentFragmentView ;
-
         currentFragmentView = inflater.inflate(R.layout.fragment_home, null) ;
-
         initial();
+        newInstanceHandler() ;  //实例化handler
+        presenter = new LiveRoomPresenter(getContext(), handler) ;
+        presenter.loadLiveRoomData() ;
         return currentFragmentView ;
     }
 
@@ -71,35 +82,53 @@ public class HomeFragment extends Fragment{
         liveRoomRecycleView.addItemDecoration(new LiveRoomItemDecoration()) ;
 
         adapter = new LiveRoomGridAdapter(getContext()) ;
+
+        adapter.setListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getContext(), adapter.liveRoomList.get(position).getLiveRoomName(), Toast.LENGTH_SHORT).show() ;
+            }
+        });
+
         liveRoomRecycleView.setAdapter(adapter) ;
         liveRoomRecycleView.setHasFixedSize(true) ; //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        //下拉刷新数据
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.loadLiveRoomData() ;
+            }
+        });
 
-        LiveRoomVo vo = new LiveRoomVo() ;
-        vo.setLiveRoomId("11") ;
-        vo.setLiveRoomName("欢迎来到我的直播间直播间直播间") ;
-        vo.setAnchorName("我是城院大帅逼") ;
-        vo.setOnlineCount(1002) ;
-        vo.setLiveRoomCoverUrl(R.drawable.pause_publish+"") ;
+    }
 
 
-        LiveRoomVo vo1 = new LiveRoomVo() ;
-        vo1.setLiveRoomId("22") ;
-        vo1.setLiveRoomName("欢迎来到你的直播间") ;
-        vo1.setAnchorName("你是城院大傻逼大傻逼大傻逼大傻逼") ;
-        vo1.setOnlineCount(999) ;
-        vo1.setLiveRoomCoverUrl(R.drawable.bg+"") ;
+    public void newInstanceHandler() {
+        this.handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == HomeConstants.LOAD_LIVE_ROOM_SUCCESS_FLAG) { //数据加载成功
+                    SimpleResponseModel<List<LiveRoomVo>> dataModel = (SimpleResponseModel<List<LiveRoomVo>>) msg.obj;
+                    if(dataModel.getStatus() == 1) {
+                        adapter.liveRoomList.clear() ;    //先清空之间的直播间数据
+                        List<LiveRoomVo> liveRoomVos = dataModel.getData();
+                        if(liveRoomVos == null || liveRoomVos.size() == 0) {    //没有直播间信息
 
-        adapter.liveRoomList.add(vo) ;
-        adapter.liveRoomList.add(vo) ;
-        adapter.liveRoomList.add(vo) ;
-        adapter.liveRoomList.add(vo) ;
+                            adapter.notifyDataSetChanged() ;
+                        } else {
+                            adapter.liveRoomList.addAll(liveRoomVos) ;
+                            adapter.notifyDataSetChanged() ;
+                        }
 
-        adapter.liveRoomList.add(vo1) ;
-        adapter.liveRoomList.add(vo1) ;
-        adapter.liveRoomList.add(vo1) ;
-        adapter.liveRoomList.add(vo) ;
-
-        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getContext(), "服务器繁忙！", Toast.LENGTH_LONG).show() ;
+                    }
+                } else {
+                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_LONG).show() ;
+                }
+                refreshLayout.setRefreshing(false) ;    //隐藏刷新控件
+            }
+        } ;
     }
 
 
