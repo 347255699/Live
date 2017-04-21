@@ -20,6 +20,7 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import org.live.R;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.BackHandledInterface;
+import org.live.common.util.BackThread;
 import org.live.module.home.listener.OnUserInfoActivityListener;
 import org.live.module.home.presenter.UserInfoPresenter;
 import org.live.module.home.presenter.impl.UserInfoPresenterImpl;
@@ -133,7 +134,7 @@ public class UserInfoActivity extends AppCompatActivity implements BackHandledIn
         Drawable drawable = MaterialDrawableBuilder.with(this) // provide a context
                 .setIcon(iconValue)
                 .setColor(color)
-                .setToActionbarSize()
+                .setSizeDp(35)
                 .build();
         return drawable;
     }
@@ -156,22 +157,6 @@ public class UserInfoActivity extends AppCompatActivity implements BackHandledIn
         transaction.replace(R.id.fl_user_info, userInfoEditFragment, "userInfoEdit"); // 添加用户信息修改模块
         transaction.addToBackStack(null); // 添加至回退栈
         transaction.commit(); // 提交事务
-    }
-
-    /**
-     * 返回键点击线程
-     */
-    class BackThread extends Thread {
-        public void run() {       //这个方法是不能写在你的主线程里面的，所以你要自己开个线程用来执行
-            Instrumentation inst = new Instrumentation();
-
-            try {
-                inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
-            } catch (Exception e) {
-                Log.e("Global", e.getMessage());
-            }
-
-        }
     }
 
     /**

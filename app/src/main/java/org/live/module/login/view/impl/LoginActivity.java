@@ -21,6 +21,7 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import org.live.R;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.BackHandledInterface;
+import org.live.common.util.BackThread;
 import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.login.listener.OnLoginActivityEventListener;
 import org.live.module.login.presenter.LoginPresenter;
@@ -123,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
         Drawable drawable = MaterialDrawableBuilder.with(this)
                 .setIcon(iconValue)
                 .setColor(color)
-                .setToActionbarSize()
+                .setToActionbarSize().setSizeDp(35)
                 .build();
         return drawable;
     }
@@ -266,19 +267,4 @@ public class LoginActivity extends AppCompatActivity implements BackHandledInter
         this.finish();
     }
 
-    /**
-     * 返回键点击线程
-     */
-    class BackThread extends Thread {
-        public void run() {       //这个方法是不能写在你的主线程里面的，所以你要自己开个线程用来执行
-            Instrumentation inst = new Instrumentation();
-
-            try {
-                inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
-            } catch (Exception e) {
-                Log.e("Global", e.getMessage());
-            }
-
-        }
-    }
 }

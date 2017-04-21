@@ -86,6 +86,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".module.home.view.impl.UserInfoActivity"></activity>
+        <activity android:name=".module.anchor.view.impl.ApplyAnchorActivity"/>
     </application>
 
 </manifest>
