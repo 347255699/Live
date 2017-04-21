@@ -44,6 +44,8 @@ public class CategoryFragment extends Fragment {
 
     private GridLayoutManager layoutManager = null;    //grid布局管理器，为RecyclerView设置布局
 
+    private View toSearchPageBtn ;  //跳转到搜索页面的按钮
+
     private SwipeRefreshLayout refreshLayout = null;   //下拉刷新
 
     private CategoryGridAdapter adapter = null;    //分类数据的适配器
@@ -71,6 +73,7 @@ public class CategoryFragment extends Fragment {
      */
     public void initial() {
 
+        toSearchPageBtn = currentFragmentView.findViewById(R.id.btn_category_search) ;
         refreshLayout = (SwipeRefreshLayout) currentFragmentView.findViewById(R.id.sl_category_refresh);
         refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
 
@@ -117,8 +120,6 @@ public class CategoryFragment extends Fragment {
             }
         });
 
-
-
         adapter.setListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -133,6 +134,13 @@ public class CategoryFragment extends Fragment {
             }
         });
 
+        toSearchPageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchLiveRoomActivity.class) ;
+                startActivity(intent) ;
+            }
+        });
 
     }
 

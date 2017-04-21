@@ -18,7 +18,7 @@
             android:textSize="20sp"
             android:layout_gravity="center" />
         <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/btn_home_search"
+            android:id="@+id/btn_category_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"

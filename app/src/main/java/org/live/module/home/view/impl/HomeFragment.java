@@ -1,5 +1,6 @@
 package org.live.module.home.view.impl;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -48,6 +49,8 @@ public class HomeFragment extends Fragment{
 
     private SwipeRefreshLayout refreshLayout = null ;  //下拉刷新
 
+    private View toSearchPageBtn ;  //跳转到搜索页面的按钮
+
     private LiveRoomPresenter presenter ;
 
     private Handler handler ;
@@ -72,7 +75,7 @@ public class HomeFragment extends Fragment{
      *  初始化
      */
     public void initial() {
-
+        toSearchPageBtn = currentFragmentView.findViewById(R.id.btn_home_search) ;
         notFoundResultView = (ImageView) currentFragmentView.findViewById(R.id.iv_home_notFound);
         refreshLayout = (SwipeRefreshLayout) currentFragmentView.findViewById(R.id.sl_home_refresh);
         refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
@@ -101,6 +104,14 @@ public class HomeFragment extends Fragment{
             @Override
             public void onRefresh() {
                 presenter.loadLiveRoomData() ;
+            }
+        });
+
+        toSearchPageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchLiveRoomActivity.class) ;
+                startActivity(intent) ;
             }
         });
 
