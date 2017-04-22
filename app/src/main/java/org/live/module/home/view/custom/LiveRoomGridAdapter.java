@@ -59,7 +59,7 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
         mInflater = LayoutInflater.from(context) ;
 
         roundedCornersTransformation =  new RoundedCornersTransformation(mContext, 30, 5) ;
-        blurTransformation = new BlurTransformation(context, 6) ;
+        blurTransformation = new BlurTransformation(context, 15) ;
         grayscaleTransformation = new GrayscaleTransformation(context) ;
     }
 
@@ -90,8 +90,10 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
             Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
                     .bitmapTransform(roundedCornersTransformation).into(holder.getLiveCoverImageView()) ;
         } else {
+            ImageView coverImageView = holder.getLiveCoverImageView();
+            coverImageView.setImageAlpha(75);
             Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
-                    .bitmapTransform(roundedCornersTransformation, grayscaleTransformation, blurTransformation).into(holder.getLiveCoverImageView()) ;
+                    .bitmapTransform(roundedCornersTransformation).into(coverImageView) ;
         }
 
         holder.getLiveRoomNameTextView().setText(vo.getLiveRoomName()) ;
