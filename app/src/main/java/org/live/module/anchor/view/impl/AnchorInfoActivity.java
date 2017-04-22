@@ -7,18 +7,21 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import org.live.R;
 import org.live.common.util.BackThread;
+import org.live.module.anchor.view.AnchorInfoView;
 
 /**
  * 主播信息模块
  */
-public class AnchorInfoActivity extends AppCompatActivity {
+public class AnchorInfoActivity extends AppCompatActivity implements AnchorInfoView {
     /**
      * 待修改key值
      */
@@ -40,8 +43,8 @@ public class AnchorInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anchor_info);
-        this.key = getIntent().getStringExtra("val");
-        this.val = getIntent().getStringExtra("key");
+        this.val = getIntent().getStringExtra("val");
+        this.key = getIntent().getStringExtra("key");
         initUIElement();
     }
 
@@ -87,5 +90,19 @@ public class AnchorInfoActivity extends AppCompatActivity {
                 .setSizeDp(35)
                 .build();
         return drawable;
+    }
+
+    @Override
+    public void showToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show(); // 提示信息
+    }
+
+    @Override
+    public void back() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0); // 关闭软键盘
+        }
+        new BackThread().start(); // 模拟返回键点击
     }
 }
