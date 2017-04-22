@@ -22,6 +22,6 @@
         android:textColor="@color/colorShallowBlack"
         android:textSize="13dp"
         android:text="这是我的分类"
-        />
+        android:singleLine="true" />
 
 </RelativeLayout>

@@ -11,15 +11,6 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize">
 
-        <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/btn_return_singleCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="center"
-            app:materialIcon="chevron_left"
-            app:materialIconColor="@color/colorWhite"
-            app:materialIconSize="35dp" />
-
         <TextView
             android:id="@+id/tv_title_singleCategory"
             android:layout_width="wrap_content"

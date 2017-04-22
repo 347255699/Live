@@ -72,8 +72,8 @@ public class CategoryFragment extends Fragment {
      * 初始化
      */
     public void initial() {
-
         toSearchPageBtn = currentFragmentView.findViewById(R.id.btn_category_search) ;
+        toSearchPageBtn.setClickable(true) ;    //设置为可点击的
         refreshLayout = (SwipeRefreshLayout) currentFragmentView.findViewById(R.id.sl_category_refresh);
         refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
 

@@ -41,4 +41,12 @@ public class LiveRoomPresenter {
         liveRoomModel.loadAttentionLiveRoomByUserId(userId) ;
     }
 
+    /**
+     * 搜索直播间
+     * @param searchStr 搜索条件
+     */
+    public void loadSearchLiveRoomData(String searchStr) {
+        liveRoomModel.loadSearchLiveRoomData(searchStr) ;
+    }
+
 }

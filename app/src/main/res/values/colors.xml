@@ -4,16 +4,18 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorGray">#b3b3b3</color>
+    <color name="colorShallowGray">#d4d3d3</color>
     <color name="colorWall">#f8f6f6</color>
     <color name="colorClicked">#F0F0F0</color>
     <color name="colorDeepGray">#807f7f</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhite2">#f8f4f4</color>
     <color name="colorShallowBlack">#7e7979</color><!-- 浅黑 -->
     <color name="colorlittleBlack">#202020</color>
     <color name="colorShallowBlue">#5CACEE</color><!-- 浅蓝 -->
     <color name="colorBlue">#1874CD</color><!-- 深蓝 -->
-    <color name="colorWhite2">#f8f4f4</color>
+
     <color name="colorGold">#DAA520</color>/
     <color name="colorRed">#f15555</color>
     <color name="colorRed1">#fa3838</color>

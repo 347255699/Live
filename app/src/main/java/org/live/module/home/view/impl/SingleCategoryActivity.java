@@ -2,21 +2,27 @@ package org.live.module.home.view.impl;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.R;
+import org.live.common.util.BackThread;
 import org.live.common.util.SimpleResponseModel;
 import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.domain.LiveRoomVo;
@@ -31,11 +37,9 @@ import java.util.List;
  *  展示我的收藏中的直播间
  * Created by Mr.wang on 2017/4/5.
  */
-public class SingleCategoryActivity extends Activity {
+public class SingleCategoryActivity extends AppCompatActivity {
 
     public static final String TAG = "HOME" ;
-
-    private MaterialIconView backToCategoryBtn ;   //返回到直播分类的btn
 
     private TextView titleTextView ; //title名称的textview
 
@@ -84,6 +88,8 @@ public class SingleCategoryActivity extends Activity {
             presenter.loadLiveRoomDataByCategoryId(categoryId) ;
         }
 
+        //初始化标题栏
+        initActionBar() ;
     }
 
     /**
@@ -94,9 +100,6 @@ public class SingleCategoryActivity extends Activity {
         notFoundResultView = (ImageView) findViewById(R.id.iv_singleCategory_notFound);
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.sl_singleCategory_refresh);
         refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
-
-        backToCategoryBtn = (MaterialIconView) findViewById(R.id.btn_return_singleCategory) ;
-
 
         titleTextView = (TextView) findViewById(R.id.tv_title_singleCategory) ;
 
@@ -115,15 +118,6 @@ public class SingleCategoryActivity extends Activity {
             titleTextView.setText(categoryName) ;
         }
 
-
-
-        backToCategoryBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish() ;  //关闭当前的activity
-            }
-        }) ;
-
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -134,6 +128,37 @@ public class SingleCategoryActivity extends Activity {
                 }
             }
         });
+    }
+
+    /**
+     * 初始化标题栏
+     */
+    private void initActionBar() {
+        Toolbar lToolbar = (Toolbar) findViewById(R.id.rl_singleCategory_top) ;
+        lToolbar.setTitle("");
+        setSupportActionBar(lToolbar);
+        lToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.CHEVRON_LEFT, Color.WHITE));
+        lToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new BackThread().start(); // 模拟返回键点击
+            }
+        });
+
+    }
+    /**
+     * 获取图标
+     *
+     * @param
+     * @return
+     */
+    private Drawable getIconDrawable(MaterialDrawableBuilder.IconValue iconValue, int color) {
+        Drawable drawable = MaterialDrawableBuilder.with(this)
+                .setIcon(iconValue)
+                .setColor(color)
+                .setToActionbarSize().setSizeDp(35)
+                .build();
+        return drawable;
     }
 
 
@@ -154,7 +179,6 @@ public class SingleCategoryActivity extends Activity {
                             adapter.liveRoomList.addAll(liveRoomVos) ;
                             adapter.notifyDataSetChanged() ;
                         }
-
                     } else {
                         Toast.makeText(getBaseContext(), "服务器繁忙！", Toast.LENGTH_LONG).show() ;
                     }

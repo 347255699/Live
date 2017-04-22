@@ -76,6 +76,7 @@ public class HomeFragment extends Fragment{
      */
     public void initial() {
         toSearchPageBtn = currentFragmentView.findViewById(R.id.btn_home_search) ;
+        toSearchPageBtn.setClickable(true) ;    //设置为可点击的
         notFoundResultView = (ImageView) currentFragmentView.findViewById(R.id.iv_home_notFound);
         refreshLayout = (SwipeRefreshLayout) currentFragmentView.findViewById(R.id.sl_home_refresh);
         refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色

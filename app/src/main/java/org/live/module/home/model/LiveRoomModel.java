@@ -34,12 +34,14 @@ public class LiveRoomModel {
 
     public static final String TAG = "HOME" ;
 
-    protected static String url = LiveConstants.REMOTE_SERVER_HTTP_IP +"/app/liveroom" ;
+    protected final String url = LiveConstants.REMOTE_SERVER_HTTP_IP +"/app/liveroom" ;
 
     /**
      * 用户关注的直播间的url
      */
-    protected static String attentionLiveRoomUrl = LiveConstants.REMOTE_SERVER_HTTP_IP +"/app/user/liveroom" ;
+    protected final String attentionLiveRoomUrl = LiveConstants.REMOTE_SERVER_HTTP_IP +"/app/user/liveroom" ;
+
+    protected final String searchLiveRoomUrl =  LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/search" ;
 
     private Context context ;
 
@@ -81,23 +83,7 @@ public class LiveRoomModel {
     public void loadLiveRoomDataByCategoryId(String categoryId) {
 
         AsyncHttpGet request = new AsyncHttpGet(url+"?categoryId="+categoryId) ;
-        AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback() {
-            @Override
-            public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
-                Message message = Message.obtain() ;
-                if(e != null) {
-                    Log.e(TAG, e.getMessage()) ;
-                    message.what = HomeConstants.LOAD_LIVE_ROOM_EXCEPTION_FLAG ;
-                    handler.sendMessage(message) ;
-                    return ;
-                }
-                Log.d(TAG, "result-->" + result) ;
-                ResponseModel<List<LiveRoomVo>> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<LiveRoomVo>>>(){}.getType()) ;
-                message.obj = dataModel ;
-                message.what = HomeConstants.LOAD_LIVE_ROOM_SUCCESS_FLAG ;
-                handler.sendMessage(message) ;
-            }
-        }) ;
+        requestServer(request) ;
     }
 
     /**
@@ -106,6 +92,20 @@ public class LiveRoomModel {
     public void loadAttentionLiveRoomByUserId(String userId) {
 
         AsyncHttpGet request = new AsyncHttpGet(attentionLiveRoomUrl+"?userId="+userId) ;
+        requestServer(request) ;
+    }
+
+    /**
+     * 搜索直播间
+     * @param searchStr 搜索条件
+     */
+    public void loadSearchLiveRoomData(String searchStr) {
+        AsyncHttpGet request = new AsyncHttpGet(searchLiveRoomUrl+"?searchStr="+searchStr) ;
+        requestServer(request) ;
+    }
+
+
+    private void requestServer(AsyncHttpRequest request) {
         AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback() {
             @Override
             public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
@@ -123,7 +123,6 @@ public class LiveRoomModel {
                 handler.sendMessage(message) ;
             }
         }) ;
-
     }
 
 
