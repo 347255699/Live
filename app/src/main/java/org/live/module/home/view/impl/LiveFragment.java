@@ -40,15 +40,18 @@ public class LiveFragment extends Fragment implements LiveView {
      */
     private TextView lBeAnchorTextView;
     private LivePresenter livePresenter;
-    private  OnHomeActivityEventListener homeActivityEventListener;
+    private OnHomeActivityEventListener homeActivityEventListener;
+    private MobileUserVo mobileUserVo; // 用户信息
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(getActivity() instanceof OnHomeActivityEventListener){
+        if (getActivity() instanceof OnHomeActivityEventListener) {
             this.homeActivityEventListener = (OnHomeActivityEventListener) getActivity();
         }
         currentFragmentView = inflater.inflate(R.layout.fragment_live, null);
         livePresenter = new LivePresenterImpl(getActivity(), this);
+        this.mobileUserVo = HomeActivity.mobileUserVo;
         initUIElement();
         return currentFragmentView;
     }
@@ -78,7 +81,7 @@ public class LiveFragment extends Fragment implements LiveView {
     @Override
     public void closeRefreshing(boolean isAnchor) {
         lLiveSwipeRefreshLayout.setRefreshing(false); // 关闭下拉刷新视图
-        if (isAnchor && !HomeActivity.mobileUserVo.isAnchorFlag()) {
+        if (isAnchor && !mobileUserVo.isAnchorFlag()) {
             // 刷新视图
             homeActivityEventListener.replaceLiveFragment(); // 刷新视图
         }
