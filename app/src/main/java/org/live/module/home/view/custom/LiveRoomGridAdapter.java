@@ -36,12 +36,6 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
     //图片圆角
     private RoundedCornersTransformation roundedCornersTransformation ;
 
-    //图片朦胧处理
-    private BlurTransformation blurTransformation ;
-
-    //图片灰度处理
-    private GrayscaleTransformation grayscaleTransformation ;
-
     /**
      * 数据集合
      */
@@ -58,9 +52,7 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
         liveRoomList = new LinkedList<LiveRoomVo>() ;
         mInflater = LayoutInflater.from(context) ;
 
-        roundedCornersTransformation =  new RoundedCornersTransformation(mContext, 30, 5) ;
-        blurTransformation = new BlurTransformation(context, 15) ;
-        grayscaleTransformation = new GrayscaleTransformation(context) ;
+        roundedCornersTransformation =  new RoundedCornersTransformation(mContext, 8, 0) ;
     }
 
 
@@ -87,13 +79,16 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
         LiveRoomVo vo = liveRoomList.get(position) ;
 
         if(vo.isLiveFlag()) {
-            Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
-                    .bitmapTransform(roundedCornersTransformation).into(holder.getLiveCoverImageView()) ;
-        } else {
-            ImageView coverImageView = holder.getLiveCoverImageView();
-            coverImageView.setImageAlpha(75);
+            ImageView coverImageView = holder.getLiveCoverImageView() ;
+            coverImageView.setImageAlpha(255) ; //设置透明度
             Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
                     .bitmapTransform(roundedCornersTransformation).into(coverImageView) ;
+        } else {
+            ImageView coverImageView = holder.getLiveCoverImageView();
+            coverImageView.setImageAlpha(80) ;  //设置透明度
+            Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
+                    .bitmapTransform(roundedCornersTransformation).into(coverImageView) ;
+
         }
 
         holder.getLiveRoomNameTextView().setText(vo.getLiveRoomName()) ;

@@ -40,6 +40,11 @@ public class LiveRoomVo {
     private String anchorName ;
 
     /**
+     * 头像url
+     */
+    private String headImgUrl;
+
+    /**
      *  在线人数
      */
     private int onlineCount ;
@@ -52,16 +57,6 @@ public class LiveRoomVo {
     public LiveRoomVo() {
     }
 
-    public LiveRoomVo(String liveRoomId, String roomNum, String liveRoomCoverUrl, String liveRoomUrl, String liveRoomName, String anchorName, int onlineCount, boolean liveFlag) {
-        this.liveRoomId = liveRoomId;
-        this.roomNum = roomNum ;
-        this.liveRoomCoverUrl = liveRoomCoverUrl;
-        this.liveRoomUrl = liveRoomUrl;
-        this.liveRoomName = liveRoomName;
-        this.anchorName = anchorName;
-        this.onlineCount = onlineCount;
-        this.liveFlag = liveFlag;
-    }
 
     public String getLiveRoomId() {
         return liveRoomId;
@@ -125,5 +120,13 @@ public class LiveRoomVo {
 
     public void setRoomNum(String roomNum) {
         this.roomNum = roomNum;
+    }
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
     }
 }
