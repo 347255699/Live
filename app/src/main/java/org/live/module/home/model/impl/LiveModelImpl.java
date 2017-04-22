@@ -56,8 +56,9 @@ public class LiveModelImpl implements LiveModel {
                     if (jsonObject != null) {
                         if (jsonObject.getInt("status") == 1) {
                             MobileUserVo mobileUserVo = JsonUtils.fromJson(jsonObject.getJSONObject("data").toString(), MobileUserVo.class);
+                            modelListener.closeRefreshing(mobileUserVo.isAnchorFlag()); // 关闭刷新视图并刷新当前视图
                             HomeActivity.mobileUserVo = mobileUserVo; // 更新数据
-                            modelListener.closeRefreshing(mobileUserVo.isAnchorFlag());
+
                         } else {
                             modelListener.showToast(jsonObject.getString("message"));
                         }
