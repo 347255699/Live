@@ -32,4 +32,9 @@ public interface OnHomeActivityEventListener {
      * 拍摄头像
      */
     public void chooseHeadImgFromCamera();
+
+    /**
+     * 替换直播模块的fragment
+     */
+    public void replaceLiveFragment();
 }

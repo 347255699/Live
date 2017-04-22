@@ -42,4 +42,6 @@ public interface MeModel {
      * 保存图片至sd卡
      */
     public String setPicToSd(Bitmap bitmap);
+
+
 }

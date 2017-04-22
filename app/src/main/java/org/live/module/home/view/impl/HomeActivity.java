@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -68,11 +69,11 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.mePresenter = new MePresenterImpl(this, this); // 取得'我的模块'表示器
+        this.mobileUserVo = mePresenter.getUserData(); // 取得用户数据
         requestWindowFeature(Window.FEATURE_NO_TITLE);     //隐藏标题
         setContentView(R.layout.activity_home);
         initTabLayout();
-        this.mePresenter = new MePresenterImpl(this, this); // 取得'我的模块'表示器
-        this.mobileUserVo = mePresenter.getUserData(); // 取得用户数据
     }
 
     @Override
@@ -82,7 +83,7 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         if (fragmentList.get(fragmentIndex) instanceof MeFragment) {
             meFragment = (MeFragment) fragmentList.get(fragmentIndex);
         }
-        if(meFragment != null){
+        if (meFragment != null) {
             meFragment.reLoadData(); // 刷新数据
         }
 
@@ -147,7 +148,11 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         MeFragment meFragment = new MeFragment();
         fragmentList.add(homeFragment);
         fragmentList.add(categoryFragment);
-        fragmentList.add(liveFragment);
+        if (mobileUserVo.isAnchorFlag()) {
+            fragmentList.add(new LiveFragment2());
+        } else {
+            fragmentList.add(liveFragment);
+        }
         fragmentList.add(meFragment);
         //创建FragmentPagerAdapter
         return new CustomFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
@@ -205,7 +210,7 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
 
     @Override
     protected void onDestroy() {
-        if(mobileUserVo != null){
+        if (mobileUserVo != null) {
             mobileUserVo = null;
         } // 释放资源
         super.onDestroy();
@@ -228,6 +233,7 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         startActivityForResult(intent1, HomeConstants.GALLERY_RESULT_CODE);
     }
 
+
     /**
      * 拍摄头像
      */
@@ -237,6 +243,20 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         intent2.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "head.jpg")));
         startActivityForResult(intent2, HomeConstants.CAMERA_RESULT_CODE);
+    }
+
+    /**
+     * 更换fragment视图
+     */
+    @Override
+    public void replaceLiveFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(fragmentList.get(2));
+        ft.commit();
+        fm.executePendingTransactions();
+        fragmentList.set(2, new LiveFragment2());
+        fragmentPagerAdapter.notifyDataSetChanged();
     }
 
 
@@ -253,9 +273,16 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         }
 
         @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;//返回这个表示该对象已改变,需要刷新
+
+        }
+
+        @Override
         public Fragment getItem(int position) {
             return fragmentList.get(position);
         }
+
 
         @Override
         public int getCount() {

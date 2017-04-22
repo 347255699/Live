@@ -97,7 +97,7 @@ public class UserInfoEditFragment extends BackHandledFragment {
                 }
                 boolean isPassed = userInfoActivityListener.getUserInfoPresenter().validateInputItem(itemKey, uUserInfoItemEditView.getText().toString(), label); // 校验信息
 
-                if (isPassed && !itemVal.equals(uUserInfoItemEditView.getText().toString())) {
+                if (isPassed && !uUserInfoItemEditView.getText().toString().equals(itemVal)) {
                     userInfoActivityListener.getUserInfoPresenter().editUserInfo(itemKey, uUserInfoItemEditView.getText().toString()); // 修改信息
                 }else{
                     if(itemVal.equals(uUserInfoItemEditView.getText().toString())){

@@ -8,7 +8,7 @@
         android:id="@+id/rl_me_cover"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:background="@color/themeColor1">
+        android:background="@color/themeColor">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,15 +75,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:clickable="true"
             android:background="@drawable/selector_ll_corners"
+            android:clickable="true"
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
 
                 <TextView
                     android:id="@+id/tv_me_logout"
