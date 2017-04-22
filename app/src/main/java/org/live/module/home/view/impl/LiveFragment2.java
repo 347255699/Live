@@ -5,20 +5,31 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 
 import org.live.R;
 import org.live.common.constants.LiveConstants;
+import org.live.common.util.BackThread;
+import org.live.module.anchor.presenter.AnchorInfoPresenter;
+import org.live.module.anchor.presenter.impl.AnchorInfoPresenterImpl;
+import org.live.module.anchor.view.AnchorInfoView;
 import org.live.module.anchor.view.impl.AnchorInfoActivity;
+import org.live.module.home.constants.HomeConstants;
+import org.live.module.home.listener.OnHomeActivityEventListener;
 import org.live.module.home.view.LiveView;
 import org.live.module.login.domain.MobileUserVo;
 
@@ -34,10 +45,14 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  * Created by KAM on 2017/4/22.
  */
 
-public class LiveFragment2 extends Fragment implements LiveView {
+public class LiveFragment2 extends Fragment {
     private View view;
     private MobileUserVo.LiveRoomInUserVo liveRoomInUserVo;
     private MobileUserVo mobileUserVo;
+    /**
+     * 房间封面更换按钮
+     */
+    private LinearLayout lLiveRoomCoverLinearLayout;
     /**
      * 主播信息列表
      */
@@ -46,15 +61,20 @@ public class LiveFragment2 extends Fragment implements LiveView {
      * 主播封面视图
      */
     private ImageView lAnchorCoverImageView;
+
     private String[] labels = {"房间号", "房间名", "分类名称", "个性签名"}; // 主播信息标签
     private String[] vals; // 主播信息
+    private AnchorInfoPresenter anchorInfoPresenter;
+    private OnHomeActivityEventListener homeActivityEventListener;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.liveRoomInUserVo = HomeActivity.mobileUserVo.getLiveRoomVo();
         this.mobileUserVo = HomeActivity.mobileUserVo;
-        //Log.i("Global", liveRoomInUserVo.getRoomId());
+        if (getActivity() instanceof OnHomeActivityEventListener) {
+            this.homeActivityEventListener = (OnHomeActivityEventListener) getActivity();
+        }
         view = inflater.inflate(R.layout.fragment_live2, null);
         initUIElement();
         return view;
@@ -66,6 +86,7 @@ public class LiveFragment2 extends Fragment implements LiveView {
     private void initUIElement() {
         lAnchorInfoListView = (ListView) view.findViewById(R.id.lv_anchor_info);
         lAnchorCoverImageView = (ImageView) view.findViewById(R.id.iv_anchor_cover);
+        lLiveRoomCoverLinearLayout = (LinearLayout) view.findViewById(R.id.ll_live_cover);
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), getData(), R.layout.item_user_info, new String[]{"label", "val"}, new int[]{R.id.tv_user_info_label, R.id.tv_user_info_val});
         lAnchorInfoListView.setAdapter(adapter);
         lAnchorInfoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -91,8 +112,47 @@ public class LiveFragment2 extends Fragment implements LiveView {
         }); // 绑定列表选项
         Glide.with(this).load(LiveConstants.REMOTE_SERVER_HTTP_IP + liveRoomInUserVo.getRoomCoverUrl())
                 .into(lAnchorCoverImageView); // 设置主播封面
+
+        lAnchorCoverImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), LiveRoomCoverActivity.class)); // 跳转至直播间封面查看窗口
+            }
+        }); // 绑定房间封面点击事件
+        lLiveRoomCoverLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showHeadImgChooseTypeDialog();
+            }
+        }); // 绑定房间封面选项点击事件
+
     }
 
+    /**
+     * 显示头像获取方式对话框
+     */
+    private void showHeadImgChooseTypeDialog() {
+        final DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite2)
+                .setContentHolder(new ViewHolder(R.layout.dialog_me_choose_type))
+                .setGravity(Gravity.CENTER)
+                .create();
+        dialog.show();
+        final View dialogView = dialog.getHolderView();
+        dialogView.findViewById(R.id.btn_me_gallery).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeActivityEventListener.chooseHeadImgFromGallery(HomeConstants.GALLERY_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER);
+                dialog.dismiss();
+            }
+        });// 从相册中选取
+        dialogView.findViewById(R.id.btn_me_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeActivityEventListener.chooseHeadImgFromCamera(HomeConstants.CAMERA_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER);
+                dialog.dismiss();
+            }
+        });// 拍摄照片
+    }
 
     /**
      * 获取主播数据
@@ -101,7 +161,7 @@ public class LiveFragment2 extends Fragment implements LiveView {
         List<Map<String, Object>> data = new ArrayList<>();
         this.vals = new String[]{liveRoomInUserVo.getRoomNum(), liveRoomInUserVo.getRoomName(), liveRoomInUserVo.getCategoryName(), liveRoomInUserVo.getDescription()}; // 主播信息
         for (int i = 0; i < vals.length; i++) {
-            Map<String, Object> map = new HashMap<String, Object>();
+            Map<String, Object> map = new HashMap<>();
             String label = labels[i];
             String val = vals[i];
             map.put("label", label);
@@ -111,13 +171,13 @@ public class LiveFragment2 extends Fragment implements LiveView {
         return data;
     }
 
-    @Override
-    public void closeRefreshing(boolean isAnchor) {
-
+    /**
+     * 获取房间封面视图
+     *
+     * @return
+     */
+    public ImageView getAnchorCoverImageView() {
+        return this.lAnchorCoverImageView;
     }
 
-    @Override
-    public void showToast(String msg) {
-
-    }
 }

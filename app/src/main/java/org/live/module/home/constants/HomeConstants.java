@@ -83,5 +83,13 @@ public class HomeConstants {
      */
     public static final String ATTENTION_LIVEROOM = "attentionLiveRoom";
 
+    /**
+     * 房间封面标识
+     */
+    public static final int LIVE_ROOM_COVER = 11;
+    /**
+     * 头像标识
+     */
+    public static final int HEAD_IMG = 12;
 
 }

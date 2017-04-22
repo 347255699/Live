@@ -14,5 +14,5 @@ public interface AnchorInfoPresenter {
     /**
      * 上传主播封面图片
      */
-    public void postAnchorCoverImg();
+    public void postAnchorCoverImg(String filePath);
 }

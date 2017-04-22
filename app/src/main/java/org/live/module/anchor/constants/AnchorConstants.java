@@ -15,4 +15,10 @@ public class AnchorConstants {
      * 上传申请主播表单信息响应标志码
      */
     public static final int HTTP_RESPONSE_RESULT_POST_APPLY_ANCHOR_FORM_CODE = 7001;
+
+    /**
+     * 上传直播间封面响应标志码
+     */
+    public static final int HTTP_RESPONSE_RESULT_POST_LIVE_ROOM_COVER_CODE = 8001;
+
 }

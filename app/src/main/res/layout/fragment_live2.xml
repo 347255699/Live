@@ -33,6 +33,7 @@
         android:background="@color/colorWhite">
 
         <LinearLayout
+            android:id="@+id/ll_live_cover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -55,14 +56,16 @@
                     android:layout_centerVertical="true"
                     android:text="封面"
                     android:textColor="@color/colorlittleBlack"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/iv_anchor_cover"
                     android:layout_width="100dp"
                     android:layout_height="75dp"
                     android:layout_alignParentRight="true"
+                    android:scaleType="fitXY"
                     android:src="@drawable/shap_ll_corners_pressed" />
+
             </RelativeLayout>
 
         </LinearLayout>
@@ -70,6 +73,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_anchor_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rl_live_cover"
@@ -83,6 +87,89 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:background="@color/colorWhite" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_living"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_anchor_info"
+        android:layout_marginTop="15dp"
+        android:background="@color/colorWhite">
+
+        <LinearLayout
+            android:id="@+id/ll_living_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="10dp"
+
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="直播类型"
+                    android:textColor="@color/colorlittleBlack"
+                    android:textSize="16sp" />
+
+                <RadioGroup
+                    android:id="@+id/rg_living_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_living"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="50dp"
+                        android:checked="true"
+                        android:text="直播" />
+
+                    <RadioButton
+                        android:id="@+id/rb_capture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="录屏直播" />
+                </RadioGroup>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_living"
+        android:layout_marginTop="15dp">
+
+        <Button
+            android:id="@+id/btn_live_start_living"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:background="@drawable/selector_green_corners_button"
+            android:text="开始直播"
+            android:textColor="@color/colorWhite" />
 
     </RelativeLayout>
 </RelativeLayout>

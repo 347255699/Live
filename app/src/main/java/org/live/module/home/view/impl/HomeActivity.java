@@ -227,10 +227,10 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
      * 从相册选取头像
      */
     @Override
-    public void chooseHeadImgFromGallery() {
+    public void chooseHeadImgFromGallery(int flag) {
         Intent intent1 = new Intent(Intent.ACTION_PICK, null);
         intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(intent1, HomeConstants.GALLERY_RESULT_CODE);
+        startActivityForResult(intent1, flag);
     }
 
 
@@ -238,11 +238,11 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
      * 拍摄头像
      */
     @Override
-    public void chooseHeadImgFromCamera() {
+    public void chooseHeadImgFromCamera(int flag) {
         Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent2.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "head.jpg")));
-        startActivityForResult(intent2, HomeConstants.CAMERA_RESULT_CODE);
+        startActivityForResult(intent2, flag);
     }
 
     /**
@@ -349,13 +349,13 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         }
         if (meFragment != null) {
             switch (requestCode) {
-                case HomeConstants.GALLERY_RESULT_CODE:
+                case HomeConstants.GALLERY_RESULT_CODE + HomeConstants.HEAD_IMG:
                     if (resultCode == RESULT_OK) {
                         cropPhoto(data.getData());// 裁剪图片
                     }
 
                     break;
-                case HomeConstants.CAMERA_RESULT_CODE:
+                case HomeConstants.CAMERA_RESULT_CODE + HomeConstants.HEAD_IMG:
                     if (resultCode == RESULT_OK) {
                         File temp = new File(Environment.getExternalStorageDirectory() + "/head.jpg");
                         cropPhoto(Uri.fromFile(temp));// 裁剪图片

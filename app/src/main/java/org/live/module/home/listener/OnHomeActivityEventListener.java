@@ -26,12 +26,12 @@ public interface OnHomeActivityEventListener {
     /**
      * 从相册选择头像
      */
-    public void chooseHeadImgFromGallery();
+    public void chooseHeadImgFromGallery(int flag);
 
     /**
      * 拍摄头像
      */
-    public void chooseHeadImgFromCamera();
+    public void chooseHeadImgFromCamera(int flag);
 
     /**
      * 替换直播模块的fragment

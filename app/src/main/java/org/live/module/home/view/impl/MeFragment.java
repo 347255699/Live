@@ -126,9 +126,9 @@ public class MeFragment extends Fragment {
                         break;
 
                     case 1: //点击我的收藏
-                        Intent intent1 = new Intent(getActivity(), SingleCategoryActivity.class) ;
-                        intent1.putExtra(HomeConstants.ENTER_SINGLE_CATEGORY_KEY, HomeConstants.ATTENTION_LIVEROOM) ;
-                        intent1.putExtra(HomeConstants.ATTENTION_LIVEROOM_USER_ID, mobileUserVo.getUserId()) ;
+                        Intent intent1 = new Intent(getActivity(), SingleCategoryActivity.class);
+                        intent1.putExtra(HomeConstants.ENTER_SINGLE_CATEGORY_KEY, HomeConstants.ATTENTION_LIVEROOM);
+                        intent1.putExtra(HomeConstants.ATTENTION_LIVEROOM_USER_ID, mobileUserVo.getUserId());
                         startActivity(intent1);
                         break;
                 }
@@ -182,14 +182,14 @@ public class MeFragment extends Fragment {
         dialogView.findViewById(R.id.btn_me_gallery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeActivityEventListener.chooseHeadImgFromGallery();
+                homeActivityEventListener.chooseHeadImgFromGallery(HomeConstants.GALLERY_RESULT_CODE + HomeConstants.HEAD_IMG);
                 dialog.dismiss();
             }
         });// 从相册中选取
         dialogView.findViewById(R.id.btn_me_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeActivityEventListener.chooseHeadImgFromCamera();
+                homeActivityEventListener.chooseHeadImgFromCamera(HomeConstants.CAMERA_RESULT_CODE + HomeConstants.HEAD_IMG);
                 dialog.dismiss();
             }
         });// 拍摄照片
@@ -224,7 +224,7 @@ public class MeFragment extends Fragment {
      * 重新刷新数据
      */
     public void reLoadData() {
-        if(mAccountTextView != null && mNicknameTextView != null){
+        if (mAccountTextView != null && mNicknameTextView != null) {
             mAccountTextView.setText("ID: " + homeActivityEventListener.getUserData().getAccount());
             mNicknameTextView.setText(homeActivityEventListener.getUserData().getNickname());
         }

@@ -16,6 +16,8 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import org.live.R;
 import org.live.common.util.BackThread;
+import org.live.module.anchor.presenter.AnchorInfoPresenter;
+import org.live.module.anchor.presenter.impl.AnchorInfoPresenterImpl;
 import org.live.module.anchor.view.AnchorInfoView;
 
 /**
@@ -38,10 +40,11 @@ public class AnchorInfoActivity extends AppCompatActivity implements AnchorInfoV
      * 主播信息修改按钮
      */
     private Button aAnchorInfoEditButton;
-
+    private AnchorInfoPresenter anchorInfoPresenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.anchorInfoPresenter = new AnchorInfoPresenterImpl(this,this);
         setContentView(R.layout.activity_anchor_info);
         this.val = getIntent().getStringExtra("val");
         this.key = getIntent().getStringExtra("key");
@@ -74,6 +77,8 @@ public class AnchorInfoActivity extends AppCompatActivity implements AnchorInfoV
                 Log.i("Global", "点击");
             }
         });// 绑定主播信息修改按钮
+
+
 
     }
 
