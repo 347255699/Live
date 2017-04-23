@@ -49,4 +49,13 @@ public class LiveRoomPresenter {
         liveRoomModel.loadSearchLiveRoomData(searchStr) ;
     }
 
+    /**
+     * 查看直播间的限制
+     * @param userId
+     * @param liveRoomId
+     */
+    public void loadLiveRoomLimitations(String userId, String liveRoomId) {
+        liveRoomModel.loadLiveRoomLimitations(userId, liveRoomId) ;
+    }
+
 }

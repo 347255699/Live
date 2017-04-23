@@ -26,6 +26,7 @@ import org.live.module.home.presenter.LiveRoomPresenter;
 import org.live.module.home.view.custom.LiveRoomGridAdapter;
 import org.live.module.home.view.custom.LiveRoomItemDecoration;
 import org.live.module.home.view.custom.OnItemClickListener;
+import org.live.module.play.view.impl.PlayActivity;
 
 import java.util.List;
 
@@ -56,6 +57,11 @@ public class HomeFragment extends Fragment{
     private Handler handler ;
 
     private ImageView notFoundResultView ;  //未找到直播间的view
+
+    /**
+     *  暂存点击的直播间的下标
+     */
+    private int clickPositionFlag ;
 
 
     @Nullable
@@ -91,13 +97,6 @@ public class HomeFragment extends Fragment{
 
         adapter = new LiveRoomGridAdapter(getContext()) ;
 
-        adapter.setListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), adapter.liveRoomList.get(position).getLiveRoomName(), Toast.LENGTH_SHORT).show() ;
-            }
-        });
-
         liveRoomRecycleView.setAdapter(adapter) ;
         liveRoomRecycleView.setHasFixedSize(true) ; //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         //下拉刷新数据
@@ -116,6 +115,18 @@ public class HomeFragment extends Fragment{
             }
         });
 
+        //点击直播间
+        adapter.setListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //Toast.makeText(getContext(), adapter.liveRoomList.get(position).getLiveRoomName(), Toast.LENGTH_SHORT).show() ;
+                String liveRoomId = adapter.liveRoomList.get(position).getLiveRoomId() ;    //直播间id
+                String userId = HomeActivity.mobileUserVo.getUserId();  //用户id
+                clickPositionFlag = position ;  //更改暂存的下标
+                presenter.loadLiveRoomLimitations(userId, liveRoomId) ;
+            }
+        });
+
     }
 
 
@@ -123,7 +134,7 @@ public class HomeFragment extends Fragment{
         this.handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                if(msg.what == HomeConstants.LOAD_LIVE_ROOM_SUCCESS_FLAG) { //数据加载成功
+                if(msg.what == HomeConstants.LOAD_LIVE_ROOM_SUCCESS_FLAG) { //直播间数据加载成功
                     SimpleResponseModel<List<LiveRoomVo>> dataModel = (SimpleResponseModel<List<LiveRoomVo>>) msg.obj;
                     if(dataModel.getStatus() == 1) {
                         adapter.liveRoomList.clear() ;    //先清空之间的直播间数据
@@ -136,6 +147,29 @@ public class HomeFragment extends Fragment{
                             adapter.liveRoomList.addAll(liveRoomVos) ;
                             adapter.notifyDataSetChanged() ;
                         }
+                    } else {
+                        Toast.makeText(getContext(), "服务器繁忙！", Toast.LENGTH_LONG).show() ;
+                    }
+
+                } else if(msg.what == HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG) {     //用户在直播间的限制加载成功
+                    SimpleResponseModel<List<Integer>> dataModel = (SimpleResponseModel<List<Integer>>) msg.obj;
+                    if(dataModel.getStatus() == 1) {
+                        List<Integer> limitations = dataModel.getData() ;
+                        if(limitations.contains(HomeConstants.LIMIT_TYPE_KICKOUT)) {
+                            Toast.makeText(getContext(), "您被直播踢出直播间，暂时不能进入该直播间！", Toast.LENGTH_SHORT).show() ;
+                            return;
+                        }
+                        //进入直播间
+                        Intent intent = new Intent(getActivity(), PlayActivity.class) ;
+                        if(limitations.contains(HomeConstants.LIMIT_TYPE_SHUTUP)) {
+                            intent.putExtra(HomeConstants.LIMIT_TYPE_KEY_FLAG, HomeConstants.LIMIT_TYPE_SHUTUP) ;
+                        }
+                        LiveRoomVo liveRoomVo = adapter.liveRoomList.get(clickPositionFlag) ;   //得到被点击的直播间
+                        intent.putExtra(HomeConstants.LIVE_ROOM_ID_KEY, liveRoomVo.getLiveRoomId()) ;
+                        intent.putExtra(HomeConstants.LIVE_ROOM_NAME_KEY, liveRoomVo.getLiveRoomName()) ;
+                        intent.putExtra(HomeConstants.LIVE_ROOM_URL_KEY, liveRoomVo.getLiveRoomUrl()) ;
+                        intent.putExtra(HomeConstants.HEAD_IMG_URL_KEY, liveRoomVo.getHeadImgUrl()) ;
+                        startActivity(intent) ;
 
                     } else {
                         Toast.makeText(getContext(), "服务器繁忙！", Toast.LENGTH_LONG).show() ;

@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.FadeExit.FadeExit;
 import com.flyco.animation.FlipEnter.FlipVerticalSwingEnter;
@@ -25,10 +27,14 @@ import com.tencent.rtmp.ui.TXCloudVideoView;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.R;
+import org.live.common.constants.LiveConstants;
 import org.live.common.constants.LiveKeyConstants;
+import org.live.module.home.constants.HomeConstants;
 import org.live.module.play.presenter.PlayPresenter;
 import org.live.module.play.presenter.impl.PlayPresenterImpl;
 import org.live.module.play.view.PlayView;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by Mr.wang on 2017/3/9.
@@ -54,15 +60,36 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
 
     private ImageView bgImageView = null ;  //背景图片
 
+    private ImageView headImgView ;    //主播头像控件
+
+    private TextView liveRoomNameView ;     //直播间名控件
+
+    private TextView onlineCountView ;  //在线人数控件
+
+    private View liveRoomInfoView ;     //顶部房间信息的控件
+
+    private String liveRoomId ; //直播间id
+
+    private String liveRoomName ;   //直播间名
+
+    private String liveRoomUrl ;    //拉流地址
+
+    private String headImgUrl ;     //主播头像地址
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentFragmentView= inflater.inflate(R.layout.fragment_play, null) ;
-        initUI();
+
         playPresenter = new PlayPresenterImpl(this, getActivity()) ;
-        Intent content = getActivity().getIntent() ;
-        String playIp = content.getStringExtra(LiveKeyConstants.Global_URL_KEY) ;  //播放地址
-        this.play(playIp);
+        Intent intent = getActivity().getIntent() ;
+        liveRoomId = intent.getStringExtra(HomeConstants.LIVE_ROOM_ID_KEY);//直播间id
+        liveRoomName = intent.getStringExtra(HomeConstants.LIVE_ROOM_NAME_KEY) ; //直播间名
+        liveRoomUrl = intent.getStringExtra(HomeConstants.LIVE_ROOM_URL_KEY);//拉流地址
+        headImgUrl = intent.getStringExtra(HomeConstants.HEAD_IMG_URL_KEY);//主播头像
+
+        initUI();
+        this.play(liveRoomUrl);
         return currentFragmentView ;
     }
 
@@ -74,6 +101,18 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         closeBtn = (MaterialIconView) currentFragmentView.findViewById(R.id.btn_play_close) ;
         inputBtn = (MaterialIconView) currentFragmentView.findViewById(R.id.btn_play_input) ;
         loadingBar = (ProgressBar) currentFragmentView.findViewById(R.id.pb_play_loading) ;
+
+        //房间信息相关的控件
+        headImgView = (ImageView) currentFragmentView.findViewById(R.id.iv_play_headImg);
+        Glide.with(this).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ headImgUrl)
+                .bitmapTransform(new CropCircleTransformation(getActivity()))
+                .into(headImgView); // 设置头像
+        liveRoomNameView = (TextView) currentFragmentView.findViewById(R.id.tv_play_liveRoomName) ;
+        liveRoomNameView.setText(liveRoomName) ;
+        onlineCountView = (TextView) currentFragmentView.findViewById(R.id.tv_play_onlineCount);
+        liveRoomInfoView = currentFragmentView.findViewById(R.id.rl_play_liveroom_info) ;
+        liveRoomInfoView.getBackground().setAlpha(35) ;    //设置透明度
+
         closeBtn.setOnClickListener(this);
         inputBtn.setOnClickListener(this);
         closeBtn.getBackground().setAlpha(ALPHA_DEFAULT_VALUE) ;    //设置透明度
@@ -137,13 +176,14 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
             @Override
             public void onBtnClick() {  //返回
                 dialog.dismiss() ;
+                onDestroy();
                 getActivity().finish() ;
             }
         }, new OnBtnClickL() {
             @Override
             public void onBtnClick() {  //刷新直播间
                 dialog.dismiss() ;
-                ((PlayActivity)getActivity()).reLoadCurrentFragment() ;
+                ((PlayActivity)getActivity()).reloadCurrentFragment() ;
 
             }
         });

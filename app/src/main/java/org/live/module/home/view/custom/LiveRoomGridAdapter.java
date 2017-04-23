@@ -85,7 +85,7 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
                     .bitmapTransform(roundedCornersTransformation).into(coverImageView) ;
         } else {
             ImageView coverImageView = holder.getLiveCoverImageView();
-            coverImageView.setImageAlpha(80) ;  //设置透明度
+            coverImageView.setImageAlpha(70) ;  //设置透明度
             Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
                     .bitmapTransform(roundedCornersTransformation).into(coverImageView) ;
 

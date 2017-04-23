@@ -36,6 +36,11 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
     public List<LiveCategoryVo> categoryList ;
 
     /**
+     * 图片圆角处理
+     */
+    private  RoundedCornersTransformation roundedCornersTransformation ;
+
+    /**
      *  item的监听事件监听器
      */
     private OnItemClickListener listener ;
@@ -48,6 +53,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         this.mContext = context ;
         categoryList = new LinkedList<LiveCategoryVo>() ;
         mInflater = LayoutInflater.from(context) ;
+        roundedCornersTransformation = new RoundedCornersTransformation(mContext, 25, 2) ;
     }
 
 
@@ -70,7 +76,8 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
     public void onBindViewHolder(LiveCategoryViewHolder holder, int position) {
         LiveCategoryVo vo = categoryList.get(position) ;
         holder.getCategoryNameView().setText(vo.getCategoryName()) ;
-        Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP + vo.getCoverUrl()).bitmapTransform(new RoundedCornersTransformation(mContext, 25, 5)).into(holder.getCoverImgView()) ;
+        Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP + vo.getCoverUrl())
+                .bitmapTransform(roundedCornersTransformation).into(holder.getCoverImgView()) ;
     }
 
     @Override

@@ -27,6 +27,16 @@ public class HomeConstants {
     public static final int LOAD_LIVE_ROOM_SUCCESS_FLAG = 104;
 
     /**
+     * 加载直播间限制正确
+     */
+    public static final int LOAD_LIMITATION_SUCCESS_FLAG = 105 ;
+
+    /**
+     * 加载直播间限制的时候，发生异常。
+     */
+    public static final int LOAD_LIMITATION_EXCEPTION_FLAG = 106 ;
+
+    /**
      * 分类名称的key
      */
     public static final String CATEGORY_NAME_KEY = "categoryNameKey";
@@ -91,5 +101,40 @@ public class HomeConstants {
      * 头像标识
      */
     public static final int HEAD_IMG = 12;
+
+    /**
+     * 限制类型，禁言
+     */
+    public static final int LIMIT_TYPE_SHUTUP = 1 ;
+
+    /**
+     * 限制类型，踢出房间
+     */
+    public static final int LIMIT_TYPE_KICKOUT = 2 ;
+
+    /**
+     * 限制类型的key
+     */
+    public static final String LIMIT_TYPE_KEY_FLAG = "limitTypeKey" ;
+
+    /**
+     * 头像的key
+     */
+    public static final String HEAD_IMG_URL_KEY = "headImgUrlKey" ;
+
+    /**
+     * 直播间名的key
+     */
+    public static final String LIVE_ROOM_NAME_KEY = "liveRoomNameKey" ;
+
+    /**
+     * 直播间拉推流地址的key
+     */
+    public static final String LIVE_ROOM_URL_KEY = "liveRoomUrlKey" ;
+
+    /**
+     * 直播间id的key
+     */
+    public static final String LIVE_ROOM_ID_KEY = "liveRoomIdKey" ;
 
 }
