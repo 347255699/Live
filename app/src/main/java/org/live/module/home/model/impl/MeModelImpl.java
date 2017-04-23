@@ -202,7 +202,7 @@ public class MeModelImpl implements MeModel {
         intent.putExtra("outputX", 150);
         intent.putExtra("outputY", 150);
         intent.putExtra("return-data", true);
-        meView.cropHeadImg(intent, HomeConstants.CROP_RESULT_CODE);
+        meView.cropHeadImg(intent, HomeConstants.CROP_RESULT_CODE + HomeConstants.HEAD_IMG);
     }
 
     /**

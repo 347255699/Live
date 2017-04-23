@@ -25,6 +25,9 @@ import com.bumptech.glide.Glide;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 
 import org.live.R;
+import org.live.module.anchor.presenter.AnchorInfoPresenter;
+import org.live.module.anchor.presenter.impl.AnchorInfoPresenterImpl;
+import org.live.module.anchor.view.AnchorInfoView;
 import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.listener.OnHomeActivityEventListener;
 import org.live.module.home.presenter.MePresenter;
@@ -50,7 +53,7 @@ import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
  * 主界面
  * Created by Mr.wang on 2017/3/14.
  */
-public class HomeActivity extends FragmentActivity implements OnHomeActivityEventListener, MeView {
+public class HomeActivity extends FragmentActivity implements OnHomeActivityEventListener, MeView, AnchorInfoView {
 
     public static final String TAG = "Global";
 
@@ -63,13 +66,17 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
     public static MobileUserVo mobileUserVo; // 用户数据引用
 
     private MePresenter mePresenter; // '我的'模块表示器引用
+    private AnchorInfoPresenter anchorInfoPresenter; // ‘主播信息’模块表示器引用
+    private LiveFragment2 liveFragment2; // '我的直播'fragment引用
     private MeFragment meFragment; // '我的'fragment引用
     private Bitmap head;// 头像Bitmap
+    private Bitmap cover; // 房间封面Bitmap
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mePresenter = new MePresenterImpl(this, this); // 取得'我的模块'表示器
+        this.anchorInfoPresenter = new AnchorInfoPresenterImpl(this, this);// 取得'主播信息模块'表示器
         this.mobileUserVo = mePresenter.getUserData(); // 取得用户数据
         requestWindowFeature(Window.FEATURE_NO_TITLE);     //隐藏标题
         setContentView(R.layout.activity_home);
@@ -85,6 +92,14 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         }
         if (meFragment != null) {
             meFragment.reLoadData(); // 刷新数据
+        }
+
+        if (fragmentList.get(fragmentIndex) instanceof LiveFragment2) {
+            liveFragment2 = (LiveFragment2) fragmentList.get(fragmentIndex);
+        }
+
+        if(liveFragment2 != null){
+            liveFragment2.refreshData(); // 刷新数据
         }
 
     }
@@ -227,7 +242,7 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
      * 从相册选取头像
      */
     @Override
-    public void chooseHeadImgFromGallery(int flag) {
+    public void chooseImgFromGallery(int flag) {
         Intent intent1 = new Intent(Intent.ACTION_PICK, null);
         intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         startActivityForResult(intent1, flag);
@@ -238,10 +253,10 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
      * 拍摄头像
      */
     @Override
-    public void chooseHeadImgFromCamera(int flag) {
+    public void chooseImgFromCamera(int flag, String fileName) {
         Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent2.putExtra(MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "head.jpg")));
+                Uri.fromFile(new File(Environment.getExternalStorageDirectory(), fileName)));
         startActivityForResult(intent2, flag);
     }
 
@@ -257,6 +272,11 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         fm.executePendingTransactions();
         fragmentList.set(2, new LiveFragment2());
         fragmentPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void refreshFragment() {
+        fragmentPagerAdapter.notifyDataSetChanged();// 刷新视图
     }
 
 
@@ -327,6 +347,34 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void back() {
+
+    }
+
+    /**
+     * 裁剪封面图
+     *
+     * @param intent
+     * @param requestCode 请求标识，返回时携带的标志
+     */
+    @Override
+    public void cropRoomCover(Intent intent, int requestCode) {
+        startActivityForResult(intent, requestCode);
+    }
+
+    /**
+     * 设置封面
+     */
+    @Override
+    public void setRoomCover() {
+        if (liveFragment2 != null && cover != null) {
+            liveFragment2.getAnchorCoverImageView().setImageBitmap(cover); // 设置封面
+            cover = null; // 释放资源
+        }
+
+    }
+
     /**
      * 设置头像
      */
@@ -344,10 +392,14 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         int fragmentIndex = viewPager.getCurrentItem();
         meFragment = null;
+        liveFragment2 = null;
         if (fragmentList.get(fragmentIndex) instanceof MeFragment) {
             meFragment = (MeFragment) fragmentList.get(fragmentIndex);
         }
-        if (meFragment != null) {
+        if (fragmentList.get(fragmentIndex) instanceof LiveFragment2) {
+            liveFragment2 = (LiveFragment2) fragmentList.get(fragmentIndex);
+        }
+        if (meFragment != null || liveFragment2 != null) {
             switch (requestCode) {
                 case HomeConstants.GALLERY_RESULT_CODE + HomeConstants.HEAD_IMG:
                     if (resultCode == RESULT_OK) {
@@ -362,7 +414,7 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
                     }
 
                     break;
-                case HomeConstants.CROP_RESULT_CODE:
+                case HomeConstants.CROP_RESULT_CODE + HomeConstants.HEAD_IMG:
                     if (data != null) {
                         Bundle extras = data.getExtras();
                         head = extras.getParcelable("data");
@@ -372,9 +424,29 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
                         }
                     }
                     break;
+                case HomeConstants.CAMERA_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER:
+                    if (resultCode == RESULT_OK) {
+                        File temp = new File(Environment.getExternalStorageDirectory() + "/roomCover.jpg");
+                        anchorInfoPresenter.cropRoomCover(Uri.fromFile(temp));// 裁剪图片
+                    }
+                    break;
+                case HomeConstants.GALLERY_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER:
+                    if (resultCode == RESULT_OK) {
+                        anchorInfoPresenter.cropRoomCover(data.getData());// 裁剪图片
+                    }
+                    break;
+                case HomeConstants.CROP_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER:
+                    if (data != null) {
+                        Bundle extras = data.getExtras();
+                        cover = extras.getParcelable("data");
+                        if (cover != null) {
+                            String fileName = anchorInfoPresenter.setPicToSd(cover);// 保存在SD卡中
+                            anchorInfoPresenter.postAnchorCoverImg(fileName); // 上传封面
+                        }
+                    }
+                    break;
                 default:
                     break;
-
             }
             super.onActivityResult(requestCode, resultCode, data);
         }

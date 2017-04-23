@@ -28,4 +28,6 @@ public interface ApplyAnchorModelListener {
      * @param liveCategoryVos
      */
     public void showCategoryList(List<LiveCategoryVo> liveCategoryVos);
+
+
 }
