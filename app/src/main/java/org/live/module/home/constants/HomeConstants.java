@@ -100,7 +100,7 @@ public class HomeConstants {
     /**
      * 头像标识
      */
-    public static final int HEAD_IMG = 12;
+    public static final int HEAD_IMG = 15;
 
     /**
      * 限制类型，禁言

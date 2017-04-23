@@ -49,6 +49,7 @@ public class LiveFragment2 extends Fragment {
     private View view;
     private MobileUserVo.LiveRoomInUserVo liveRoomInUserVo;
     private MobileUserVo mobileUserVo;
+    private List<Map<String, Object>> data;
     /**
      * 房间封面更换按钮
      */
@@ -64,14 +65,14 @@ public class LiveFragment2 extends Fragment {
 
     private String[] labels = {"房间号", "房间名", "分类名称", "个性签名"}; // 主播信息标签
     private String[] vals; // 主播信息
-    private AnchorInfoPresenter anchorInfoPresenter;
+
     private OnHomeActivityEventListener homeActivityEventListener;
+    private SimpleAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.liveRoomInUserVo = HomeActivity.mobileUserVo.getLiveRoomVo();
-        this.mobileUserVo = HomeActivity.mobileUserVo;
         if (getActivity() instanceof OnHomeActivityEventListener) {
             this.homeActivityEventListener = (OnHomeActivityEventListener) getActivity();
         }
@@ -80,14 +81,21 @@ public class LiveFragment2 extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
+
     /**
      * 初始化UI控件
      */
     private void initUIElement() {
+        this.mobileUserVo = HomeActivity.mobileUserVo;
         lAnchorInfoListView = (ListView) view.findViewById(R.id.lv_anchor_info);
         lAnchorCoverImageView = (ImageView) view.findViewById(R.id.iv_anchor_cover);
         lLiveRoomCoverLinearLayout = (LinearLayout) view.findViewById(R.id.ll_live_cover);
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), getData(), R.layout.item_user_info, new String[]{"label", "val"}, new int[]{R.id.tv_user_info_label, R.id.tv_user_info_val});
+        getData();
+        adapter = new SimpleAdapter(getActivity(), data, R.layout.item_user_info, new String[]{"label", "val"}, new int[]{R.id.tv_user_info_label, R.id.tv_user_info_val});
         lAnchorInfoListView.setAdapter(adapter);
         lAnchorInfoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,10 +111,10 @@ public class LiveFragment2 extends Fragment {
                         val = liveRoomInUserVo.getDescription();
                         key = "description";
                     }
-                    Intent intent = new Intent();
+                    Intent intent = new Intent(getActivity(), AnchorInfoActivity.class);
                     intent.putExtra("key", key);
                     intent.putExtra("val", val);
-                    startActivity(new Intent(getActivity(), AnchorInfoActivity.class)); // 跳转至主播信息修改窗口
+                    startActivity(intent); // 跳转至主播信息修改窗口
                 }
             }
         }); // 绑定列表选项
@@ -141,14 +149,14 @@ public class LiveFragment2 extends Fragment {
         dialogView.findViewById(R.id.btn_me_gallery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeActivityEventListener.chooseHeadImgFromGallery(HomeConstants.GALLERY_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER);
+                homeActivityEventListener.chooseImgFromGallery(HomeConstants.GALLERY_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER);
                 dialog.dismiss();
             }
         });// 从相册中选取
         dialogView.findViewById(R.id.btn_me_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeActivityEventListener.chooseHeadImgFromCamera(HomeConstants.CAMERA_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER);
+                homeActivityEventListener.chooseImgFromCamera(HomeConstants.CAMERA_RESULT_CODE + HomeConstants.LIVE_ROOM_COVER, "roomCover.jpg");
                 dialog.dismiss();
             }
         });// 拍摄照片
@@ -157,9 +165,9 @@ public class LiveFragment2 extends Fragment {
     /**
      * 获取主播数据
      */
-    private List<Map<String, Object>> getData() {
-        List<Map<String, Object>> data = new ArrayList<>();
-        this.vals = new String[]{liveRoomInUserVo.getRoomNum(), liveRoomInUserVo.getRoomName(), liveRoomInUserVo.getCategoryName(), liveRoomInUserVo.getDescription()}; // 主播信息
+    private void getData() {
+        data = new ArrayList<>(4);
+        this.vals = new String[]{HomeActivity.mobileUserVo.getLiveRoomVo().getRoomNum(), HomeActivity.mobileUserVo.getLiveRoomVo().getRoomName(), HomeActivity.mobileUserVo.getLiveRoomVo().getCategoryName(), HomeActivity.mobileUserVo.getLiveRoomVo().getDescription()}; // 主播信息
         for (int i = 0; i < vals.length; i++) {
             Map<String, Object> map = new HashMap<>();
             String label = labels[i];
@@ -168,7 +176,6 @@ public class LiveFragment2 extends Fragment {
             map.put("val", val);
             data.add(map);
         }
-        return data;
     }
 
     /**
@@ -180,4 +187,20 @@ public class LiveFragment2 extends Fragment {
         return this.lAnchorCoverImageView;
     }
 
+    /**
+     * 刷新数据
+     */
+    public void refreshData() {
+        data.clear() ;
+        this.vals = new String[]{HomeActivity.mobileUserVo.getLiveRoomVo().getRoomNum(), HomeActivity.mobileUserVo.getLiveRoomVo().getRoomName(), HomeActivity.mobileUserVo.getLiveRoomVo().getCategoryName(), HomeActivity.mobileUserVo.getLiveRoomVo().getDescription()}; // 主播信息
+        for (int i = 0; i < vals.length; i++) {
+            Map<String, Object> map = new HashMap<>(1);
+            String label = labels[i];
+            String val = vals[i];
+            map.put("label", label);
+            map.put("val", val);
+            data.add(map);
+        }
+        adapter.notifyDataSetChanged();
+    }
 }

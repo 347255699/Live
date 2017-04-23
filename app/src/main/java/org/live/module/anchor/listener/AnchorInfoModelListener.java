@@ -1,13 +1,13 @@
-package org.live.module.anchor.view;
+package org.live.module.anchor.listener;
 
 import android.content.Intent;
 
 /**
- * 主播信息视图
+ * 主播信息逻辑处理层回调
  * Created by KAM on 2017/4/22.
  */
 
-public interface AnchorInfoView {
+public interface AnchorInfoModelListener {
     /**
      * 显示提示信息
      *

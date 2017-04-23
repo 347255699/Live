@@ -182,14 +182,14 @@ public class MeFragment extends Fragment {
         dialogView.findViewById(R.id.btn_me_gallery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeActivityEventListener.chooseHeadImgFromGallery(HomeConstants.GALLERY_RESULT_CODE + HomeConstants.HEAD_IMG);
+                homeActivityEventListener.chooseImgFromGallery(HomeConstants.GALLERY_RESULT_CODE + HomeConstants.HEAD_IMG);
                 dialog.dismiss();
             }
         });// 从相册中选取
         dialogView.findViewById(R.id.btn_me_camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeActivityEventListener.chooseHeadImgFromCamera(HomeConstants.CAMERA_RESULT_CODE + HomeConstants.HEAD_IMG);
+                homeActivityEventListener.chooseImgFromCamera(HomeConstants.CAMERA_RESULT_CODE + HomeConstants.HEAD_IMG, "head.jpg");
                 dialog.dismiss();
             }
         });// 拍摄照片
