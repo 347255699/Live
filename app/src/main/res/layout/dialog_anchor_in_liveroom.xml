@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <!-- 举报 -->
+    <LinearLayout
+        android:id="@+id/ll_dialog_play_report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:scaleType="center"
+            app:materialIcon="alert_outline"
+            app:materialIconColor="@color/colorShallowGray"
+            app:materialIconSize="20dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="举报"
+            android:textColor="@color/colorShallowGray"
+            android:paddingTop="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_dialog_play_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_dialog_play_report"
+        android:layout_marginTop="15dp">
+        <ImageView
+            android:id="@+id/iv_dialog_play_anchorImg"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg"
+            />
+        <!-- 一些主播信息的布局 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp">
+            <TextView
+                android:id="@+id/tv_dialog_play_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="201335020231"
+                android:textSize="18sp"
+                android:textColor="@color/colorShallowBlack" />
+            <TextView
+                android:id="@+id/tv_dialog_play_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:textSize="18sp"
+                android:textColor="@color/colorShallowBlack"
+                android:text="Mr_wang"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorShallowBlack"
+                    android:text="关注: "/>
+                <TextView
+                    android:id="@+id/tv_dialog_play_attentionCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorShallowBlack"
+                    android:text="50"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_dialog_play_attention"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:background="@drawable/shape_dialog_attention"
+                android:paddingRight="8dp"
+                android:layout_marginTop="8dp">
+                <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/iv_dialog_play_attention"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:padding="5dp"
+                    android:scaleType="center"
+                    app:materialIcon="account_plus"
+                    app:materialIconColor="@color/colorGray"
+                    app:materialIconSize="@dimen/icon_recorder_size" />
+                <TextView
+                    android:id="@+id/tv_dialog_play_attentionType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorGray"
+                    android:paddingTop="3dp"
+                    android:text="关注  "/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 划线 -->
+    <ImageView
+        android:id="@+id/im_dialog_play_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/colorShallowGray"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/ll_dialog_play_info"/>
+
+    <TextView
+        android:id="@+id/tv_dialog_play_descrptioin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/im_dialog_play_line"
+        android:textColor="@color/colorShallowBlack"
+        android:textSize="16dp"
+        android:text="签名：我是城院大傻逼啦啦啦啦啦啦啦啊啊啦啦阿拉"
+        />
+
+
+</RelativeLayout>

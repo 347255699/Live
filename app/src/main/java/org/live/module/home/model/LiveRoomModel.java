@@ -21,6 +21,7 @@ import org.live.common.util.JsonUtils;
 import org.live.common.util.ResponseModel;
 import org.live.common.util.SimpleResponseModel;
 import org.live.module.home.constants.HomeConstants;
+import org.live.module.home.domain.AppAnchorInfo;
 import org.live.module.home.domain.LiveRoomVo;
 
 import java.util.ArrayList;
@@ -47,6 +48,11 @@ public class LiveRoomModel {
      * 查看用户在该直播间的限制
      */
     protected final String liveRoomLimitationUrl = LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/limit" ;
+
+    /**
+     * 加载主播信息的url
+     */
+    protected final String anchorInfoUrl = LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/anchorInfo" ;
 
     private Context context ;
 
@@ -122,6 +128,32 @@ public class LiveRoomModel {
                 }
                 message.obj = dataModel ;
                 message.what = HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG ;
+                handler.sendMessage(message) ;
+            }
+        }) ;
+    }
+
+    /**
+     * 加载主播信息
+     */
+    public void loadAnchorInfoData(String userId, String liveRoomId) {
+        AsyncHttpGet request = new AsyncHttpGet(anchorInfoUrl+ "?userId=" + userId + "&liveRoomId=" + liveRoomId) ;
+        AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback(){
+            @Override
+            public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
+                Message message = Message.obtain() ;
+                if(e != null) {
+                    Log.e(TAG, e.getMessage()) ;
+                    message.what = HomeConstants.LOAD_ANCHOR_INFO_EXCEPTION_FLAG ;
+                    handler.sendMessage(message) ;
+                    return ;
+                }
+                ResponseModel<AppAnchorInfo> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<AppAnchorInfo>>(){}.getType()) ;
+                if(dataModel == null) {
+                    dataModel = new SimpleResponseModel<AppAnchorInfo>() ;
+                }
+                message.obj = dataModel ;
+                message.what = HomeConstants.LOAD_ANCHOR_INFO_SUCCESS_FLAG ;
                 handler.sendMessage(message) ;
             }
         }) ;

@@ -4,9 +4,12 @@ package org.live.module.play.view.impl;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,8 @@ import com.flyco.animation.FlipEnter.FlipVerticalSwingEnter;
 import com.flyco.dialog.listener.OnBtnClickL;
 import com.flyco.dialog.widget.MaterialDialog;
 import com.flyco.dialog.widget.NormalDialog;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
 import net.steamcrafted.materialiconlib.MaterialIconView;
@@ -29,7 +34,13 @@ import net.steamcrafted.materialiconlib.MaterialIconView;
 import org.live.R;
 import org.live.common.constants.LiveConstants;
 import org.live.common.constants.LiveKeyConstants;
+import org.live.common.listener.NoDoubleClickListener;
+import org.live.common.util.ResponseModel;
 import org.live.module.home.constants.HomeConstants;
+import org.live.module.home.domain.AppAnchorInfo;
+import org.live.module.home.presenter.LiveRoomPresenter;
+import org.live.module.home.view.custom.AnchorInfoDialogView;
+import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.play.presenter.PlayPresenter;
 import org.live.module.play.presenter.impl.PlayPresenterImpl;
 import org.live.module.play.view.PlayView;
@@ -51,6 +62,8 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
     private TXCloudVideoView mPlayerView = null ;   //播放器的view
 
     private PlayPresenter playPresenter = null ;    // 播放器的prsenter
+
+    private LiveRoomPresenter liveRoomPresenter ;     //直播间的presenter
 
     private MaterialIconView closeBtn = null ; //关闭页面的btn
 
@@ -78,12 +91,20 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
 
     private String onlineCount ;    //在线人数
 
+    private Handler handler ;      //handler
+
+    private AnchorInfoDialogView anchorInfoDialogView ;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentFragmentView= inflater.inflate(R.layout.fragment_play, null) ;
 
         playPresenter = new PlayPresenterImpl(this, getActivity()) ;
+        newHandlerInstance() ;  //实例化handler
+        liveRoomPresenter = new LiveRoomPresenter(getContext(), handler) ;
+
+
         Intent intent = getActivity().getIntent() ;
         liveRoomId = intent.getStringExtra(HomeConstants.LIVE_ROOM_ID_KEY);//直播间id
         liveRoomName = intent.getStringExtra(HomeConstants.LIVE_ROOM_NAME_KEY) ; //直播间名
@@ -116,10 +137,10 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         onlineCountView.setText(onlineCount) ;  //设置在线人数
         liveRoomInfoView = currentFragmentView.findViewById(R.id.rl_play_liveroom_info) ;
         liveRoomInfoView.getBackground().setAlpha(50) ;    //设置透明度
-        liveRoomInfoView.setOnClickListener(new View.OnClickListener() {    //点击显示房间信息
+        liveRoomInfoView.setOnClickListener(new NoDoubleClickListener() {    //点击显示房间信息
             @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), liveRoomName, Toast.LENGTH_SHORT).show();
+            protected void onNoDoubleClick(View v) {
+                liveRoomPresenter.loadAnchorInfoData(HomeActivity.mobileUserVo.getUserId(), liveRoomId) ;   //加载数据
             }
         });
 
@@ -129,6 +150,52 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         inputBtn.getBackground().setAlpha(ALPHA_DEFAULT_VALUE) ;
         bgImageView = (ImageView) currentFragmentView.findViewById(R.id.iv_play_bg) ;
     }
+
+    /**
+     * 实例化handler
+     */
+    private void newHandlerInstance() {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == HomeConstants.LOAD_ANCHOR_INFO_SUCCESS_FLAG) {   //加载主播信息成功
+                    ResponseModel<AppAnchorInfo> dataModel = (ResponseModel) msg.obj ;
+                    if(dataModel.getStatus() == 1) {
+                        AppAnchorInfo info = dataModel.getData() ;
+                        showAnchorInfoDialog(info) ;
+                    }
+                }
+            }
+        } ;
+    }
+
+
+    /**
+     * 弹出主播信息的弹出框
+     * @param info
+     */
+    private void showAnchorInfoDialog(AppAnchorInfo info) {
+       if(anchorInfoDialogView == null) anchorInfoDialogView = new AnchorInfoDialogView(getContext()) ;
+        anchorInfoDialogView.setValueAndShow(info) ;
+        anchorInfoDialogView.getReportView().setOnClickListener(new View.OnClickListener() { //点击举报
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "举报他", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //点击关注
+        anchorInfoDialogView.getAttentionHold().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "关注", Toast.LENGTH_SHORT).show();
+            }
+
+    });
+
+
+    }
+
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

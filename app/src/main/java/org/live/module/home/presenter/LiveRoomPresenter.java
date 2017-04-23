@@ -58,4 +58,11 @@ public class LiveRoomPresenter {
         liveRoomModel.loadLiveRoomLimitations(userId, liveRoomId) ;
     }
 
+    /**
+     * 加载主播信息
+     */
+    public void loadAnchorInfoData(String userId, String liveRoomId) {
+        liveRoomModel.loadAnchorInfoData(userId, liveRoomId) ;
+    }
+
 }
