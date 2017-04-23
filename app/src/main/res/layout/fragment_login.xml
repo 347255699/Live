@@ -13,7 +13,7 @@
         android:layout_marginTop="25dp"
         android:textColorHint="@color/colorGray"
         android:hint="输入账户"
-        android:text="201335020246"
+        android:text="201335020231"
         android:textCursorDrawable="@drawable/shape_cursor_color" />
     <!-- 密码输入框 -->
     <EditText
@@ -23,7 +23,7 @@
         android:layout_marginTop="25dp"
         android:textColorHint="@color/colorGray"
         android:hint="输入密码"
-        android:text="xudan930318"
+        android:text="123456"
         android:inputType="textPassword"
         android:textCursorDrawable="@drawable/shape_cursor_color" />
 

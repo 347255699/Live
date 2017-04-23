@@ -10,7 +10,7 @@ public class LiveConstants {
     /**
      * 远程服务器地址
      */
-    public static final String REMOTE_SERVER_IP = "10.20.197.154";
+    public static final String REMOTE_SERVER_IP = "172.27.35.15";
 
     /**
      * http协议开头

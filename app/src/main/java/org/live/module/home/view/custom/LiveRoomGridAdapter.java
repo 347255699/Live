@@ -80,14 +80,16 @@ public class LiveRoomGridAdapter extends RecyclerView.Adapter<LiveRoomGridAdapte
 
         if(vo.isLiveFlag()) {
             ImageView coverImageView = holder.getLiveCoverImageView() ;
+            coverImageView.setBackgroundColor(mContext.getResources().getColor(R.color.colorWhite)) ;    //设置颜色
             coverImageView.setImageAlpha(255) ; //设置透明度
             Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
-                    .bitmapTransform(roundedCornersTransformation).into(coverImageView) ;
+                    .into(coverImageView) ;
         } else {
             ImageView coverImageView = holder.getLiveCoverImageView();
-            coverImageView.setImageAlpha(70) ;  //设置透明度
+            coverImageView.setBackgroundColor(mContext.getResources().getColor(R.color.colorShallowBlack)) ;
+            coverImageView.setImageAlpha(75) ;  //设置透明度
             Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP+ vo.getLiveRoomCoverUrl())
-                    .bitmapTransform(roundedCornersTransformation).into(coverImageView) ;
+                    .into(coverImageView) ;
 
         }
 

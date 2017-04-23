@@ -73,7 +73,7 @@
         android:layout_height="38dp"
         android:background="@drawable/shape_corners_liveroom_info"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="12dp"
         android:paddingRight="15dp"
         android:paddingTop="1dp"
         android:paddingLeft="1dp"

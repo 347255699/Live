@@ -77,7 +77,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         LiveCategoryVo vo = categoryList.get(position) ;
         holder.getCategoryNameView().setText(vo.getCategoryName()) ;
         Glide.with(mContext).load(LiveConstants.REMOTE_SERVER_HTTP_IP + vo.getCoverUrl())
-                .bitmapTransform(roundedCornersTransformation).into(holder.getCoverImgView()) ;
+                .into(holder.getCoverImgView()) ;
     }
 
     @Override

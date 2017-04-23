@@ -76,6 +76,8 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
 
     private String headImgUrl ;     //主播头像地址
 
+    private String onlineCount ;    //在线人数
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         liveRoomName = intent.getStringExtra(HomeConstants.LIVE_ROOM_NAME_KEY) ; //直播间名
         liveRoomUrl = intent.getStringExtra(HomeConstants.LIVE_ROOM_URL_KEY);//拉流地址
         headImgUrl = intent.getStringExtra(HomeConstants.HEAD_IMG_URL_KEY);//主播头像
+        onlineCount = intent.getIntExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, 0)+"" ; //在线人数
 
         initUI();
         this.play(liveRoomUrl);
@@ -108,10 +111,17 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
                 .bitmapTransform(new CropCircleTransformation(getActivity()))
                 .into(headImgView); // 设置头像
         liveRoomNameView = (TextView) currentFragmentView.findViewById(R.id.tv_play_liveRoomName) ;
-        liveRoomNameView.setText(liveRoomName) ;
-        onlineCountView = (TextView) currentFragmentView.findViewById(R.id.tv_play_onlineCount);
+        liveRoomNameView.setText(liveRoomName) ;    //设置房间名
+        onlineCountView = (TextView) currentFragmentView.findViewById(R.id.tv_play_onlineCount) ;
+        onlineCountView.setText(onlineCount) ;  //设置在线人数
         liveRoomInfoView = currentFragmentView.findViewById(R.id.rl_play_liveroom_info) ;
-        liveRoomInfoView.getBackground().setAlpha(35) ;    //设置透明度
+        liveRoomInfoView.getBackground().setAlpha(50) ;    //设置透明度
+        liveRoomInfoView.setOnClickListener(new View.OnClickListener() {    //点击显示房间信息
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), liveRoomName, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         closeBtn.setOnClickListener(this);
         inputBtn.setOnClickListener(this);
@@ -136,9 +146,9 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
     @Override
     public void onDestroy() {
         Log.d(TAG, "destroy") ;
-        super.onDestroy();
         playPresenter.stopPlay() ;
         mPlayerView.onDestroy() ;
+        super.onDestroy();
     }
 
 
@@ -169,9 +179,7 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         final MaterialDialog dialog = new MaterialDialog(getActivity()) ;
         dialog.content("连接服务器失败，请进行如下操作! ") ;
         dialog.btnNum(2).btnText("返回" ,"刷新直播间") .btnTextColor(NormalDialog.STYLE_TWO) ;
-        dialog.showAnim(bas_in)
-                .dismissAnim(bas_out)
-                .show() ;
+        dialog.show() ;
         dialog.setOnBtnClickL(new OnBtnClickL() {
             @Override
             public void onBtnClick() {  //返回

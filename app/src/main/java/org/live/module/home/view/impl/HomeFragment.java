@@ -169,6 +169,7 @@ public class HomeFragment extends Fragment{
                         intent.putExtra(HomeConstants.LIVE_ROOM_NAME_KEY, liveRoomVo.getLiveRoomName()) ;
                         intent.putExtra(HomeConstants.LIVE_ROOM_URL_KEY, liveRoomVo.getLiveRoomUrl()) ;
                         intent.putExtra(HomeConstants.HEAD_IMG_URL_KEY, liveRoomVo.getHeadImgUrl()) ;
+                        intent.putExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, liveRoomVo.getOnlineCount()) ;
                         startActivity(intent) ;
 
                     } else {
