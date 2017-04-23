@@ -159,6 +159,7 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
         Map<String, Map<String, Object>> rules = new HashMap<>();
         Map<String, Object> rule = new LinkedHashMap<>();
         rule.put("required", true);
+        rule.put("maxLength", 10);
         rules.put(key, rule);
         Map<String, String> vals = new HashMap<>();
         vals.put(key, val);

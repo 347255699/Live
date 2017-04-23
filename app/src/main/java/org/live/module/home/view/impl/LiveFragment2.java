@@ -11,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -23,15 +26,19 @@ import com.orhanobut.dialogplus.ViewHolder;
 
 import org.live.R;
 import org.live.common.constants.LiveConstants;
+import org.live.common.constants.LiveKeyConstants;
+import org.live.common.listener.NoDoubleClickListener;
 import org.live.common.util.BackThread;
 import org.live.module.anchor.presenter.AnchorInfoPresenter;
 import org.live.module.anchor.presenter.impl.AnchorInfoPresenterImpl;
 import org.live.module.anchor.view.AnchorInfoView;
 import org.live.module.anchor.view.impl.AnchorInfoActivity;
+import org.live.module.capture.view.impl.CaptureActivity;
 import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.listener.OnHomeActivityEventListener;
 import org.live.module.home.view.LiveView;
 import org.live.module.login.domain.MobileUserVo;
+import org.live.module.publish.view.impl.PublishActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +55,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class LiveFragment2 extends Fragment {
     private View view;
     private MobileUserVo.LiveRoomInUserVo liveRoomInUserVo;
-    private MobileUserVo mobileUserVo;
     private List<Map<String, Object>> data;
     /**
      * 房间封面更换按钮
@@ -62,6 +68,15 @@ public class LiveFragment2 extends Fragment {
      * 主播封面视图
      */
     private ImageView lAnchorCoverImageView;
+
+    /**
+     * 单选按钮组
+     */
+    private RadioGroup lLivingTypeRadioGroup;
+    /**
+     * 开始直播按钮
+     */
+    private Button lStartLivingButton;
 
     private String[] labels = {"房间号", "房间名", "分类名称", "个性签名"}; // 主播信息标签
     private String[] vals; // 主播信息
@@ -90,10 +105,11 @@ public class LiveFragment2 extends Fragment {
      * 初始化UI控件
      */
     private void initUIElement() {
-        this.mobileUserVo = HomeActivity.mobileUserVo;
         lAnchorInfoListView = (ListView) view.findViewById(R.id.lv_anchor_info);
         lAnchorCoverImageView = (ImageView) view.findViewById(R.id.iv_anchor_cover);
         lLiveRoomCoverLinearLayout = (LinearLayout) view.findViewById(R.id.ll_live_cover);
+        lLivingTypeRadioGroup = (RadioGroup) view.findViewById(R.id.rg_living_type);
+        lStartLivingButton = (Button) view.findViewById(R.id.btn_live_start_living);
         getData();
         adapter = new SimpleAdapter(getActivity(), data, R.layout.item_user_info, new String[]{"label", "val"}, new int[]{R.id.tv_user_info_label, R.id.tv_user_info_val});
         lAnchorInfoListView.setAdapter(adapter);
@@ -133,6 +149,21 @@ public class LiveFragment2 extends Fragment {
                 showHeadImgChooseTypeDialog();
             }
         }); // 绑定房间封面选项点击事件
+        lStartLivingButton.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                int rbId = lLivingTypeRadioGroup.getCheckedRadioButtonId();
+                int type = (rbId == R.id.rb_capture) ? HomeConstants.LIVING_TYPE_CAPTURE : HomeConstants.LIVING_TYPE_GENERAL;
+                Intent intent;
+                if (type == HomeConstants.LIVING_TYPE_CAPTURE) {
+                    intent = new Intent(getActivity(), CaptureActivity.class); // 录屏直播
+                } else {
+                    intent = new Intent(getActivity(), PublishActivity.class); // 普通直播
+                }
+                intent.putExtra(LiveKeyConstants.Global_URL_KEY, liveRoomInUserVo.getLiveRoomUrl()); // 推流地址
+                startActivity(intent); // 进入直播间
+            }
+        }); // 绑定开始直播按钮
 
     }
 
@@ -191,7 +222,7 @@ public class LiveFragment2 extends Fragment {
      * 刷新数据
      */
     public void refreshData() {
-        data.clear() ;
+        data.clear();
         this.vals = new String[]{HomeActivity.mobileUserVo.getLiveRoomVo().getRoomNum(), HomeActivity.mobileUserVo.getLiveRoomVo().getRoomName(), HomeActivity.mobileUserVo.getLiveRoomVo().getCategoryName(), HomeActivity.mobileUserVo.getLiveRoomVo().getDescription()}; // 主播信息
         for (int i = 0; i < vals.length; i++) {
             Map<String, Object> map = new HashMap<>(1);

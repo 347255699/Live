@@ -20,7 +20,7 @@
             android:layout_centerVertical="true"
             android:text="测试"
             android:textColor="@color/colorlittleBlack"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_user_info_val"
