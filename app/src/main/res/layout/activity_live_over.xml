@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorShallowBlack2">
+
+    <TextView
+        android:id="@+id/tv_live_over_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="主播已结束"
+        android:textSize="28sp"
+        android:textColor="#e1c618"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+    <ImageView
+        android:id="@+id/iv_live_over_headImg"
+        android:layout_width="135dp"
+        android:layout_height="130dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tv_live_over_hint"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg" />
+
+        <TextView
+            android:id="@+id/tv_live_over_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/iv_live_over_headImg"
+            android:layout_marginTop="15dp"
+            android:text="许二狗傻子"
+            android:textSize="20sp"
+            android:textColor="@color/colorShallowGray"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_live_over_nicknameHold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_live_over_nickname"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ID: "
+                android:textColor="@color/colorShallowGray"
+                android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_live_over_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="201335020231"
+                android:textColor="@color/colorShallowGray"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_live_over_attentionHold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_live_over_nicknameHold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关注："
+            android:textColor="@color/colorShallowGray"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_live_over_attentionCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:textColor="@color/colorShallowGray"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/im_live_over_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/colorDeepGray2"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/ll_live_over_attentionHold"/>
+
+    <TextView
+        android:id="@+id/tv_live_over_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/im_live_over_line"
+        android:padding="18dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorShallowGray"
+        android:text="签名: 我是的撒电费卡世纪东方萨科技地方撒旦富士康等级发送到防守打法 "/>
+
+    <ImageView
+        android:id="@+id/im_live_over_line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/colorDeepGray2"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tv_live_over_description"/>
+
+    <Button
+        android:id="@+id/btn_live_over_return"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/im_live_over_line2"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="@drawable/shape_live_over_btn"
+        android:text="返 回"
+        android:textColor="@color/colorWhite2"
+        android:textSize="20sp"
+        />
+
+
+
+</RelativeLayout>
