@@ -10,12 +10,17 @@ public class LiveConstants {
     /**
      * 远程服务器地址
      */
-    public static final String REMOTE_SERVER_IP = "172.27.35.15";
+    public static final String REMOTE_SERVER_IP = "10.20.197.154";
 
     /**
      * http协议开头
      */
     public static final String HTTP_PREFIX = "http://";
+
+    /**
+     * websocket协议开头
+     */
+    public static final String WEB_SOCKET_PREFIX = "ws://";
 
     /**
      * http远程服务器的端口
@@ -47,5 +52,10 @@ public class LiveConstants {
      * 用于HttpRequestUtils工具类的，通用响应结果标识
      */
     public static final int HTTP_RESPONSE_RESULT_CODE = 1002;
+
+    /**
+     * 远程服务器的地址，websocket
+     */
+    public static final String REMOTE_SERVER_WEB_SOCKET_IP = WEB_SOCKET_PREFIX + REMOTE_SERVER_IP;
 
 }

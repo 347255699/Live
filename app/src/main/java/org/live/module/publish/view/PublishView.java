@@ -35,4 +35,10 @@ public interface PublishView {
     public void onRefreshVolumeOffSwitchVal(boolean isVolumeOff); // 刷新静音按钮状态
 
     public void onShowPublishSettingsView(Map<String, Object> config); // 显示推流参数设置视图
+
+    /**
+     * 刷新当前在线观看人数
+     * @param count
+     */
+    public void refreshOnlineCount(int count);
 }

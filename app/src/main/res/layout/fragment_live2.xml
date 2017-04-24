@@ -64,7 +64,7 @@
                     android:layout_height="75dp"
                     android:layout_alignParentRight="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/shap_ll_corners_pressed" />
+                    android:src="@drawable/shape_ll_corners_pressed" />
 
             </RelativeLayout>
 

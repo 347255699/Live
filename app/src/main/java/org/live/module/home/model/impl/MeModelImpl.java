@@ -141,6 +141,9 @@ public class MeModelImpl implements MeModel {
                             case "room_cover_url":
                                 liveRoomVo.setRoomCoverUrl(val2);
                                 break;
+                            case "live_room_url":
+                                liveRoomVo.setLiveRoomUrl(val2);
+                                break;
                             case "room_label":
                                 liveRoomVo.setRoomLabel(val2);
                                 break;

@@ -41,8 +41,8 @@ public class ChatListView extends ListView {
             Display display = ((Activity) cContext).getWindowManager().getDefaultDisplay();
             DisplayMetrics d = new DisplayMetrics();
             display.getMetrics(d);
-            maxHeight = d.heightPixels / 4;
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST); // 高度设置为屏幕的4/1
+            maxHeight = d.heightPixels / 5;
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST); // 高度设置为屏幕的5/1
 
         } catch (Exception e) {
             e.printStackTrace();

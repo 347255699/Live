@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <com.tencent.rtmp.ui.TXCloudVideoView
         android:id="@+id/vv_preview"
         android:layout_width="match_parent"
@@ -11,13 +12,86 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
+    <!-- 直播间信息 -->
+    <RelativeLayout
+        android:id="@+id/rl_recorder_live_room_info"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:clickable="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_corners_liveroom_info"
+        android:paddingBottom="1dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="15dp"
+        android:paddingTop="1dp">
+
+        <ImageView
+            android:id="@+id/iv_recorder_head_img"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/hint_404" />
+
+        <TextView
+            android:id="@+id/tv_recorder_live_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/iv_recorder_head_img"
+            android:text="主播名称"
+            android:textColor="@color/colorWhite"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tv_recrder_online_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_recorder_live_room_name"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/iv_recorder_head_img"
+            android:text="111"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+    </RelativeLayout>
+    <!-- 黑名单 -->
+    <LinearLayout
+        android:id="@+id/ll_recorder_black_list"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:clickable="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="12dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/select_btn_red_bg"
+        android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/colorWhite"
+            android:text="黑名单"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:layout_marginRight="5dp"
+            android:scaleType="center"
+            app:materialIcon="menu_down"
+            app:materialIconColor="@color/colorWhite"
+            app:materialIconSize="22dp" />
+
+    </LinearLayout>
+
+    <!-- 按钮组 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
-        android:paddingBottom="@dimen/icon_marign_bottom"
         android:orientation="horizontal"
+        android:paddingBottom="@dimen/icon_marign_bottom"
         android:weightSum="7">
 
         <LinearLayout
@@ -31,11 +105,12 @@
                 android:id="@+id/btn_recording_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_backgroud"
+                android:background="@drawable/selector_icon"
+                android:clickable="true"
                 android:padding="5dp"
                 android:scaleType="center"
-                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="play"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -50,11 +125,12 @@
                 android:id="@+id/btn_camera_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_backgroud"
+                android:background="@drawable/selector_icon"
+                android:clickable="true"
                 android:padding="5dp"
                 android:scaleType="center"
-                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="camera_party_mode"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -69,7 +145,8 @@
                 android:id="@+id/btn_beauty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_backgroud"
+                android:background="@drawable/selector_icon"
+                android:clickable="true"
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="auto_fix"
@@ -88,14 +165,14 @@
                 android:id="@+id/btn_flash_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_backgroud"
+                android:background="@drawable/selector_icon"
+                android:clickable="true"
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="flash"
                 app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
-
 
 
         <LinearLayout
@@ -109,11 +186,12 @@
                 android:id="@+id/btn_volume_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_backgroud"
+                android:background="@drawable/selector_icon"
+                android:clickable="true"
                 android:padding="5dp"
                 android:scaleType="center"
-                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="volume_high"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -128,7 +206,8 @@
                 android:id="@+id/btn_record_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_backgroud"
+                android:background="@drawable/selector_icon"
+                android:clickable="true"
                 android:padding="5dp"
                 android:scaleType="center"
                 app:materialIcon="settings"
@@ -148,11 +227,12 @@
                 android:id="@+id/btn_record_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_backgroud"
+                android:background="@drawable/selector_icon"
+                android:clickable="true"
                 android:padding="5dp"
                 android:scaleType="center"
-                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="close"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
     </LinearLayout>

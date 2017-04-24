@@ -2,20 +2,31 @@ package org.live.module.publish.view.impl;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appyvet.rangebar.RangeBar;
 
 import org.live.R;
 
+import com.bumptech.glide.Glide;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.suke.widget.SwitchButton;
@@ -25,15 +36,30 @@ import com.tencent.rtmp.ui.TXCloudVideoView;
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
+import org.live.common.constants.LiveConstants;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
 import org.live.common.util.NetworkUtils;
+import org.live.common.util.ResponseModel;
+import org.live.module.anchor.view.AnchorInfoView;
+import org.live.module.home.constants.HomeConstants;
+import org.live.module.home.domain.AppAnchorInfo;
+import org.live.module.home.presenter.LivePresenter;
+import org.live.module.home.presenter.LiveRoomPresenter;
+import org.live.module.home.view.custom.AnchorInfoDialogView;
+import org.live.module.home.view.impl.HomeActivity;
+import org.live.module.login.domain.MobileUserVo;
 import org.live.module.publish.presenter.PublishPresenter;
 import org.live.module.publish.presenter.impl.PublishPresenterImpl;
 import org.live.module.publish.util.constant.PublishConstant;
 import org.live.module.publish.view.PublishView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 
 /**
@@ -45,22 +71,18 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     private static final String TAG = "PublishFragment";
     private View view = null;
     private IconButtonOnClickListener listener = null;
-    private static final int ALPHHA_DEFAULT_VALUE = 20; // 默认透明度
+    private static final int ALPHHA_DEFAULT_VALUE = 50; // 默认透明度
     private TXCloudVideoView iPreviewVideoView = null; // 直播预览视图
     private PublishPresenter recorderPresenter = null;
     private String rtmpUrl = null; // 测试用例
     private DialogPlus dialog = null; // 对话框
 
     private String pDefinitionInfos[] = {"标清", "高清", "超清"};
-    /**
-     * ui之间对应的状态标识
-     */
+
     private boolean isRecording = false; // 正在直播
     private boolean isFrontCamera = true; // 开启前置摄像头
     private boolean isFlashOn = false; // 开启闪光灯
-    /**
-     * 图标按钮
-     */
+
     private MaterialIconView iRecordingStatusButton = null; // 直播状态转换按钮
     private MaterialIconView iCameraSwitchButton = null; // 摄像头转换按钮
     private MaterialIconView iBeautyButton = null; // 美颜按钮
@@ -69,23 +91,27 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     private MaterialIconView iRecordSettingsButton = null; // 直播设置按钮
     private MaterialIconView iRecordCloseButton = null; // 主播界面关闭按钮
 
-    /**
-     * 拉杆
-     **/
     private RangeBar iBeautySettingRangeBar = null; // 磨皮设置拉杆
     private RangeBar iWhiteningSettingRangeBar = null; // 美白设置拉杆
     private RangeBar iMicroPhoneSettingRangeBar = null; // 麦克风音量拉杆
     private RangeBar iVolumeSettingRangeBar = null; // 背景音量设置拉杆
 
-    /**
-     * switch开关
-     */
     private SwitchButton iVolumeOffSwitchButton = null; // 静音开关
     private SwitchButton iTouchFocusSwitchButton = null; // 手动对焦开关
-    /**
-     * 下拉框
-     */
+
     private Spinner pDefinitionSpinner = null; // 清晰度下拉框
+    private RelativeLayout pLiveRoomInfoRelativeLayout; // 直播间信息视图
+    private MobileUserVo mobileUserVo; // 用户信息
+    private ImageView pHeadImgImageView; // 用户头像视图
+    private TextView pLiveRoomName; // 直播间名称
+    private TextView pOnlineCount; // 在线人数
+    private LinearLayout pBlockListLinearLayout; // 黑名单按钮
+    private List<Map<String, Object>> data;
+
+    private Handler handler ;
+
+    private LiveRoomPresenter liveRoomPresenter ;
+    private AnchorInfoDialogView anchorInfoDialogView;     //主播信息弹出框的包裹view
 
     @Nullable
     @Override
@@ -94,9 +120,14 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         listener = new IconButtonOnClickListener(); // 初始化图标按钮监听事件
         recorderPresenter = new PublishPresenterImpl(this, getActivity());
         PublishActivity publishActivity = (PublishActivity) getActivity();
-        this.rtmpUrl = publishActivity.getRtmpUrl();
+        this.rtmpUrl = publishActivity.getRtmpUrl(); // 推流地址
+        this.mobileUserVo = HomeActivity.mobileUserVo; // 用户信息
+
         initUIElements(); // 初始化ui控件
         recorderPresenter.startCameraPreview(); // 开始预览
+
+        newHanderInstance() ;
+        liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler) ;
 
         return view;
     }
@@ -126,6 +157,8 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         iRecordCloseButton.getBackground().setAlpha(ALPHHA_DEFAULT_VALUE);
         iRecordSettingsButton = (MaterialIconView) view.findViewById(R.id.btn_record_settings);
         iRecordSettingsButton.getBackground().setAlpha(ALPHHA_DEFAULT_VALUE);
+        pLiveRoomInfoRelativeLayout = (RelativeLayout) view.findViewById(R.id.rl_recorder_live_room_info);
+        pLiveRoomInfoRelativeLayout.getBackground().setAlpha(ALPHHA_DEFAULT_VALUE); // 设置透明度*/
 
         iRecordingStatusButton.setOnClickListener(listener);
         iCameraSwitchButton.setOnClickListener(listener);
@@ -136,6 +169,82 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         iRecordSettingsButton.setOnClickListener(listener);
 
         iPreviewVideoView = (TXCloudVideoView) view.findViewById(R.id.vv_preview);
+        pHeadImgImageView = (ImageView) view.findViewById(R.id.iv_recorder_head_img);
+        pLiveRoomName = (TextView) view.findViewById(R.id.tv_recorder_live_room_name);
+        pOnlineCount = (TextView) view.findViewById(R.id.tv_recrder_online_count);
+
+        Glide.with(getActivity()).load(LiveConstants.REMOTE_SERVER_HTTP_IP + mobileUserVo.getHeadImgUrl())
+                .bitmapTransform(new CropCircleTransformation(getActivity()))
+                .into(pHeadImgImageView); // 设置头像
+        pLiveRoomName.setText(mobileUserVo.getLiveRoomVo().getRoomName());
+
+        pBlockListLinearLayout = (LinearLayout) view.findViewById(R.id.ll_recorder_black_list);
+        pBlockListLinearLayout.getBackground().setAlpha(150);
+        pBlockListLinearLayout.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite)
+                        .setContentHolder(new ViewHolder(R.layout.dialog_black_list))
+                        .setContentHeight(650)
+                        .setGravity(Gravity.CENTER)
+                        .create();
+                dialog.show();
+                View dialogView = dialog.getHolderView();
+                ListView blackList = (ListView) dialogView.findViewById(R.id.lv_black_list);
+                getData(); // 获取数据
+                SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, R.layout.item_black_list, new String[]{"nickname"}, new int[]{R.id.tv_black_list_nickname});
+                blackList.setAdapter(adapter);
+            }
+        }); // 黑名单按钮点击
+
+        pLiveRoomInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 liveRoomPresenter.loadAnchorInfoData(mobileUserVo.getUserId(), mobileUserVo.getLiveRoomVo().getRoomId()) ;
+            }
+        });
+    }
+
+    private void newHanderInstance() {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == HomeConstants.LOAD_ANCHOR_INFO_SUCCESS_FLAG) {   //加载主播信息成功
+                    ResponseModel<AppAnchorInfo> dataModel = (ResponseModel) msg.obj ;
+                    if(dataModel.getStatus() == 1) {
+                        AppAnchorInfo info = dataModel.getData() ;
+                        showAnchorInfoDialog(info) ;
+                    }
+                }
+            }
+        } ;
+    }
+
+    /**
+     * 弹出主播信息的弹出框
+     * @param info
+     */
+    private void showAnchorInfoDialog(AppAnchorInfo info) {
+        if (anchorInfoDialogView == null)
+            anchorInfoDialogView = new AnchorInfoDialogView(getActivity());
+        anchorInfoDialogView.getReportView().setVisibility(View.GONE) ;     //隐藏举报
+        anchorInfoDialogView.getAttentionHold().setVisibility(View.GONE) ;  //隐藏关注按钮
+        anchorInfoDialogView.setValueAndShow(info) ;
+    }
+
+
+        /**
+         * 获得数据
+         */
+    public void getData() {
+        String[] nicknames = {"黑名单1", "黑名单2", "黑名单3", "黑名单1", "黑名单1", "黑名单1"};
+        List<Map<String, Object>> data = new ArrayList<>();
+        for (int i = 0; i < nicknames.length; i++) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("nickname", nicknames[i]);
+            data.add(item);
+        }
+        this.data = data;
     }
 
     /**
@@ -252,6 +361,16 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
                 .create();
         dialog.show();
         initPublishSettingsView(dialog.getHolderView(), config);
+    }
+
+    /**
+     * 刷新在线人数
+     *
+     * @param count
+     */
+    @Override
+    public void refreshOnlineCount(int count) {
+
     }
 
     @Override

@@ -10,15 +10,16 @@
     <color name="colorDeepGray">#807f7f</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorWhite2">#f8f4f4</color>
+    <color name="colorWhite2">#d4d1d1</color>
     <color name="colorShallowBlack">#7e7979</color><!-- 浅黑 -->
     <color name="colorlittleBlack">#202020</color>
-    <color name="colorShallowBlue">#5CACEE</color><!-- 浅蓝 -->
+    <color name="colorShallowBlue">#589ed7</color><!-- 浅蓝 -->
     <color name="colorBlue">#1874CD</color><!-- 深蓝 -->
 
-    <color name="colorGold">#DAA520</color>/
-    <color name="colorRed">#f15555</color>
-    <color name="colorRed1">#fa3838</color>
+    <color name="colorGold">#d9b04b</color>/
+    <color name="colorRed">#ec6b6b</color>
+    <color name="colorRed1">#e75252</color>
+    <color name="colorShallowGreen">#43ceab</color>
     <!-- 这个系统的主题颜色 -->
     <color name="themeColor">#2CE1B3</color>
     <!-- 比themeColor深一点点 -->

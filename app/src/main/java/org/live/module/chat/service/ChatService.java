@@ -40,7 +40,7 @@ public class ChatService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         initChatMsgHandler();
-        wsUrl = intent.getStringExtra(LiveKeyConstants.Global_URL_KEY);
+        wsUrl = intent.getStringExtra(LiveKeyConstants.Global_URL_KEY); // 取得链接
         buildWebSocketConnecting(); // 建立连接
         return new ChatBinder();
     }

@@ -164,7 +164,6 @@ public class LoginModelImpl implements LoginModel {
                             } else {
                                 listener.showToast("密码过期");
                                 listener.toLogin(); // 前往登录页
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

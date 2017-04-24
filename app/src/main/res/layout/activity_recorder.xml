@@ -12,7 +12,11 @@
         android:id="@+id/fgt_icon_group"
         android:name="org.live.module.publish.view.impl.PublishFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
-
+    <fragment
+        android:id="@+id/fgt_chat"
+        android:name="org.live.module.publish.view.impl.ChatFragment2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>

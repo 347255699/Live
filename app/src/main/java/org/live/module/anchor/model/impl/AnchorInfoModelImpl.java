@@ -158,8 +158,14 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
     public boolean validateInputItem(String key, String val) {
         Map<String, Map<String, Object>> rules = new HashMap<>();
         Map<String, Object> rule = new LinkedHashMap<>();
-        rule.put("required", true);
-        rule.put("maxLength", 10);
+        if(key.equals("description")){
+            rule.put("required", true);
+            rule.put("maxLength", 30);
+        }
+        if(key.equals("roomName")){
+            rule.put("required", true);
+            rule.put("maxLength", 10);
+        }
         rules.put(key, rule);
         Map<String, String> vals = new HashMap<>();
         vals.put(key, val);

@@ -11,13 +11,13 @@
         android:id="@+id/tv_chat_from_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"/>
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/tv_chat_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:textSize="12sp"
         android:layout_marginStart="10dp"
        />
 </LinearLayout>
