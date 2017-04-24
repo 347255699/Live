@@ -73,4 +73,21 @@ public class LiveRoomPresenter {
         liveRoomModel.loadAllLimitationByLiveRoomId(liveRoomId) ;
     }
 
+    /**
+     * 加载简易的用户信息
+     * @param account
+     */
+    public void loadSimpleUserData(String account) {
+        liveRoomModel.loadSimpleUserData(account) ;
+    }
+
+    /**
+     * 用户举报直播间
+     * @param userId
+     * @param liveRoomId
+     */
+    public void reportLiveRoomByUser(String userId, String liveRoomId) {
+        liveRoomModel.reportLiveRoomByUser(userId, liveRoomId) ;
+    }
+
 }

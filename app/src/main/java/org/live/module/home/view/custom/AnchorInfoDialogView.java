@@ -49,7 +49,7 @@ public class AnchorInfoDialogView {
 
     private boolean attentionFlag ;     //关注的状态。 true: 已关注， false: 关注。
 
-    private CropCircleTransformation cropCircleTransformation ;
+    private CropCircleTransformation cropCircleTransformation ; //图片圆形处理
 
     public AnchorInfoDialogView(Context context) {
         this.context = context ;

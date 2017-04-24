@@ -47,6 +47,26 @@ public class HomeConstants {
     public static final int LOAD_ANCHOR_INFO_SUCCESS_FLAG = 108 ;
 
     /**
+     * 加载用户信息的时候，发生异常。
+     */
+    public static final int LOAD_USER_INFO_EXCEPTION_FLAG = 109 ;
+
+    /**
+     * 加载主播信息正确
+     */
+    public static final int LOAD_USER_INFO_SUCCESS_FLAG = 110 ;
+
+    /**
+     * 加载举报信息异常
+     */
+    public static final int LOAD_REPORT_EXCEPTIOIN_FLAG = 111 ;
+
+    /**
+     *  加载举报信息成功！
+     */
+    public static final int LOAD_REPORT_SUCCESS_FLAG = 112 ;
+
+    /**
      * 分类名称的key
      */
     public static final String CATEGORY_NAME_KEY = "categoryNameKey";

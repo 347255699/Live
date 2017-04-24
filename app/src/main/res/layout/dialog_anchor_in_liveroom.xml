@@ -3,7 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp">
-
     <!-- 举报 -->
     <LinearLayout
         android:id="@+id/ll_dialog_play_report"
@@ -128,12 +127,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
         android:layout_below="@id/im_dialog_play_line"
         android:textColor="@color/colorShallowBlack"
         android:textSize="16dp"
         android:text="签名：我是城院大傻逼啦啦啦啦啦啦啦啊啊啦啦阿拉"
         />
-
 
 </RelativeLayout>

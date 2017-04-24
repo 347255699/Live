@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:id="@+id/ll_dialog_play_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_dialog_play_report"
+        android:layout_marginTop="15dp">
+        <ImageView
+            android:id="@+id/iv_dialog_play_userImg"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg"
+            />
+        <!-- 一些主播信息的布局 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="20dp">
+            <TextView
+                android:id="@+id/tv_dialog_play_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="201335020231"
+                android:textSize="18sp"
+                android:textColor="@color/colorShallowBlack" />
+            <TextView
+                android:id="@+id/tv_dialog_play_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textColor="@color/colorShallowBlack"
+                android:text="Mr_wang"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 横划线 -->
+    <ImageView
+        android:id="@+id/im_dialog_play_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/colorShallowGray"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/ll_dialog_play_info"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_dialog_play_btnHold"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@id/im_dialog_play_line"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:id="@+id/btn_dialog_play_shutup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/select_btn_red_bg"
+            android:text="禁言"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"
+            />
+        <!-- 竖划线 -->
+        <ImageView
+            android:id="@+id/im_dialog_play_line2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorShallowGray"
+            android:layout_toRightOf="@id/btn_dialog_play_shutup"
+            android:layout_marginLeft="25dp"/>
+        <Button
+            android:id="@+id/btn_dialog_play_kickout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/im_dialog_play_line2"
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/select_btn_red_bg"
+            android:text="踢出"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite" />
+    </RelativeLayout>
+
+</RelativeLayout>

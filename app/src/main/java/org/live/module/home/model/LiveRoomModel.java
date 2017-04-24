@@ -17,6 +17,7 @@ import com.koushikdutta.async.http.NameValuePair;
 import com.koushikdutta.async.http.body.UrlEncodedFormBody;
 
 import org.live.common.constants.LiveConstants;
+import org.live.common.domain.SimpleUserVo;
 import org.live.common.util.JsonUtils;
 import org.live.common.util.ResponseModel;
 import org.live.common.util.SimpleResponseModel;
@@ -62,6 +63,16 @@ public class LiveRoomModel {
      * 加载主播信息的url
      */
     protected final String anchorInfoUrl = LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/anchorInfo" ;
+
+    /**
+     * 加载用户的信息
+     */
+    protected final String simpleUserUrl = LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/simpleUser" ;
+
+    /**
+     * 举报url
+     */
+    protected final String reportLiveRoomUrl = LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/report" ;
 
     private Context context ;
 
@@ -195,7 +206,73 @@ public class LiveRoomModel {
         }) ;
     }
 
+    /**
+     * 用户举报直播间
+     * @param userId
+     * @param liveRoomId
+     */
+    public void reportLiveRoomByUser(String userId, String liveRoomId) {
+        AsyncHttpPost request = new AsyncHttpPost(reportLiveRoomUrl) ;  //举报直播间
+        List<NameValuePair> params = new ArrayList<>(2) ;
+        params.add(new BasicNameValuePair("userId", userId)) ;
+        params.add(new BasicNameValuePair("liveRoomId", liveRoomId)) ;
+        UrlEncodedFormBody requestBody = new UrlEncodedFormBody(params) ;
+        request.setBody(requestBody) ;
+        AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback(){
+            @Override
+            public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
+                Message message = Message.obtain() ;
+                if(e != null) {
+                    Log.e(TAG, e.getMessage()) ;
+                    message.what = HomeConstants.LOAD_REPORT_EXCEPTIOIN_FLAG ;
+                    handler.sendMessage(message) ;
+                    return ;
+                }
+                ResponseModel<Object> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<Object>>(){}.getType()) ;
+                if(dataModel == null) {
+                    dataModel = new SimpleResponseModel<Object>() ;
+                }
+                message.obj = dataModel ;
+                message.what = HomeConstants.LOAD_USER_INFO_SUCCESS_FLAG ;
+                handler.sendMessage(message) ;
+            }
+        }) ;
+    }
 
+
+    /**
+     * 加载简易的用户信息
+     * @param account
+     */
+    public void loadSimpleUserData(String account) {
+        AsyncHttpGet request = new AsyncHttpGet(simpleUserUrl+ "?account=" + account) ;
+        AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback() {
+            @Override
+            public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
+                Message message = Message.obtain() ;
+                if(e != null) {
+                    Log.e(TAG, e.getMessage()) ;
+                    message.what = HomeConstants.LOAD_USER_INFO_EXCEPTION_FLAG ;
+                    handler.sendMessage(message) ;
+                    return ;
+                }
+                Log.d(TAG, "result-->" + result) ;
+                ResponseModel<SimpleUserVo> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<SimpleUserVo>>(){}.getType()) ;
+                if(dataModel == null) {
+                    dataModel = new SimpleResponseModel<SimpleUserVo>() ;
+                }
+                message.obj = dataModel ;
+                message.what = HomeConstants.LOAD_USER_INFO_SUCCESS_FLAG ;
+                handler.sendMessage(message) ;
+            }
+        }) ;
+    }
+
+
+    /**
+     * 加载直播间信息
+     * @param request
+     */
     private void requestLiveRoomData(AsyncHttpRequest request) {
         AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback() {
             @Override
