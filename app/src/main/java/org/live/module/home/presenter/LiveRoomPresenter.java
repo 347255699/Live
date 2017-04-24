@@ -65,4 +65,12 @@ public class LiveRoomPresenter {
         liveRoomModel.loadAnchorInfoData(userId, liveRoomId) ;
     }
 
+    /**
+     * 查询某个直播间的所有限制用户
+     * @param liveRoomId
+     */
+    public void loadAllLimitationByLiveRoomId(String liveRoomId) {
+        liveRoomModel.loadAllLimitationByLiveRoomId(liveRoomId) ;
+    }
+
 }
