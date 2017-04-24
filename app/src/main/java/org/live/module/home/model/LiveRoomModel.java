@@ -23,6 +23,7 @@ import org.live.common.util.SimpleResponseModel;
 import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.domain.AppAnchorInfo;
 import org.live.module.home.domain.LiveRoomVo;
+import org.live.module.publish.domain.LimitationVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +43,20 @@ public class LiveRoomModel {
      */
     protected final String attentionLiveRoomUrl = LiveConstants.REMOTE_SERVER_HTTP_IP +"/app/user/liveroom" ;
 
+    /**
+     * 直播间搜索
+     */
     protected final String searchLiveRoomUrl =  LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/search" ;
 
     /**
      * 查看用户在该直播间的限制
      */
     protected final String liveRoomLimitationUrl = LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/limit" ;
+
+    /**
+     * 查看直播间的所有被限制的用户
+     */
+    protected final String limitationsForLiveRoomUrl = LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/limits" ;
 
     /**
      * 加载主播信息的url
@@ -125,6 +134,33 @@ public class LiveRoomModel {
                 ResponseModel<List<Integer>> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<Integer>>>(){}.getType()) ;
                 if(dataModel == null) {
                     dataModel = new SimpleResponseModel<List<Integer>>() ;
+                }
+                message.obj = dataModel ;
+                message.what = HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG ;
+                handler.sendMessage(message) ;
+            }
+        }) ;
+    }
+
+    /**
+     * 查询某个直播间的所有限制用户
+     * @param liveRoomId
+     */
+    public void loadAllLimitationByLiveRoomId(String liveRoomId) {
+        AsyncHttpGet request = new AsyncHttpGet(limitationsForLiveRoomUrl+ "?liveRoomId=" + liveRoomId) ;
+        AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback(){
+            @Override
+            public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
+                Message message = Message.obtain() ;
+                if(e != null) {
+                    Log.e(TAG, e.getMessage()) ;
+                    message.what = HomeConstants.LOAD_LIMITATION_EXCEPTION_FLAG ;
+                    handler.sendMessage(message) ;
+                    return ;
+                }
+                ResponseModel<List<LimitationVo>> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<LimitationVo>>>(){}.getType()) ;
+                if(dataModel == null) {
+                    dataModel = new SimpleResponseModel<List<LimitationVo>>() ;
                 }
                 message.obj = dataModel ;
                 message.what = HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG ;
