@@ -29,6 +29,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.R;
@@ -91,6 +92,8 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
 
     private String onlineCount ;    //在线人数
 
+    private boolean shutupFlag ;    //禁言标记
+
     private Handler handler ;      //handler
 
     private AnchorInfoDialogView anchorInfoDialogView ;
@@ -110,10 +113,11 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         liveRoomName = intent.getStringExtra(HomeConstants.LIVE_ROOM_NAME_KEY) ; //直播间名
         liveRoomUrl = intent.getStringExtra(HomeConstants.LIVE_ROOM_URL_KEY);//拉流地址
         headImgUrl = intent.getStringExtra(HomeConstants.HEAD_IMG_URL_KEY);//主播头像
-        onlineCount = intent.getIntExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, 0)+"" ; //在线人数
+        onlineCount = intent.getIntExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, 1)+"" ; //在线人数
+        shutupFlag = intent.getIntExtra(HomeConstants.LIMIT_TYPE_KEY_FLAG, 0) == 1  ;   //禁言标记
 
         initUI();
-        this.play(liveRoomUrl);
+        this.play(liveRoomUrl) ;
         return currentFragmentView ;
     }
 
@@ -122,8 +126,11 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
      */
     public void initUI() {
         mPlayerView = (TXCloudVideoView) currentFragmentView.findViewById(R.id.vv_play_player) ;   //播放器的view
-        closeBtn = (MaterialIconView) currentFragmentView.findViewById(R.id.btn_play_close) ;
+        closeBtn = (MaterialIconView) currentFragmentView.findViewById(R.id.btn_play_close) ;   //关闭按钮
         inputBtn = (MaterialIconView) currentFragmentView.findViewById(R.id.btn_play_input) ;
+        if(shutupFlag) {    //被禁言
+            switchInputBtnState(shutupFlag) ;
+        }
         loadingBar = (ProgressBar) currentFragmentView.findViewById(R.id.pb_play_loading) ;
 
         //房间信息相关的控件
@@ -190,9 +197,20 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
                 Toast.makeText(getContext(), "关注", Toast.LENGTH_SHORT).show();
             }
 
-    });
+        });
+    }
 
-
+    /**
+     * 切换呼出输入文字的按钮
+     * @param shutupFlag
+     */
+    private void switchInputBtnState(boolean shutupFlag) {
+        this.shutupFlag = shutupFlag ;
+        if(shutupFlag) {    //被禁言
+            inputBtn.setIcon(MaterialDrawableBuilder.IconValue.COMMENT_REMOVE_OUTLINE) ;
+        } else {
+            inputBtn.setIcon(MaterialDrawableBuilder.IconValue.COMMENT_TEXT_OUTLINE) ;
+        }
     }
 
 
@@ -285,7 +303,12 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
                 break ;
             }
             case R.id.btn_play_input : {
-                Log.d(TAG, "点击了输入文字的按钮");
+                Log.d(TAG, "点击了输入文字的按钮") ;
+                if (shutupFlag) {   //被禁言
+                    Toast.makeText(getContext(), "您被禁言，暂时不能发言", Toast.LENGTH_SHORT).show();
+                    return ;
+                }
+
                 break ;
             }
         }

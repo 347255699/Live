@@ -16,7 +16,7 @@
 
     <ImageView
         android:id="@+id/iv_live_over_headImg"
-        android:layout_width="135dp"
+        android:layout_width="130dp"
         android:layout_height="130dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/tv_live_over_hint"
@@ -98,7 +98,7 @@
         android:padding="18dp"
         android:textSize="18sp"
         android:textColor="@color/colorShallowGray"
-        android:text="签名: 我是的撒电费卡世纪东方萨科技地方撒旦富士康等级发送到防守打法 "/>
+        android:text="签名：我是的撒电费卡世纪东方萨科技地方撒旦富士康等级发送到防守打法 "/>
 
     <ImageView
         android:id="@+id/im_live_over_line2"
@@ -115,8 +115,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/im_live_over_line2"
-        android:layout_marginTop="20dp"
+        android:layout_below="@id/tv_live_over_description"
+        android:layout_marginTop="25dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:background="@drawable/shape_live_over_btn"
