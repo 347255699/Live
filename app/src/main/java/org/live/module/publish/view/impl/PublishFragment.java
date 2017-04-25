@@ -30,6 +30,9 @@ import com.appyvet.rangebar.RangeBar;
 import org.live.R;
 
 import com.bumptech.glide.Glide;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.widget.MaterialDialog;
+import com.flyco.dialog.widget.NormalDialog;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.suke.widget.SwitchButton;
@@ -52,7 +55,9 @@ import org.live.module.home.domain.AppAnchorInfo;
 import org.live.module.home.presenter.LiveRoomPresenter;
 import org.live.module.home.view.custom.AnchorInfoDialogView;
 import org.live.module.home.view.impl.HomeActivity;
+import org.live.module.home.view.impl.LiveOverActivity;
 import org.live.module.login.domain.MobileUserVo;
+import org.live.module.play.view.impl.PlayActivity;
 import org.live.module.publish.domain.LimitationVo;
 import org.live.module.publish.listener.OnPublishActivityListener;
 import org.live.module.publish.presenter.PublishPresenter;
@@ -467,16 +472,39 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         @Override
         protected void onNoDoubleClick(View v) {
             switch (v.getId()) {
-                case R.id.btn_recording_status:
+                case R.id.btn_recording_status:     //进行直播和结束直播的按钮
                     if (NetworkUtils.isConnected(getActivity())) {
-                        if (!isRecording) {
+                        if (!isRecording) {        //
                             if (rtmpUrl != null) {
                                 recorderPresenter.startPusher(rtmpUrl);
                             } else {
                                 onShowToastMessage("地址出错！", Toast.LENGTH_SHORT);
                             }
                         } else {
-                            recorderPresenter.stopRtmpPublish();
+                            final MaterialDialog dialog = new MaterialDialog(getActivity()) ;
+                            dialog.content("您确定要结束直播吗？ ") ;
+                            dialog.btnNum(2).btnText("取消" ,"确定") .btnTextColor(NormalDialog.STYLE_TWO) ;
+                            dialog.show() ;
+                            dialog.setOnBtnClickL(new OnBtnClickL() {
+                                @Override
+                                public void onBtnClick() {  //取消
+                                    dialog.dismiss() ;
+                                }
+                            }, new OnBtnClickL() {
+                                @Override
+                                public void onBtnClick() {  //确定
+                                    dialog.dismiss() ;
+                                    recorderPresenter.stopRtmpPublish() ;   //结束推流服务
+                                    Intent intent = new Intent(getActivity(), LiveOverActivity.class)
+                                            .putExtra(HomeConstants.LIVE_ROOM_ID_KEY, mobileUserVo.getLiveRoomVo().getRoomId())
+                                            .putExtra(HomeConstants.USER_ID_KEY, mobileUserVo.getUserId()) ;
+                                           // .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) ;
+                                    //getActivity().finish() ;
+                                    startActivity(intent) ; //跳转页面
+                                }
+                            });
+
+
                         }
                     } else {
                         onShowToastMessage("网络无法连接", Toast.LENGTH_SHORT);
@@ -499,7 +527,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
                 case R.id.btn_volume_settings:
                     recorderPresenter.getVolumeVal();
                     break;
-                case R.id.btn_record_close:
+                case R.id.btn_record_close:     //关闭按钮
                     if (isRecording) {
                         onShowToastMessage("正在直播，不能退出当前界面！", Toast.LENGTH_SHORT);
                     } else {

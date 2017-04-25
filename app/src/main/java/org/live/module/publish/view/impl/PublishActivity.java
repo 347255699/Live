@@ -33,9 +33,14 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
     private String wsUrl;
     private AnchorChatService.ChatReceiveServiceBinder anchorChatServiceBinder;
 
+    public static PublishActivity instanace ;
+
+    private boolean logoutServiceFlag = false ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instanace = this ;
         win = this.getWindow();
         win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 保持屏幕常亮
         // win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // 全屏显示
@@ -51,10 +56,21 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void finish() {
+        super.finish();
         win.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 取消屏幕常亮
         logoutService(); // 注销服务
+        logoutServiceFlag = true ;
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(!logoutServiceFlag) {
+            win.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 取消屏幕常亮
+            logoutService(); // 注销服务
+        }
     }
 
     @Override

@@ -173,6 +173,11 @@ public class HomeConstants {
     public static final String LIVE_ROOM_ONLINE_COUNT_KEY = "liveRoomOnlineCountKey" ;
 
     /**
+     * 用户的id
+     */
+    public static final String USER_ID_KEY = "userIdKey" ;
+
+    /**
      * 直播类型，录屏
      */
     public static final int LIVING_TYPE_CAPTURE = 0;

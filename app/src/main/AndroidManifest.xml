@@ -93,6 +93,7 @@
         <activity android:name=".module.home.view.impl.SearchLiveRoomActivity" />
         <activity android:name=".module.anchor.view.impl.AnchorInfoActivity" />
         <activity android:name=".module.home.view.impl.LiveRoomCoverActivity"></activity>
+        <activity android:name=".module.home.view.impl.LiveOverActivity"></activity>
     </application>
 
 </manifest>

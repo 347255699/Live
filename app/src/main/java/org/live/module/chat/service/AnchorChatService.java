@@ -46,6 +46,7 @@ public class AnchorChatService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.i(TAG, "---------------------》》断开websocket链接");
         if (websocket != null) {
             websocket.close(); // 关闭websocket链接
         }

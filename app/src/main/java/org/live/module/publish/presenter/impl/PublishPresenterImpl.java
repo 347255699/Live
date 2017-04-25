@@ -250,7 +250,7 @@ public class PublishPresenterImpl implements PublishPresenter, OnPublishModelEve
     @Override
     public void onStopPusher() {
         recorderView.onShowPlayIconView();
-        recorderView.onShowToastMessage("直播已经断开！", Toast.LENGTH_SHORT);
+        //recorderView.onShowToastMessage("直播已经断开！", Toast.LENGTH_SHORT);
     }
 
     /**
