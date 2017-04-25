@@ -13,12 +13,7 @@ import com.koushikdutta.async.http.WebSocket;
 
 import org.live.common.constants.LiveKeyConstants;
 import org.live.common.domain.Message;
-import org.live.common.domain.MessageType;
 import org.live.common.util.JsonUtils;
-import org.live.module.home.view.impl.HomeActivity;
-import org.live.module.login.domain.MobileUserVo;
-
-import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -26,27 +21,35 @@ import java.util.concurrent.ExecutionException;
  * Created by KAM on 2017/4/24.
  */
 
-public class ChatReceiveService extends Service {
+public class AnchorChatService extends Service {
     private static final String TAG = "Global";
     private String wsUrl;
-    //duplexing
+
     public static final String ACTION = "org.live.module.chat.service.RECEIVER"; // 广播意图
+    //duplexing
+
     private Intent intent = new Intent(ACTION); // 设置广播意图
     private WebSocket websocket;
-    private MobileUserVo mobileUserVo;
 
-    // 此websocket连接，必选3个参数 chatroom（直播间号），account（用户账号）, nickname(昵称),  1个可选参数 anchor（是否主播开启直播间的flag）
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         try {
             wsUrl = intent.getStringExtra(LiveKeyConstants.Global_URL_KEY); // 取得websocket链接
-            this.mobileUserVo = HomeActivity.mobileUserVo; // 取得用户信息引用（当前用户为主播）
+            Log.i(TAG, "---------------------》》开始建立websocket链接");
             buildWebSocketConnecting(); // 建立链接
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-        return null;
+        return new ChatReceiveServiceBinder();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (websocket != null) {
+            websocket.close(); // 关闭websocket链接
+        }
+        super.onDestroy();
     }
 
     /**
@@ -62,15 +65,10 @@ public class ChatReceiveService extends Service {
                 }
                 webSocket.setStringCallback(new WebSocket.StringCallback() {
                     public void onStringAvailable(String result) {
-                        Message message = JsonUtils.fromJson(result, Message.class);
-                        switch (message.getMessageType()) {
-                            case MessageType.SEND_TO_CHATROOM_MESSAGE_TYPE:
-                                intent.putExtra("msg", result);
-                                sendBroadcast(intent); //发送广播给Fragment
-                                break;
-                            default:
-                                break;
-                        }
+                        Log.i("Global", "-------->>" + result);
+                        intent.putExtra("msg", result);
+                        sendBroadcast(intent); //发送广播给Fragment
+
                     }
                 });
             }
@@ -84,8 +82,7 @@ public class ChatReceiveService extends Service {
     public class ChatReceiveServiceBinder extends Binder {
 
         public void sendMsg(Message message) {
-            // TODO 发送消息
-
-        }
+            websocket.send(JsonUtils.toJson(message)); // 发送消息
+        } // 发送消息
     }
 }

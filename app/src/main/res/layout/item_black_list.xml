@@ -21,6 +21,7 @@
             android:textSize="16sp" />
 
         <Button
+            android:id="@+id/btn_black_list_relieve"
             android:background="@drawable/selector_green_corners_button"
             android:layout_width="wrap_content"
             android:layout_height="25dp"

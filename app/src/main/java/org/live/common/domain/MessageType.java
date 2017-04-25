@@ -61,4 +61,9 @@ public class MessageType {
      */
     public static final int RELIEVE_USER_ATTENTION_CHATROOM = 10 ;
 
+    /**
+     * 系统消息
+     */
+    public static final int SYSTEM_MESSAGE_TYPE = 11 ;
+
 }

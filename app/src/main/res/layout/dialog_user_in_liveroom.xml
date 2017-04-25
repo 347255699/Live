@@ -9,12 +9,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_dialog_play_report"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp">
         <ImageView
             android:id="@+id/iv_dialog_play_userImg"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_marginLeft="10dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:scaleType="fitXY"
             android:src="@drawable/bg"
             />
@@ -30,14 +30,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="201335020231"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="@color/colorShallowBlack" />
             <TextView
                 android:id="@+id/tv_dialog_play_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="@color/colorShallowBlack"
                 android:text="Mr_wang"/>
         </LinearLayout>
@@ -57,7 +57,7 @@
     <RelativeLayout
         android:id="@+id/rl_dialog_play_btnHold"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/im_dialog_play_line"
         android:layout_marginTop="15dp"
         android:paddingLeft="15dp"
@@ -66,30 +66,30 @@
         android:layout_centerHorizontal="true">
         <Button
             android:id="@+id/btn_dialog_play_shutup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
             android:background="@drawable/select_btn_red_bg"
             android:text="禁言"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:textColor="@color/colorWhite"
             />
         <!-- 竖划线 -->
         <ImageView
             android:id="@+id/im_dialog_play_line2"
             android:layout_width="1dp"
-            android:layout_height="match_parent"
+            android:layout_height="45dp"
             android:background="@color/colorShallowGray"
             android:layout_toRightOf="@id/btn_dialog_play_shutup"
             android:layout_marginLeft="25dp"/>
         <Button
             android:id="@+id/btn_dialog_play_kickout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
             android:layout_toRightOf="@id/im_dialog_play_line2"
             android:layout_marginLeft="25dp"
             android:background="@drawable/select_btn_red_bg"
             android:text="踢出"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:textColor="@color/colorWhite" />
     </RelativeLayout>
 

@@ -35,16 +35,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorShallowGreen"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_chat_record_last"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="来了"
+                android:text=""
                 android:textColor="@color/colorGold"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout

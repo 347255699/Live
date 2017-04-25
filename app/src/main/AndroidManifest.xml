@@ -74,6 +74,8 @@
         <service android:name=".module.login.service.InitPushService" />
         <!-- 个推的订阅service -->
         <service android:name=".module.login.service.ReceiveIntentService" />
+        <!-- 主播聊天服务service -->
+        <service android:name=".module.chat.service.AnchorChatService" />
 
         <activity android:name=".module.home.view.impl.SingleCategoryActivity" />
         <activity

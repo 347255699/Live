@@ -50,7 +50,7 @@
             android:layout_below="@id/tv_recorder_live_room_name"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/iv_recorder_head_img"
-            android:text="111"
+            android:text="1"
             android:textColor="@color/colorWhite"
             android:textSize="12sp" />
     </RelativeLayout>

@@ -40,7 +40,11 @@ import java.util.ArrayList;
  */
 
 public class ChatFragment extends BackHandledFragment {
-    private static final String TAG = "Global";
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
+/*    private static final String TAG = "Global";
     private ListView cRecordsListView; // 记录列表
     private ChatRecordAdapter adapter; // 聊天记录适配器
     private LinearLayout cUnreadMsgHintView; // 未读消息提示视图
@@ -87,9 +91,9 @@ public class ChatFragment extends BackHandledFragment {
         super.onDestroy();
     }
 
-    /**
+    *//**
      * 初始化UI控件
-     */
+     *//*
     private void initUIElements() {
         cRecordsListView = (ListView) view.findViewById(R.id.lv_chat_records);
         cUnreadMsgHintView = (LinearLayout) view.findViewById(R.id.ll_chat_hint);
@@ -109,9 +113,9 @@ public class ChatFragment extends BackHandledFragment {
         cRecordsListView.setAdapter(adapter);
         addLastRecord("测试用户");
 
-        /**
+        *//**
          * 绑定未读消息提示按钮
-         */
+         *//*
         cUnreadMsgHintView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +129,7 @@ public class ChatFragment extends BackHandledFragment {
             }
         });
 
-        /** 绑定发送消息按钮 **/
+        *//** 绑定发送消息按钮 **//*
         cMsgSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,9 +145,9 @@ public class ChatFragment extends BackHandledFragment {
             }
         });
 
-        /**
+        *//**
          * 设置滚动监听
-         */
+         *//*
         cRecordsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -175,9 +179,9 @@ public class ChatFragment extends BackHandledFragment {
 
     }
 
-    /**
+    *//**
      * 追加消息记录
-     */
+     *//*
     private void addRecord(String msg) {
         // 添加记录
         adapter.arr.add(msg);
@@ -189,51 +193,51 @@ public class ChatFragment extends BackHandledFragment {
         }
     }
 
-    /**
+    *//**
      * 添加最后一条消息记录
-     */
+     *//*
     private void addLastRecord(String user) {
         cLastChatRecordFromUser.setText(user);
     }
 
-    /**
+    *//**
      * 显示提示消息
      *
      * @param msg
      * @param lengthType
-     */
+     *//*
     private void showToastMsg(String msg, int lengthType) {
         Toast.makeText(getActivity(), msg, lengthType).show();
     }
 
-    /**
+    *//**
      * 监听返回按钮
      *
      * @return
-     */
+     *//*
     @Override
     public boolean onBackPressed() {
         return false;
     }
 
-    /**
+    *//**
      * 服务连接实体
-     */
+     *//*
     private ServiceConnection conn = new ServiceConnection() {
-        /**
+        *//**
          * 服务断开连接时回调
          * @param name
-         */
+         *//*
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
         }
 
-        /**
+        *//**
          * 服务建立连接时回调
          * @param name
          * @param service 当前服务实体
-         */
+         *//*
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             chatService = ((ChatService.ChatBinder) service).getChatService(); // 取得服务实体
@@ -246,9 +250,9 @@ public class ChatFragment extends BackHandledFragment {
         }
     };
 
-    /**
+    *//**
      * 广播接收器
-     */
+     *//*
     private BroadcastReceiver chatReceiver = new BroadcastReceiver() {
 
         @Override
@@ -258,9 +262,9 @@ public class ChatFragment extends BackHandledFragment {
 
     };
 
-    /**
+    *//**
      * 聊天记录适配器
-     */
+     *//*
     private class ChatRecordAdapter extends BaseAdapter {
 
         private Context context;
@@ -299,7 +303,6 @@ public class ChatFragment extends BackHandledFragment {
             if (view == null) {
                 view = inflater.inflate(R.layout.item_chat_record, null);
             }
-            final TextView userTextView = (TextView) view.findViewById(R.id.tv_chat_from_user);
             final TextView msgTextView = (TextView) view.findViewById(R.id.tv_chat_record);
             userTextView.setTypeface(typeFace);
             msgTextView.setTypeface(typeFace);
@@ -314,5 +317,5 @@ public class ChatFragment extends BackHandledFragment {
             }
             return view;
         }
-    }
+    }*/
 }

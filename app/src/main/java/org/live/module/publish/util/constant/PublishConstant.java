@@ -15,5 +15,13 @@ public class PublishConstant {
     public static final String CONFIG_TYPE_VOLUME_VAL = "volumeVal"; // 背景音量
     public static final String CONFIG_TYPE_IS_VOLUME_OFF = "isVolumeOff"; // 是否静音
 
+    /**
+     * 限制类型,禁言
+     */
+    public static final int BLACK_LIST_LIMIT_TYPE_SHUTUP = 1;
+    /**
+     * 限制类型,提出房间
+     */
+    public static final int BLACK_LIST_LIMIT_TYPE_KICKED_KECKOUT = 2;
 
 }

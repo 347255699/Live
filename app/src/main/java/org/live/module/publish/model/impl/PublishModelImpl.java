@@ -5,21 +5,41 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.Surface;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.AsyncHttpGet;
+import com.koushikdutta.async.http.AsyncHttpResponse;
 import com.tencent.rtmp.ITXLivePushListener;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.TXLivePushConfig;
 import com.tencent.rtmp.TXLivePusher;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.live.common.constants.LiveConstants;
+import org.live.common.constants.LiveKeyConstants;
+import org.live.common.constants.RequestMethod;
+import org.live.common.util.HttpRequestUtils;
+import org.live.common.util.JsonUtils;
+import org.live.common.util.ResponseModel;
+import org.live.common.util.SimpleResponseModel;
+import org.live.module.home.constants.HomeConstants;
+import org.live.module.home.view.impl.HomeActivity;
+import org.live.module.publish.domain.LimitationVo;
 import org.live.module.publish.listener.OnPublishModelEventListener;
 import org.live.module.publish.model.PublishModel;
 import org.live.common.service.PreferencesService;
 import org.live.module.publish.util.constant.PublishConstant;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.tencent.rtmp.TXLiveConstants.*;
@@ -378,6 +398,38 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
         }
         config.put("isVolumeOff", turnVolumeOff);
     }
+
+    @Override
+    public void getBlackListData() {
+        AsyncHttpGet request = new AsyncHttpGet(LiveConstants.REMOTE_SERVER_HTTP_IP+ "/app/liveroom/limits?liveRoomId=" + HomeActivity.mobileUserVo.getLiveRoomVo().getRoomId()) ;
+        AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback(){
+            @Override
+            public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
+                Message message = responseHandler.obtainMessage();
+                if(e != null) {
+                    Log.e("Global", e.getMessage()) ;
+                    return ;
+                }
+                ResponseModel<List<LimitationVo>> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<LimitationVo>>>(){}.getType()) ;
+                if(dataModel == null) {
+                    dataModel = new SimpleResponseModel<List<LimitationVo>>() ;
+                }
+                message.obj = dataModel ;
+                message.what = HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG ;
+                responseHandler.sendMessage(message) ;
+            }
+        }) ;
+    }
+
+    Handler responseHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG) {
+                ResponseModel<List<LimitationVo>> dataModel = (ResponseModel<List<LimitationVo>>) msg.obj;
+                listener.refreshBlackList(dataModel.getData()); // 刷新黑名单
+            }
+        }
+    }; // 处理响应
 
     /**
      * 绑定推流过程中相关事件的监听

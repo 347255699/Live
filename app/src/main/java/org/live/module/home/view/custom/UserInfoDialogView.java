@@ -3,6 +3,7 @@ package org.live.module.home.view.custom;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +48,8 @@ public class UserInfoDialogView {
 
         AnchorInfoDialog = DialogPlus.newDialog(context).setContentBackgroundResource(R.color.colorWhite)
                 .setContentHolder(new ViewHolder(R.layout.dialog_user_in_liveroom))
+                .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setGravity(Gravity.CENTER)
                 .create() ;
 
@@ -72,4 +75,31 @@ public class UserInfoDialogView {
         AnchorInfoDialog.show() ;
     }
 
+    public ImageView getHeadImgView() {
+        return headImgView;
+    }
+
+    public TextView getAccountView() {
+        return accountView;
+    }
+
+    public TextView getNicknameView() {
+        return nicknameView;
+    }
+
+    public View getBtnHoldView() {
+        return btnHoldView;
+    }
+
+    public Button getShutupBtnView() {
+        return shutupBtnView;
+    }
+
+    public Button getKickoutBtnView() {
+        return kickoutBtnView;
+    }
+
+    public DialogPlus getAnchorInfoDialog() {
+        return AnchorInfoDialog;
+    }
 }

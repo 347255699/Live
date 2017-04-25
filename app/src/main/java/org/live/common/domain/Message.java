@@ -1,48 +1,46 @@
 package org.live.common.domain;
 
 /**
- *  通讯信息
- *
- *  消息事件类型参考 {@link MessageType}
- *
+ * 通讯信息
+ * <p>
+ * 消息事件类型参考 {@link MessageType}
+ * <p>
  * Created by Mr.wang on 2017/3/17.
  */
 public class Message {
 
     /**
-     *  来自哪个直播间号
+     * 来自哪个直播间号
      */
     private String fromChatRoomNum;
 
     /**
-     *  发送至某直播间，或某人
-     *  当发送至某人时，格式：  "直播间号-用户账号"，例如："10001-201335020231"
+     * 发送至某直播间，或某人
+     * 当发送至某人时，格式：  "直播间号-用户账号"，例如："10001-201335020231"
      */
     private String destination;
 
 
     /**
-     *  发送者的账号
+     * 发送者的账号
      */
-    private String usernameNum;
- 
-    /**
-     *  发送者的名称
-     */
-    private String username ;
+    private String account;
 
     /**
-     *  信息内容
+     * 发送者的名称
      */
-    private String content ;
+    private String nickname;
+
+    /**
+     * 信息内容
+     */
+    private String content;
 
 
     /**
-     *
-     *  消息事件类型
+     * 消息事件类型
      */
-    private int messageType ;
-
+    private int messageType;
 
     public String getFromChatRoomNum() {
         return fromChatRoomNum;
@@ -60,20 +58,20 @@ public class Message {
         this.destination = destination;
     }
 
-    public String getUsernameNum() {
-        return usernameNum;
+    public String getAccount() {
+        return account;
     }
 
-    public void setUsernameNum(String usernameNum) {
-        this.usernameNum = usernameNum;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getContent() {
@@ -91,4 +89,5 @@ public class Message {
     public void setMessageType(int messageType) {
         this.messageType = messageType;
     }
+
 }

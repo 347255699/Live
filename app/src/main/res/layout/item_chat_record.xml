@@ -2,22 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="2dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <TextView
+<!--    <TextView
         android:id="@+id/tv_chat_from_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"/>
+        android:textSize="14sp"/>-->
 
     <TextView
         android:id="@+id/tv_chat_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:layout_marginStart="10dp"
+        android:textSize="14sp"
        />
 </LinearLayout>

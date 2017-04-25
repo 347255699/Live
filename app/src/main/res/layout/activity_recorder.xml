@@ -16,7 +16,9 @@
 
     <fragment
         android:id="@+id/fgt_chat"
-        android:name="org.live.module.publish.view.impl.ChatFragment2"
+        android:name="org.live.module.publish.view.impl.AnchorChatFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
 </RelativeLayout>

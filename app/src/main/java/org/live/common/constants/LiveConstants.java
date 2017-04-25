@@ -56,6 +56,6 @@ public class LiveConstants {
     /**
      * 远程服务器的地址，websocket
      */
-    public static final String REMOTE_SERVER_WEB_SOCKET_IP = WEB_SOCKET_PREFIX + REMOTE_SERVER_IP;
+    public static final String REMOTE_SERVER_WEB_SOCKET_IP = WEB_SOCKET_PREFIX + REMOTE_SERVER_IP  + ":" + REMOTE_PORT;
 
 }

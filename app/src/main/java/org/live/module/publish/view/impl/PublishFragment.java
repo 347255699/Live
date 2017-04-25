@@ -1,23 +1,26 @@
 package org.live.module.publish.view.impl;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,18 +40,21 @@ import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.common.constants.LiveConstants;
+import org.live.common.domain.MessageType;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
+import org.live.common.util.JsonUtils;
 import org.live.common.util.NetworkUtils;
 import org.live.common.util.ResponseModel;
-import org.live.module.anchor.view.AnchorInfoView;
+import org.live.module.chat.service.AnchorChatService;
 import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.domain.AppAnchorInfo;
-import org.live.module.home.presenter.LivePresenter;
 import org.live.module.home.presenter.LiveRoomPresenter;
 import org.live.module.home.view.custom.AnchorInfoDialogView;
 import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.login.domain.MobileUserVo;
+import org.live.module.publish.domain.LimitationVo;
+import org.live.module.publish.listener.OnPublishActivityListener;
 import org.live.module.publish.presenter.PublishPresenter;
 import org.live.module.publish.presenter.impl.PublishPresenterImpl;
 import org.live.module.publish.util.constant.PublishConstant;
@@ -108,10 +114,13 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     private LinearLayout pBlockListLinearLayout; // 黑名单按钮
     private List<Map<String, Object>> data;
 
-    private Handler handler ;
+    private Handler handler;
 
-    private LiveRoomPresenter liveRoomPresenter ;
+    private LiveRoomPresenter liveRoomPresenter;
     private AnchorInfoDialogView anchorInfoDialogView;     //主播信息弹出框的包裹view
+    private BlackListAdapter blackListAdapter; // 黑名单适配器
+    private OnPublishActivityListener publishActivityListener;
+    private int liftABanUserIndex; // 待解禁用户下标
 
     @Nullable
     @Override
@@ -122,20 +131,35 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         PublishActivity publishActivity = (PublishActivity) getActivity();
         this.rtmpUrl = publishActivity.getRtmpUrl(); // 推流地址
         this.mobileUserVo = HomeActivity.mobileUserVo; // 用户信息
-
+        if (getActivity() instanceof OnPublishActivityListener) {
+            publishActivityListener = (OnPublishActivityListener) getActivity();
+        }
         initUIElements(); // 初始化ui控件
         recorderPresenter.startCameraPreview(); // 开始预览
 
-        newHanderInstance() ;
-        liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler) ;
+        newHanderInstance();
+        liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler);
 
         return view;
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        registerService();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         recorderPresenter.refreshPreferences(); // 刷新参数并持久化
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(chatReceiver); // 注销广播接收器
     }
 
     /**
@@ -192,58 +216,88 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
                 View dialogView = dialog.getHolderView();
                 ListView blackList = (ListView) dialogView.findViewById(R.id.lv_black_list);
                 getData(); // 获取数据
-                SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, R.layout.item_black_list, new String[]{"nickname"}, new int[]{R.id.tv_black_list_nickname});
-                blackList.setAdapter(adapter);
+                blackListAdapter = new BlackListAdapter(getActivity());
+                blackList.setAdapter(blackListAdapter);
             }
         }); // 黑名单按钮点击
 
         pLiveRoomInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 liveRoomPresenter.loadAnchorInfoData(mobileUserVo.getUserId(), mobileUserVo.getLiveRoomVo().getRoomId()) ;
+                liveRoomPresenter.loadAnchorInfoData(mobileUserVo.getUserId(), mobileUserVo.getLiveRoomVo().getRoomId());
             }
         });
+
+
     }
+
+    /**
+     * 注册服务
+     */
+    private void registerService() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AnchorChatService.ACTION); // 绑定意图
+        filter.setPriority(Integer.MAX_VALUE); // 高优先级
+        getActivity().registerReceiver(chatReceiver, filter); // 注册广播接收器
+    }
+
+    /**
+     * 广播接收器
+     */
+    private BroadcastReceiver chatReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            org.live.common.domain.Message message = JsonUtils.fromJson(intent.getStringExtra("msg"), org.live.common.domain.Message.class);
+            switch (message.getMessageType()) {
+                case MessageType.USER_ENTER_CHATROOM_MESSAGE_TYPE:
+                    String onlineCount = message.getContent();
+                    refreshOnlineCount(onlineCount); // 刷新在线观看人数
+                    break; // 用户进入直播间
+                case MessageType.USER_EXIT_CHATROOM_MESSAGE_TYPE:
+                    String onlineCount2 = message.getContent();
+                    refreshOnlineCount(onlineCount2); // 刷新在线观看人数
+                    break; // 用户进入直播间
+                default:
+                    break;
+            }
+        }
+    };
 
     private void newHanderInstance() {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                if(msg.what == HomeConstants.LOAD_ANCHOR_INFO_SUCCESS_FLAG) {   //加载主播信息成功
-                    ResponseModel<AppAnchorInfo> dataModel = (ResponseModel) msg.obj ;
-                    if(dataModel.getStatus() == 1) {
-                        AppAnchorInfo info = dataModel.getData() ;
-                        showAnchorInfoDialog(info) ;
+                if (msg.what == HomeConstants.LOAD_ANCHOR_INFO_SUCCESS_FLAG) {   //加载主播信息成功
+                    ResponseModel<AppAnchorInfo> dataModel = (ResponseModel) msg.obj;
+                    if (dataModel.getStatus() == 1) {
+                        AppAnchorInfo info = dataModel.getData();
+                        showAnchorInfoDialog(info);
                     }
                 }
             }
-        } ;
+        };
     }
 
     /**
      * 弹出主播信息的弹出框
+     *
      * @param info
      */
     private void showAnchorInfoDialog(AppAnchorInfo info) {
         if (anchorInfoDialogView == null)
             anchorInfoDialogView = new AnchorInfoDialogView(getActivity());
-        anchorInfoDialogView.getReportView().setVisibility(View.GONE) ;     //隐藏举报
-        anchorInfoDialogView.getAttentionHold().setVisibility(View.GONE) ;  //隐藏关注按钮
-        anchorInfoDialogView.setValueAndShow(info) ;
+        anchorInfoDialogView.getReportView().setVisibility(View.GONE);     //隐藏举报
+        anchorInfoDialogView.getAttentionHold().setVisibility(View.GONE);  //隐藏关注按钮
+        anchorInfoDialogView.setValueAndShow(info);
     }
 
 
-        /**
-         * 获得数据
-         */
+    /**
+     * 获得数据
+     */
     public void getData() {
-        String[] nicknames = {"黑名单1", "黑名单2", "黑名单3", "黑名单1", "黑名单1", "黑名单1"};
         List<Map<String, Object>> data = new ArrayList<>();
-        for (int i = 0; i < nicknames.length; i++) {
-            Map<String, Object> item = new HashMap<>();
-            item.put("nickname", nicknames[i]);
-            data.add(item);
-        }
+        recorderPresenter.getBlackListData(); // 获取数据
         this.data = data;
     }
 
@@ -369,7 +423,30 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
      * @param count
      */
     @Override
-    public void refreshOnlineCount(int count) {
+    public void refreshOnlineCount(String count) {
+        pOnlineCount.setText(count);
+    }
+
+    @Override
+    public void refreshBlackList(List<LimitationVo> limitationVos) {
+        if (limitationVos.size() > 0) {
+            for (LimitationVo limitationVo : limitationVos) {
+                Map<String, Object> item = new HashMap<>();
+                item.put("nickname", limitationVo.getNickname());
+                item.put("account", limitationVo.getAccount());
+                item.put("limitType", limitationVo.getLimitType());
+                item.put("userId", limitationVo.getUserId());
+                item.put("roomNum", limitationVo.getRoomNum());
+                data.add(item);
+            }
+        } else {
+            Map<String, Object> item = new HashMap<>();
+            item.put("nickname", "无内容");
+            item.put("account", "0");
+            data.add(item);
+        }
+
+        blackListAdapter.notifyDataSetChanged(); // 刷新黑名单视图
 
     }
 
@@ -599,6 +676,95 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     public void onConfigurationChanged(Configuration newConfig) {
         int mobileRotation = this.getActivity().getWindowManager().getDefaultDisplay().getRotation();
         recorderPresenter.onDisplayRotationChanged(mobileRotation);
+    }
+
+    /**
+     * 黑明单适配器
+     */
+    public class BlackListAdapter extends BaseAdapter {
+        private LayoutInflater inflater;
+        private Context context;
+
+        public BlackListAdapter(Context context) {
+            this.context = context;
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return arg0;
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            // TODO Auto-generated method stub
+            return arg0;
+        }
+
+        @Override
+        public View getView(final int position, View view, ViewGroup arg2) {
+            if (view == null) {
+                view = inflater.inflate(R.layout.item_black_list, null);
+            }
+            TextView nicknameTextView = (TextView) view.findViewById(R.id.tv_black_list_nickname);
+            Button btn = (Button) view.findViewById(R.id.btn_black_list_relieve);
+            Map<String, Object> item = data.get(position);
+            String nickname = (String) item.get("nickname");
+            String account = (String) item.get("account");
+            if (position == 0) {
+                if (account.equals("0")) {
+                    nicknameTextView.setText(nickname);
+                    btn.setVisibility(View.GONE);
+                    return view;
+                }
+            }
+            int limitType = (int) item.get("limitType");
+            nicknameTextView.setText(nickname); // 设置昵称
+            String btnTxt = (limitType == PublishConstant.BLACK_LIST_LIMIT_TYPE_SHUTUP) ? "解除禁言" : "解除踢出";
+            btn.setText(btnTxt); // 设置按钮内容
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    liftABanUserIndex = position; // 缓存待解禁用户下标
+                    Map<String, Object> item = data.get(position);
+                    int limitType = (int) item.get("limitType"); // 解禁类型
+                    String roomNum = mobileUserVo.getLiveRoomVo().getRoomNum(); // 房间号
+                    String userAccount = (String) item.get("account"); // 待解禁用户账号
+                    String userNickname = (String) item.get("nickname"); // 取得待发消息内容项
+
+                    org.live.common.domain.Message message = new org.live.common.domain.Message();
+                    message.setAccount(userAccount);
+                    message.setFromChatRoomNum(roomNum);
+                    if (limitType == PublishConstant.BLACK_LIST_LIMIT_TYPE_SHUTUP) {
+                        message.setMessageType(MessageType.RELIEVE_SHUTUP_USER_MESSAGE_TYPE);
+                    } else {
+                        message.setMessageType(MessageType.RELIEVE_KICKOUT_USER_MESSAGE_TYPE);
+                    }
+                    message.setDestination(roomNum + "-" + userAccount);
+                    message.setNickname(userNickname); // 构建消息
+
+                    publishActivityListener.getChatReceiveServiceBinder().sendMsg(message); // 发送消息
+                    data.remove(position);
+                    if (data.size() == 0) {
+                        Map<String, Object> item2 = new HashMap<>();
+                        item2.put("nickname", "无内容");
+                        item2.put("account", "0");
+                        data.add(item2);
+                    }
+                    blackListAdapter.notifyDataSetChanged(); // 刷新视图
+
+                }
+            }); // 解禁按钮
+            return view;
+
+        }
     }
 
 }

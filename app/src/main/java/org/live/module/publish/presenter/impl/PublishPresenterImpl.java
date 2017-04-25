@@ -6,12 +6,15 @@ import android.widget.Toast;
 
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
+import org.live.module.chat.entity.Message;
+import org.live.module.publish.domain.LimitationVo;
 import org.live.module.publish.listener.OnPublishModelEventListener;
 import org.live.module.publish.model.PublishModel;
 import org.live.module.publish.model.impl.PublishModelImpl;
 import org.live.module.publish.presenter.PublishPresenter;
 import org.live.module.publish.view.PublishView;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -189,6 +192,14 @@ public class PublishPresenterImpl implements PublishPresenter, OnPublishModelEve
     }
 
     /**
+     * 获取黑名单
+     */
+    @Override
+    public void getBlackListData() {
+        recorderModel.getBlackListData();
+    }
+
+    /**
      * 通知view正在直播
      */
     @Override
@@ -273,5 +284,14 @@ public class PublishPresenterImpl implements PublishPresenter, OnPublishModelEve
     public void onSetPublishSettingsViewVal(Map<String, Object> config) {
         recorderView.onShowPublishSettingsView(config);
     }
+
+    /**
+     * 刷新黑名单
+     */
+    @Override
+    public void refreshBlackList(List<LimitationVo> limitationVos) {
+        recorderView.refreshBlackList(limitationVos);
+    }
+
 
 }

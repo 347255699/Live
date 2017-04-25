@@ -1,5 +1,8 @@
 package org.live.module.publish.listener;
 
+import org.live.module.publish.domain.LimitationVo;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,4 +33,6 @@ public interface OnPublishModelEventListener {
     public void onSetVolumeOffSwitchButton(boolean isVolumeOff); // 刷新静音按钮状态
 
     public void onSetPublishSettingsViewVal(Map<String, Object> config); // 设置推流参数视图初始值
+
+    public void refreshBlackList(List<LimitationVo> limitationVos); // 刷新黑名单
 }
