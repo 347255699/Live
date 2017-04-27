@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <!-- 用在替换播放器的view  -->
     <FrameLayout
         android:id="@+id/fl_play_playerDump"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
-
     <FrameLayout
         android:id="@+id/fl_play_chat"
         android:layout_width="match_parent"

@@ -85,7 +85,7 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
     public void setFragmentDefault() {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fl_play_playerDump, playFragment, "playerDump");
-        fragmentTransaction.add(R.id.fl_play_chat, chatFragment, "playChat");
+       fragmentTransaction.add(R.id.fl_play_chat, chatFragment, "playChat");
         fragmentTransaction.commit();
     }
 
