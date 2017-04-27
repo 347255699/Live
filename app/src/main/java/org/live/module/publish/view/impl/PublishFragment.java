@@ -55,9 +55,7 @@ import org.live.module.home.domain.AppAnchorInfo;
 import org.live.module.home.presenter.LiveRoomPresenter;
 import org.live.module.home.view.custom.AnchorInfoDialogView;
 import org.live.module.home.view.impl.HomeActivity;
-import org.live.module.home.view.impl.LiveOverActivity;
 import org.live.module.login.domain.MobileUserVo;
-import org.live.module.play.view.impl.PlayActivity;
 import org.live.module.publish.domain.LimitationVo;
 import org.live.module.publish.listener.OnPublishActivityListener;
 import org.live.module.publish.presenter.PublishPresenter;
@@ -116,7 +114,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     private ImageView pHeadImgImageView; // 用户头像视图
     private TextView pLiveRoomName; // 直播间名称
     private TextView pOnlineCount; // 在线人数
-    private LinearLayout pBlockListLinearLayout; // 黑名单按钮
+    private Button pBlockListButton;// 黑名单按钮
     private List<Map<String, Object>> data;
 
     private Handler handler;
@@ -130,7 +128,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_recorder, container);
+        view = inflater.inflate(R.layout.fragment_recorder, container, false);
         listener = new IconButtonOnClickListener(); // 初始化图标按钮监听事件
         recorderPresenter = new PublishPresenterImpl(this, getActivity());
         PublishActivity publishActivity = (PublishActivity) getActivity();
@@ -151,7 +149,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        registerService();
+        registerReceiver(); // 注册广播接收器
     }
 
     @Override
@@ -207,18 +205,29 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
                 .into(pHeadImgImageView); // 设置头像
         pLiveRoomName.setText(mobileUserVo.getLiveRoomVo().getRoomName());
 
-        pBlockListLinearLayout = (LinearLayout) view.findViewById(R.id.ll_recorder_black_list);
-        pBlockListLinearLayout.getBackground().setAlpha(150);
-        pBlockListLinearLayout.setOnClickListener(new NoDoubleClickListener() {
+        pBlockListButton = (Button) view.findViewById(R.id.btn_recorder_black_list);
+        pBlockListButton.getBackground().setAlpha(150);
+        pBlockListButton.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View v) {
-                DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite)
+                final DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite)
                         .setContentHolder(new ViewHolder(R.layout.dialog_black_list))
+                        .setHeader(R.layout.dialog_header)
                         .setContentHeight(650)
                         .setGravity(Gravity.CENTER)
                         .create();
                 dialog.show();
-                View dialogView = dialog.getHolderView();
+                View dialogHeader = dialog.getHeaderView(); // 取得标题栏
+                dialogHeader.findViewById(R.id.btn_header_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                }); // 绑定取消按钮
+                TextView headerTitleTextView = (TextView) dialogHeader.findViewById(R.id.tv_header_title);
+                headerTitleTextView.setText("黑名单"); // 设置标题
+
+                View dialogView = dialog.getHolderView(); // 取得内容容器
                 ListView blackList = (ListView) dialogView.findViewById(R.id.lv_black_list);
                 getData(); // 获取数据
                 blackListAdapter = new BlackListAdapter(getActivity());
@@ -239,7 +248,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     /**
      * 注册服务
      */
-    private void registerService() {
+    private void registerReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(AnchorChatService.ACTION); // 绑定意图
         filter.setPriority(Integer.MAX_VALUE); // 高优先级
@@ -322,6 +331,9 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     public void onShowPlayIconView() {
         iRecordingStatusButton.setIcon(MaterialDrawableBuilder.IconValue.PLAY);
         isRecording = false;
+        publishActivityListener.logoutService(); // 注销服务
+        publishActivityListener.backLiving(); // 退出直播
+
     }
 
     /**
@@ -446,7 +458,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
             }
         } else {
             Map<String, Object> item = new HashMap<>();
-            item.put("nickname", "无内容");
+            item.put("nickname", "无相关内容");
             item.put("account", "0");
             data.add(item);
         }
@@ -481,30 +493,22 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
                                 onShowToastMessage("地址出错！", Toast.LENGTH_SHORT);
                             }
                         } else {
-                            final MaterialDialog dialog = new MaterialDialog(getActivity()) ;
-                            dialog.content("您确定要结束直播吗？ ") ;
-                            dialog.btnNum(2).btnText("取消" ,"确定") .btnTextColor(NormalDialog.STYLE_TWO) ;
-                            dialog.show() ;
+                            final MaterialDialog dialog = new MaterialDialog(getActivity());
+                            dialog.content("您确定要结束直播吗？ ");
+                            dialog.btnNum(2).btnText("取消", "确定").btnTextColor(NormalDialog.STYLE_TWO);
+                            dialog.show();
                             dialog.setOnBtnClickL(new OnBtnClickL() {
                                 @Override
                                 public void onBtnClick() {  //取消
-                                    dialog.dismiss() ;
+                                    dialog.dismiss();
                                 }
                             }, new OnBtnClickL() {
                                 @Override
                                 public void onBtnClick() {  //确定
-                                    dialog.dismiss() ;
-                                    recorderPresenter.stopRtmpPublish() ;   //结束推流服务
-                                    Intent intent = new Intent(getActivity(), LiveOverActivity.class)
-                                            .putExtra(HomeConstants.LIVE_ROOM_ID_KEY, mobileUserVo.getLiveRoomVo().getRoomId())
-                                            .putExtra(HomeConstants.USER_ID_KEY, mobileUserVo.getUserId()) ;
-                                           // .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) ;
-                                    //getActivity().finish() ;
-                                    startActivity(intent) ; //跳转页面
+                                    dialog.dismiss();
+                                    recorderPresenter.stopRtmpPublish();   //结束推流服务
                                 }
                             });
-
-
                         }
                     } else {
                         onShowToastMessage("网络无法连接", Toast.LENGTH_SHORT);
@@ -695,15 +699,23 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         return definition;
     }
 
-    /**
+/*    *//**
      * 监听系统参数变化
      *
      * @param newConfig
-     */
+     *//*
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         int mobileRotation = this.getActivity().getWindowManager().getDefaultDisplay().getRotation();
         recorderPresenter.onDisplayRotationChanged(mobileRotation);
+    }*/
+
+
+    /**
+     * 旋转屏幕时更改推流方向
+     */
+    public void onDisplayRotationChanged(int mobileRotation){
+        recorderPresenter.onDisplayRotationChanged(mobileRotation);  // 自动旋转打开，Activity随手机方向旋转之后，只需要改变推流方向
     }
 
     /**
@@ -782,7 +794,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
                     data.remove(position);
                     if (data.size() == 0) {
                         Map<String, Object> item2 = new HashMap<>();
-                        item2.put("nickname", "无内容");
+                        item2.put("nickname", "无相关内容");
                         item2.put("account", "0");
                         data.add(item2);
                     }

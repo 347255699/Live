@@ -165,11 +165,12 @@ public class HomeFragment extends Fragment{
                             intent.putExtra(HomeConstants.LIMIT_TYPE_KEY_FLAG, HomeConstants.LIMIT_TYPE_SHUTUP) ;
                         }
                         LiveRoomVo liveRoomVo = adapter.liveRoomList.get(clickPositionFlag) ;   //得到被点击的直播间
-                        intent.putExtra(HomeConstants.LIVE_ROOM_ID_KEY, liveRoomVo.getLiveRoomId()) ;
-                        intent.putExtra(HomeConstants.LIVE_ROOM_NAME_KEY, liveRoomVo.getLiveRoomName()) ;
-                        intent.putExtra(HomeConstants.LIVE_ROOM_URL_KEY, liveRoomVo.getLiveRoomUrl()) ;
-                        intent.putExtra(HomeConstants.HEAD_IMG_URL_KEY, liveRoomVo.getHeadImgUrl()) ;
-                        intent.putExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, liveRoomVo.getOnlineCount()) ;
+                        intent.putExtra(HomeConstants.LIVE_ROOM_ID_KEY, liveRoomVo.getLiveRoomId()) ;   //房间id
+                        intent.putExtra(HomeConstants.LIVE_ROOM_NAME_KEY, liveRoomVo.getLiveRoomName()) ;   //房间名
+                        intent.putExtra(HomeConstants.LIVE_ROOM_URL_KEY, liveRoomVo.getLiveRoomUrl()) ; //直播推流地址
+                        intent.putExtra(HomeConstants.HEAD_IMG_URL_KEY, liveRoomVo.getHeadImgUrl()) ;   //头像url
+                        intent.putExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, liveRoomVo.getOnlineCount()) ;    //在线人数
+                        intent.putExtra(HomeConstants.LIVE_ROOM_NUM_KEY, liveRoomVo.getRoomNum()) ;     //直播间号
                         startActivity(intent) ;
 
                     } else {

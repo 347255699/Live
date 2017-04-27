@@ -49,7 +49,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".module.demo.MainActivity" />
-        <activity android:name=".module.publish.view.impl.PublishActivity" />
+        <activity android:name=".module.publish.view.impl.PublishActivity"  android:configChanges="orientation|screenSize"/>
         <activity android:name=".module.play.view.impl.PlayActivity" />
         <activity
             android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"
@@ -93,7 +93,7 @@
         <activity android:name=".module.home.view.impl.SearchLiveRoomActivity" />
         <activity android:name=".module.anchor.view.impl.AnchorInfoActivity" />
         <activity android:name=".module.home.view.impl.LiveRoomCoverActivity"></activity>
-        <activity android:name=".module.home.view.impl.LiveOverActivity"></activity>
+
     </application>
 
 </manifest>

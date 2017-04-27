@@ -22,7 +22,7 @@
         android:layout_below="@id/tv_live_over_hint"
         android:layout_marginTop="20dp"
         android:scaleType="fitXY"
-        android:src="" />
+         />
 
         <TextView
             android:id="@+id/tv_live_over_nickname"

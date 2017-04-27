@@ -5,20 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBlack"
-
     tools:context="org.live.module.publish.view.impl.PublishActivity">
 
-    <fragment
-        android:id="@+id/fgt_icon_group"
-        android:name="org.live.module.publish.view.impl.PublishFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
-    <fragment
-        android:id="@+id/fgt_chat"
-        android:name="org.live.module.publish.view.impl.AnchorChatFragment"
+    <FrameLayout
+        android:id="@+id/fl_icon_group"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
 
 
 </RelativeLayout>

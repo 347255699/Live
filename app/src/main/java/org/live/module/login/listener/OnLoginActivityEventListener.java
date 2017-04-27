@@ -10,7 +10,7 @@ import org.live.module.login.presenter.LoginPresenter;
 public interface OnLoginActivityEventListener {
     /**
      * 替换成注册模块
-     */
+    */
     public void replaceToRegisterFragment();
 
     /**

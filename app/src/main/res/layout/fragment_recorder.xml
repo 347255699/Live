@@ -17,10 +17,10 @@
         android:id="@+id/rl_recorder_live_room_info"
         android:layout_width="wrap_content"
         android:layout_height="38dp"
-        android:clickable="true"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/shape_corners_liveroom_info"
+        android:clickable="true"
         android:paddingBottom="1dp"
         android:paddingLeft="1dp"
         android:paddingRight="15dp"
@@ -54,36 +54,17 @@
             android:textColor="@color/colorWhite"
             android:textSize="12sp" />
     </RelativeLayout>
-    <!-- 黑名单 -->
-    <LinearLayout
-        android:id="@+id/ll_recorder_black_list"
+    <!-- 黑名单按钮 -->
+    <Button
+        android:id="@+id/btn_recorder_black_list"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:clickable="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
         android:layout_marginRight="12dp"
-        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
         android:background="@drawable/select_btn_red_bg"
-        android:orientation="horizontal">
-        <TextView
-            android:textColor="@color/colorWhite"
-            android:text="黑名单"
-            android:layout_marginLeft="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:layout_marginRight="5dp"
-            android:scaleType="center"
-            app:materialIcon="menu_down"
-            app:materialIconColor="@color/colorWhite"
-            app:materialIconSize="22dp" />
-
-    </LinearLayout>
-
+        android:text="黑名单"
+        android:textColor="@color/colorWhite" />
     <!-- 按钮组 -->
     <LinearLayout
         android:layout_width="match_parent"

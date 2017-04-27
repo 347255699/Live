@@ -4,10 +4,16 @@
     android:layout_height="match_parent">
 
     <!-- 用在替换播放器的view  -->
-    <RelativeLayout
-        android:id="@+id/rl_play_playerDump"
+    <FrameLayout
+        android:id="@+id/fl_play_playerDump"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </RelativeLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_play_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 </RelativeLayout>

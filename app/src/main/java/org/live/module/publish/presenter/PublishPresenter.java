@@ -47,5 +47,6 @@ public interface PublishPresenter{
     public void setVolumeOff(boolean turnVolumeOff); // 设置静音
 
     public void getBlackListData(); // 取得黑名单数据
+
     /** 背景混音暂未计划开发**/
 }

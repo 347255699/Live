@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:weightSum="4">
+    <!--    <EditText
+            android:id="@+id/et_chat_msg"
+            android:layout_width="match_parent"
+            android:layout_height="36dip"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="3"
+            android:background="@drawable/bg_edittext"
+            android:hint="请输入..."
+            android:maxLines="1"
+            android:padding="5dip"
+            android:textColorHint="#AAAAAA"
+            android:textSize="15dip" />-->
+    <EditText
+        android:id="@+id/et_chat_msg"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="3"
+        android:hint="请输入..."
+        android:textColorHint="@color/colorGray"
+        android:textCursorDrawable="@drawable/shape_cursor_color" />
+
+    <Button
+        android:id="@+id/btn_chat_send"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="5dp"
+        android:layout_weight="1"
+        android:background="@drawable/select_sent_btn"
+        android:text="发送"
+        android:textColor="@color/colorWhite" />
+</LinearLayout>

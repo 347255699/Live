@@ -8,16 +8,30 @@ import org.live.module.chat.service.AnchorChatService;
  */
 
 public interface OnPublishActivityListener {
+
+
     /**
-     * 取得主播聊天服务绑定实体
+     * 取得websocket链接
+     *
+     * @return
+     */
+    public String getWsUrl();
+
+    /**
+     * 退出直播
+     */
+    public void backLiving();
+
+    /**
+     * 获得聊天服务实体
      *
      * @return
      */
     public AnchorChatService.ChatReceiveServiceBinder getChatReceiveServiceBinder();
 
     /**
-     * 取得websocket链接
-     * @return
+     * 注销服务
      */
-    public String getWsUrl();
+    public void logoutService();
+
 }

@@ -7,10 +7,10 @@
         android:id="@+id/ll_chat_record_list"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="70dp"
         android:orientation="vertical"
+        android:padding="10dp"
         android:weightSum="1">
 
         <org.live.module.chat.view.impl.ChatListView
@@ -34,16 +34,7 @@
                 android:id="@+id/tv_chat_from_user_last"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorShallowGreen"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_chat_record_last"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text=""
-                android:textColor="@color/colorGold"
+                android:textColor="@color/colorWhite2"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -51,9 +42,9 @@
             android:id="@+id/ll_chat_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginTop="10dp"
             android:background="@drawable/linearlayout_hint_backgroud"
-            android:layout_gravity="center_vertical"
             android:orientation="horizontal"
             android:visibility="gone">
 
@@ -74,5 +65,35 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
+        <EditText
+            android:id="@+id/et_chat_msg"
+            android:layout_width="match_parent"
+            android:layout_height="36dip"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="3"
+            android:background="@drawable/bg_edittext"
+            android:hint="请输入..."
+            android:maxLines="1"
+            android:padding="5dip"
+            android:textColorHint="#AAAAAA"
+            android:textSize="15dip" />
+
+        <Button
+            android:id="@+id/btn_chat_send"
+            android:layout_width="wrap_content"
+            android:layout_height="36dip"
+            android:layout_weight="1"
+            android:background="@drawable/selector_green_corners_button"
+            android:text="发 送"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
 </RelativeLayout>

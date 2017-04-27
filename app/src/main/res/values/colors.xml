@@ -31,5 +31,5 @@
     <color name="tab_default_color">#969696</color>
     <color name="tab_checked_color">#2CE1B3</color>
     <color name="tab_background_color">#FFFFFD</color>
-
+    <color name="transparent">#00000000</color>
 </resources>
