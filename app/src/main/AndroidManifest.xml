@@ -60,7 +60,6 @@
         <activity
             android:name=".module.home.view.impl.HomeActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".module.chat.view.impl.ChatActivity" />
         <!-- service -->
         <service
             android:name=".common.service.PreferencesService"
