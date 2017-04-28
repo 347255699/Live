@@ -97,7 +97,7 @@
                     android:scaleType="center"
                     app:materialIcon="account_plus"
                     app:materialIconColor="@color/colorGray"
-                    app:materialIconSize="@dimen/icon_recorder_size" />
+                    app:materialIconSize="20dp" />
                 <TextView
                     android:id="@+id/tv_dialog_play_attentionType"
                     android:layout_width="wrap_content"
@@ -127,7 +127,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="1dp"
+        android:padding="15dp"
         android:layout_below="@id/im_dialog_play_line"
         android:textColor="@color/colorShallowBlack"
         android:textSize="16dp"

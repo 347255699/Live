@@ -105,15 +105,15 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
 
     private OnPlayActivityEvent playActivityEvent;
 
+    private AnchorChatService.ChatReceiveServiceBinder chatReceiveServiceBinder ;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        currentFragmentView = inflater.inflate(R.layout.fragment_play, null);
 
-        playPresenter = new PlayPresenterImpl(this, getActivity());
+        currentFragmentView = inflater.inflate(R.layout.fragment_play, null);
         newHandlerInstance();  //实例化handler
-        liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler);
         if (getActivity() instanceof AnchorInfoProvider) {
             this.anchorInfoProvider = (AnchorInfoProvider) getActivity();
         }
@@ -124,7 +124,9 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         this.liveRoomInfo = anchorInfoProvider.getLiveRoomInfo(); // 取得直播间信息
 
         initUI();
-        this.play(liveRoomInfo.getLiveRoomUrl());
+        liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler);
+        playPresenter = new PlayPresenterImpl(this, getActivity());
+        this.play(LiveConstants.RTMP_PLAY_IP_PREFIX + liveRoomInfo.getLiveRoomNum()) ;
         return currentFragmentView;
     }
 
@@ -185,6 +187,13 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
                         AppAnchorInfo info = dataModel.getData();
                         showAnchorInfoDialog(info);
                     }
+                } else if(msg.what == HomeConstants.LOAD_REPORT_SUCCESS_FLAG) {     //加载举报信息
+                    ResponseModel<Object> dataModel = (ResponseModel<Object>) msg.obj ;
+                    if(dataModel.getStatus() ==1) {
+                        Toast.makeText(getActivity(), "举报成功！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "举报失败！", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         };
@@ -197,23 +206,23 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
      * @param info
      */
     private void showAnchorInfoDialog(AppAnchorInfo info) {
-        if (anchorInfoDialogView == null)
+        if (anchorInfoDialogView == null) {
             anchorInfoDialogView = new AnchorInfoDialogView(getActivity());
-        anchorInfoDialogView.setValueAndShow(info);
-        anchorInfoDialogView.getReportView().setOnClickListener(new View.OnClickListener() { //点击举报
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "举报他", Toast.LENGTH_SHORT).show();
-            }
-        });
-        //点击关注
-        anchorInfoDialogView.getAttentionHold().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "关注", Toast.LENGTH_SHORT).show();
-            }
+            anchorInfoDialogView.getReportView().setOnClickListener(new View.OnClickListener() { //点击举报
+                @Override
+                public void onClick(View v) {
+                    liveRoomPresenter.reportLiveRoomByUser(HomeActivity.mobileUserVo.getUserId(), liveRoomInfo.getLiveRoomId()) ;
+                }
+            });
 
-        });
+            ClickAttentionListener listener = new ClickAttentionListener() ;
+            //点击关注
+            anchorInfoDialogView.getAttentionHold().setOnClickListener(listener) ;
+            anchorInfoDialogView.getAttentionBtnView().setOnClickListener(listener) ;
+            anchorInfoDialogView.getAttentionTypeView().setOnClickListener(listener) ;
+        }
+        anchorInfoDialogView.setValueAndShow(info);
+
     }
 
     /**
@@ -277,7 +286,10 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
 
     @Override
     public void destroyPlayView() {
-        final MaterialDialog dialog = new MaterialDialog(getActivity());
+        //连接拉流失败，重新刷新fragment，
+        ((PlayActivity) getActivity()).reloadCurrentFragment();
+
+    /*    final MaterialDialog dialog = new MaterialDialog(getActivity());
         dialog.content("连接服务器失败，请进行如下操作! ");
         dialog.btnNum(2).btnText("返回", "刷新直播间").btnTextColor(NormalDialog.STYLE_TWO);
         dialog.show();
@@ -295,8 +307,8 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
                 ((PlayActivity) getActivity()).reloadCurrentFragment();
 
             }
-        });
-        Toast.makeText(getActivity(), "网络重连失败，请重新进入直播间", Toast.LENGTH_LONG).show();
+        });*/
+       // Toast.makeText(getActivity(), "网络重连失败，请重新进入直播间", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -380,8 +392,49 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
                 }
 
             }
-
-
         }
     } ;
+
+    /**
+     *
+     * @return
+     */
+    private AnchorChatService.ChatReceiveServiceBinder getChatServiceBinder() {
+        if(chatReceiveServiceBinder == null)
+            chatReceiveServiceBinder = ((ChatActivityEvent) getActivity()).getChatReceiveServiceBinder() ;
+        return chatReceiveServiceBinder ;
+    }
+
+    /**
+     * 关注的点击事件
+     */
+     class ClickAttentionListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            String account = HomeActivity.mobileUserVo.getAccount() ;
+            org.live.common.domain.Message message = new org.live.common.domain.Message() ;
+            message.setFromChatRoomNum(liveRoomInfo.getLiveRoomNum()) ;
+            message.setAccount(account) ;
+            message.setDestination(liveRoomInfo.getLiveRoomNum() + "-" + account) ;
+            message.setNickname(HomeActivity.mobileUserVo.getNickname()) ;
+
+            boolean attentionFlag = anchorInfoDialogView.isAttentionFlag() ;
+            if(attentionFlag) { //当前是关注状态， 改成未关注
+                message.setMessageType(MessageType.RELIEVE_USER_ATTENTION_CHATROOM) ;
+                getChatServiceBinder().sendMsg(message) ;
+
+                anchorInfoDialogView.getAttentionBtnView().setIcon(MaterialDrawableBuilder.IconValue.ACCOUNT_PLUS) ;
+                anchorInfoDialogView.getAttentionTypeView().setText("关注");
+
+            } else {    //当前是未关注状态，改成已关注状态
+                message.setMessageType(MessageType.USER_ATTENTION_CHATROOM) ;
+                getChatServiceBinder().sendMsg(message) ;
+
+                anchorInfoDialogView.getAttentionBtnView().setIcon(MaterialDrawableBuilder.IconValue.ACCOUNT) ;
+                anchorInfoDialogView.getAttentionTypeView().setText("已关注") ;
+            }
+            anchorInfoDialogView.setAttentionFlag(!attentionFlag) ;
+        }
+    }
+
 }

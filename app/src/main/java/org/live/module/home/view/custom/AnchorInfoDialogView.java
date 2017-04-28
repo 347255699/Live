@@ -141,4 +141,8 @@ public class AnchorInfoDialogView {
     public View getAttentionHold() {
         return attentionHold;
     }
+
+    public void setAttentionFlag(boolean attentionFlag) {
+        this.attentionFlag = attentionFlag;
+    }
 }
