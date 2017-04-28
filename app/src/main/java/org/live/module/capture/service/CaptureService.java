@@ -145,7 +145,7 @@ public class CaptureService extends Service {
 
         @Override
         public void run() {
-            presenter = new CapturePresenterImpl(context, captureHandler);
+            presenter = new CapturePresenterImpl(context, captureHandler, null);
             presenter.startScreenCaptureAndPublish(rtmpUrl); // 开始录屏直播
         }
     }

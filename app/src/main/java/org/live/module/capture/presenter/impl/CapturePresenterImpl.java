@@ -13,6 +13,8 @@ import org.live.module.capture.util.WindowManagerUtil;
 import org.live.module.capture.util.constant.CaptureConstant;
 import org.live.module.capture.view.CaptureView;
 
+import java.util.Map;
+
 /**
  * 录屏表示器业务实现类
  * Created by KAM on 2017/3/10.
@@ -22,11 +24,12 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
     private CaptureModel captureModel;
     private Handler captureHandler;
     private CaptureView captureView = null;
-
-    public CapturePresenterImpl(Context context, Handler handler) {
+    private CaptureView captureView2;
+    public CapturePresenterImpl(Context context, Handler handler,CaptureView captureView2) {
         if (WindowManagerUtil.captureFABView != null) {
             this.captureView = WindowManagerUtil.captureFABView;
         }
+        this.captureView2 = captureView2;
         this.captureHandler = handler;
         captureModel = new CaptureModelImpl(context, this);
     }
@@ -52,6 +55,11 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
     @Override
     public void triggerPrivateMode(boolean isPrivateMode) {
         captureModel.triggerPrivateMode(isPrivateMode);
+    }
+
+    @Override
+    public void showVideoQualitySettingView() {
+        captureModel.showVideoQualitySettingView();
     }
 
     @Override
@@ -98,6 +106,12 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
             sendHandlerMsg(CaptureConstant.CAPTURE_SERVICE_IS_PRIVATE_MODE_FALSE);
         }
     }
+
+    @Override
+    public void onShowQualitySettingsView(Map<String, Object> config) {
+        captureView2.onShowQualitySettingsView(config);
+    }
+
 
     /**
      * 发送消息至captureService

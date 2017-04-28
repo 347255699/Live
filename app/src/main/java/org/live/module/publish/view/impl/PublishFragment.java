@@ -272,7 +272,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
                     refreshOnlineCount(onlineCount2); // 刷新在线观看人数
                     break; // 用户进入直播间
                 case MessageType.ANCHOR_EXIT_CHATROOM_MESSAGE_TYPE:
-                    recorderPresenter.stopRtmpPublish();   //结束推流服务
+                    recorderPresenter.stopRtmpPublish();  // 停止推流
                     break; // 主播离开直播间
                 default:
                     break;
@@ -717,7 +717,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     /**
      * 旋转屏幕时更改推流方向
      */
-    public void onDisplayRotationChanged(int mobileRotation) {
+    public void onDisplayRotationChanged(int mobileRotation){
         recorderPresenter.onDisplayRotationChanged(mobileRotation);  // 自动旋转打开，Activity随手机方向旋转之后，只需要改变推流方向
     }
 

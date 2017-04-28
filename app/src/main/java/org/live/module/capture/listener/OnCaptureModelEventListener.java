@@ -1,5 +1,7 @@
 package org.live.module.capture.listener;
 
+import java.util.Map;
+
 /**
  * 录屏模型层事件监听(驱动presenter层做出相应的响应)
  * Created by KAM on 2017/3/10.
@@ -29,4 +31,6 @@ public interface OnCaptureModelEventListener {
      * @param isPrivateMode
      */
     public void onPrivateModeStatus(boolean isPrivateMode);
+
+    void onShowQualitySettingsView(Map<String, Object> config); // 显示推流参数设置视图
 }

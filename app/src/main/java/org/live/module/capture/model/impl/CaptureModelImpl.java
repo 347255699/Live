@@ -89,6 +89,11 @@ public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
     }
 
     @Override
+    public void showVideoQualitySettingView() {
+        eventListener.onShowQualitySettingsView(config);
+    }
+
+    @Override
     public void setVideoQuality(Integer videoQuality) {
         mLivePusher.setVideoQuality(videoQuality); // 设置清晰度
         config.put(PublishConstant.CONFIG_TYPE_VIDEO_QUALITY, videoQuality);

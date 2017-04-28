@@ -14,13 +14,14 @@ import org.live.common.listener.NoDoubleClickListener;
 import org.live.module.capture.view.CaptureView;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * 录屏浮动按钮视图
  * Created by KAM on 2017/3/13.
  */
 
-public class CaptureFABView extends LinearLayout implements CaptureView {
+public class CaptureFABView extends LinearLayout implements CaptureView{
     private NoDoubleClickListener onClickListener;
     private View view;
     private Context context;
@@ -160,4 +161,8 @@ public class CaptureFABView extends LinearLayout implements CaptureView {
         return statusBarHeight;
     }
 
+    @Override
+    public void onShowQualitySettingsView(Map<String, Object> config) {
+
+    }
 }

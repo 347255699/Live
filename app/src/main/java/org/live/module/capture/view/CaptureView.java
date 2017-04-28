@@ -8,5 +8,5 @@ import java.util.Map;
  */
 
 public interface CaptureView {
-    public void onShowPublishSettingsView(Map<String, Object> config); // 显示推流参数设置视图
+    void onShowQualitySettingsView(Map<String, Object> config); // 显示推流参数设置视图
 }

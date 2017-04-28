@@ -25,9 +25,15 @@ public interface CaptureModel {
     public void triggerPrivateMode(boolean isPrivateMode);
 
     /**
+     * 显示视图
+     */
+    void showVideoQualitySettingView();
+
+    /**
      * 设置清晰度
      *
      * @param videoQuality
      */
-    public void setVideoQuality(Integer videoQuality);
+    void setVideoQuality(Integer videoQuality);
+
 }

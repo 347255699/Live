@@ -1,5 +1,6 @@
 package org.live.module.capture.view.impl;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +9,13 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
@@ -19,6 +24,10 @@ import com.flyco.animation.FlipEnter.FlipVerticalSwingEnter;
 import com.flyco.dialog.listener.OnBtnClickL;
 import com.flyco.dialog.widget.MaterialDialog;
 import com.flyco.dialog.widget.NormalDialog;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
+import com.suke.widget.SwitchButton;
+import com.tencent.rtmp.TXLiveConstants;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
@@ -29,17 +38,23 @@ import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
 import org.live.common.util.NetworkUtils;
 import org.live.module.capture.listener.OnCaptureServiceStatusListener;
+import org.live.module.capture.presenter.CapturePresenter;
+import org.live.module.capture.presenter.impl.CapturePresenterImpl;
 import org.live.module.capture.service.CaptureService;
 import org.live.module.capture.util.WindowManagerUtil;
+import org.live.module.capture.view.CaptureView;
 import org.live.module.play.view.impl.PlayActivity;
 import org.live.module.play.view.impl.PlayFragment;
+import org.live.module.publish.util.constant.PublishConstant;
+
+import java.util.Map;
 
 /**
  * 录屏模块
  * Created by KAM on 2017/3/10.
  */
 
-public class CaptureFragment extends BackHandledFragment {
+public class CaptureFragment extends BackHandledFragment implements CaptureView {
     private static final String TAG = "Global";
     private View view;
     private static final int ALPHHA_DEFAULT_VALUE = 50; // 默认透明度
@@ -54,6 +69,8 @@ public class CaptureFragment extends BackHandledFragment {
     private MaterialIconView cCaptureSettingsButton = null; // 录屏参数设置按钮
     private MaterialIconView cCaptureCloseButton = null; // 录屏关闭按钮
     private boolean isCapturing = false;
+    private CapturePresenter capturePresenter;
+    private String pDefinitionInfos[] = {"标清", "高清", "超清"};
 
     @Nullable
     @Override
@@ -61,6 +78,7 @@ public class CaptureFragment extends BackHandledFragment {
         view = inflater.inflate(R.layout.fragment_capture, container);
         onClickListener = new IconButtonOnClickListener();
         captureActivity = (CaptureActivity) getActivity();
+        capturePresenter = new CapturePresenterImpl(getActivity(), null, this);
         rtmpUrl = captureActivity.getRtmpUrl(); // 获取推流地址
         initUIElements();
         return view;
@@ -125,6 +143,17 @@ public class CaptureFragment extends BackHandledFragment {
         Toast.makeText(getActivity().getApplicationContext(), msg, lengthType).show();
     }
 
+    @Override
+    public void onShowQualitySettingsView(Map<String, Object> config) {
+        DialogPlus dialog = DialogPlus.newDialog(getActivity())
+                .setBackgroundColorResId(R.color.colorWall)
+                .setContentHolder(new ViewHolder(R.layout.dialog_publish_settings))
+                .setExpanded(true, 350).setGravity(Gravity.BOTTOM)
+                .create();
+        dialog.show();
+        initQualitySettingsView(dialog.getHolderView(), config);
+    }
+
     /**
      * 图标按钮点击事件监听
      */
@@ -151,7 +180,7 @@ public class CaptureFragment extends BackHandledFragment {
                     }
                     break;
                 case R.id.btn_capture_settings: // 设置录屏参数
-                    Log.i("MainLog", "capture_settings");
+                    capturePresenter.showVideoQualitySettingView();
                     break;
                 case R.id.btn_capture_close: // 关闭当前界面
                     if (CaptureService.isCapturing) {
@@ -165,6 +194,84 @@ public class CaptureFragment extends BackHandledFragment {
         }
     }
 
+
+    /**
+     * 初始化推流参数设置界面
+     *
+     * @param qualitySettingsView
+     * @param config
+     */
+    public void initQualitySettingsView(View qualitySettingsView, Map<String, Object> config) {
+        Spinner pDefinitionSpinner = (Spinner) qualitySettingsView.findViewById(R.id.spin_pulish_definition);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pDefinitionInfos); // 建立Adapter并且绑定数据源
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        pDefinitionSpinner.setAdapter(adapter); //绑定 Adapter到控件
+
+
+        pDefinitionSpinner.setSelection(mapperSpinnerSelectionPosition((Integer) config.get(PublishConstant.CONFIG_TYPE_VIDEO_QUALITY))); // 设置当前选项
+        pDefinitionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                capturePresenter.setVideoQuality(mapperVideoQuality(pos)); // 设置视频清晰度
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        }); // 监听下拉框
+
+    }
+
+    /**
+     * 视频清晰度对应下拉框位置
+     *
+     * @param videoQuality 视频清晰度
+     * @return
+     */
+    private int mapperSpinnerSelectionPosition(int videoQuality) {
+        int defalutPosition = 1;
+        switch (videoQuality) {
+            case TXLiveConstants.VIDEO_QUALITY_STANDARD_DEFINITION:
+                defalutPosition = 0;
+                break;
+            case TXLiveConstants.VIDEO_QUALITY_HIGH_DEFINITION:
+                defalutPosition = 1;
+                break;
+            case TXLiveConstants.VIDEO_QUALITY_SUPER_DEFINITION:
+                defalutPosition = 2;
+                break;
+            default:
+                break;
+        }
+        return defalutPosition;
+    }
+
+    /**
+     * 下拉框位置对应的视频清晰度
+     *
+     * @param position 下拉框位置
+     * @return
+     */
+    private int mapperVideoQuality(int position) {
+        int definition = TXLiveConstants.VIDEO_QUALITY_HIGH_DEFINITION;
+        switch (position) {
+            case 0:
+                definition = TXLiveConstants.VIDEO_QUALITY_STANDARD_DEFINITION;
+                break;
+            case 1:
+                definition = TXLiveConstants.VIDEO_QUALITY_HIGH_DEFINITION;
+                break;
+            case 2:
+                definition = TXLiveConstants.VIDEO_QUALITY_SUPER_DEFINITION;
+                break;
+            default:
+                break;
+        }
+        return definition;
+    }
 
     /**
      * 监听返回键
