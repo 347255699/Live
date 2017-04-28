@@ -412,7 +412,7 @@ public class PublishModelImpl implements PublishModel, ITXLivePushListener {
                 }
                 ResponseModel<List<LimitationVo>> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<LimitationVo>>>(){}.getType()) ;
                 if(dataModel == null) {
-                    dataModel = new SimpleResponseModel<List<LimitationVo>>() ;
+                    dataModel = new SimpleResponseModel<>() ;
                 }
                 message.obj = dataModel ;
                 message.what = HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG ;

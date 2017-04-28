@@ -54,6 +54,11 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
         captureModel.triggerPrivateMode(isPrivateMode);
     }
 
+    @Override
+    public void setVideoQuality(Integer videoQuality) {
+        captureModel.setVideoQuality(videoQuality);
+    }
+
     /**
      * 通知正在录屏直播
      */

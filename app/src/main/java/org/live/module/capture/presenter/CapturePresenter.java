@@ -21,4 +21,11 @@ public interface CapturePresenter {
      * 设置隐私模式
      */
     public void triggerPrivateMode(boolean isPrivateMode);
+
+    /**
+     * 设置清晰度
+     *
+     * @param videoQuality
+     */
+    public void setVideoQuality(Integer videoQuality);
 }

@@ -247,6 +247,13 @@ public class ChatFragment extends Fragment {
                     item4.put("nickname", message.getNickname());
                     addRecord(item4); // 添加消息记录
                     break; //提示用户关注了主播
+                case MessageType.RELIEVE_USER_ATTENTION_CHATROOM:
+                    Map<String, String> item5 = new HashMap<>(3);
+                    item5.put("record", message.getContent());
+                    item5.put("account", "10003");
+                    item5.put("nickname", message.getNickname());
+                    addRecord(item5); // 添加消息记录
+                    break; //提示用户取消了关注
                 default:
                     break;
             }
@@ -318,6 +325,10 @@ public class ChatFragment extends Fragment {
                         msgTextView.setText(data.get(position).get("record")); // 显示提示信息
                         msgTextView.setTextColor(context.getResources().getColor(R.color.colorGold));
                         break; // 用户关注了主播
+                    case "10003":
+                        msgTextView.setText(data.get(position).get("record")); // 显示提示信息
+                        msgTextView.setTextColor(context.getResources().getColor(R.color.colorGold));
+                        break; // 用户取消关注主播
                     default:
                         String msg = data.get(position).get("nickname") + "：" + data.get(position).get("record"); // 消息
                         int startIndex = msg.indexOf("："); // 消息间隔下标
