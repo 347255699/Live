@@ -58,4 +58,9 @@ public class LiveConstants {
      */
     public static final String REMOTE_SERVER_WEB_SOCKET_IP = WEB_SOCKET_PREFIX + REMOTE_SERVER_IP  + ":" + REMOTE_PORT;
 
+    /**
+     * rtmp拉流地址的前缀
+     */
+    public static final String RTMP_PLAY_IP_PREFIX  = "rtmp://119.29.167.148/live/" ;
+
 }

@@ -110,10 +110,8 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         currentFragmentView = inflater.inflate(R.layout.fragment_play, null);
-
-        playPresenter = new PlayPresenterImpl(this, getActivity());
         newHandlerInstance();  //实例化handler
-        liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler);
+
         if (getActivity() instanceof AnchorInfoProvider) {
             this.anchorInfoProvider = (AnchorInfoProvider) getActivity();
         }
@@ -124,7 +122,9 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         this.liveRoomInfo = anchorInfoProvider.getLiveRoomInfo(); // 取得直播间信息
 
         initUI();
-        this.play(liveRoomInfo.getLiveRoomUrl());
+        liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler);
+        playPresenter = new PlayPresenterImpl(this, getActivity());
+        this.play(LiveConstants.RTMP_PLAY_IP_PREFIX + liveRoomInfo.getLiveRoomNum()) ;
         return currentFragmentView;
     }
 
