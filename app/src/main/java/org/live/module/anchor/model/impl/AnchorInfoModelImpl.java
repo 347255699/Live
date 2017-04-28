@@ -139,8 +139,10 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
         } finally {
             try {
                 // 关闭流
-                b.flush();
-                b.close();
+                if(b != null) {
+                    b.flush();
+                    b.close();
+                }
             } catch (IOException e) {
                 Log.e("Global", e.getMessage());
             }
