@@ -147,7 +147,8 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
 
     @Override
     public LiveRoomInfo getLiveRoomInfo() {
-        LiveRoomInfo liveRoomInfo = new LiveRoomInfo(mobileUserVo.getUserId(), mobileUserVo.getLiveRoomVo().getRoomId(), mobileUserVo.getLiveRoomVo().getRoomNum());
+
+        LiveRoomInfo liveRoomInfo = new LiveRoomInfo(mobileUserVo.getLiveRoomVo().getRoomId(), mobileUserVo.getUserId(), mobileUserVo.getLiveRoomVo().getRoomNum(), null, mobileUserVo.getHeadImgUrl(), mobileUserVo.getLiveRoomVo().getRoomName(), mobileUserVo.getLiveRoomVo().getLiveRoomUrl(), false);
         return liveRoomInfo;
     }
 

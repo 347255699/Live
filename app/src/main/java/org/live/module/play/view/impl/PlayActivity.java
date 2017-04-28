@@ -35,7 +35,7 @@ import org.live.module.publish.view.impl.LiveOverFragment;
  * <p>
  * Created by Mr.wang on 2017/3/9.
  */
-public class PlayActivity extends FragmentActivity implements AnchorInfoProvider, OnPlayActivityEvent,ChatActivityEvent {
+public class PlayActivity extends FragmentActivity implements AnchorInfoProvider, OnPlayActivityEvent, ChatActivityEvent {
 
     public static final String TAG = "PlayActivity";
 
@@ -53,15 +53,16 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 保持屏幕常亮
         requestWindowFeature(Window.FEATURE_NO_TITLE);     //隐藏标题
         setContentView(R.layout.activity_play);
-        liveRoomInfo = new LiveRoomInfo();
         Intent intent = getIntent();
-        liveRoomInfo.setLiveRoomId(intent.getStringExtra(HomeConstants.LIVE_ROOM_ID_KEY));//直播间id
-        liveRoomInfo.setLiveRoomName(intent.getStringExtra(HomeConstants.LIVE_ROOM_NAME_KEY)); //直播间名
-        liveRoomInfo.setLiveRoomUrl(intent.getStringExtra(HomeConstants.LIVE_ROOM_URL_KEY)); //拉流地址
-        liveRoomInfo.setHeadImgUrl(intent.getStringExtra(HomeConstants.HEAD_IMG_URL_KEY));//主播头像
-        liveRoomInfo.setOnlineCount(intent.getIntExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, 1) + "");//在线人数
-        liveRoomInfo.setShutupFlag(intent.getIntExtra(HomeConstants.LIMIT_TYPE_KEY_FLAG, 0) == 1); //禁言标记
-        liveRoomInfo.setLiveRoomNum(intent.getStringExtra(HomeConstants.LIVE_ROOM_NUM_KEY));   //房间号
+        liveRoomInfo = new LiveRoomInfo(intent.getStringExtra(HomeConstants.LIVE_ROOM_ID_KEY),
+                intent.getStringExtra(HomeConstants.ANCHOR_ID_KEY),
+                intent.getStringExtra(HomeConstants.LIVE_ROOM_NUM_KEY),
+                intent.getIntExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, 1) + "",
+                intent.getStringExtra(HomeConstants.HEAD_IMG_URL_KEY),
+                intent.getStringExtra(HomeConstants.LIVE_ROOM_NAME_KEY),
+                intent.getStringExtra(HomeConstants.LIVE_ROOM_URL_KEY),
+                intent.getIntExtra(HomeConstants.LIMIT_TYPE_KEY_FLAG, 0) == 1
+        ); // 取得直播间信息
 
         mobileUserVo = HomeActivity.mobileUserVo; // 取得用户信息
         playFragment = new PlayFragment();
@@ -87,7 +88,7 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
     public void setFragmentDefault() {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fl_play_playerDump, playFragment, "playerDump");
-       fragmentTransaction.add(R.id.fl_play_chat, chatFragment, "playChat");
+        fragmentTransaction.add(R.id.fl_play_chat, chatFragment, "playChat");
         fragmentTransaction.commit();
     }
 
@@ -106,7 +107,7 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
      */
     public void replaceLiveOverFragment() {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.remove(chatFragment) ;
+        fragmentTransaction.remove(chatFragment);
         fragmentTransaction.replace(R.id.fl_play_playerDump, new LiveOverFragment(), "playerDump");
         fragmentTransaction.commit();
     }
@@ -118,11 +119,6 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
             unbindService(conn);
             anchorChatServiceBinder = null;
         }
-    }
-
-    @Override
-    public MobileUserVo getAnchorInfo() {
-        return null;
     }
 
     @Override
@@ -155,7 +151,7 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
 
     @Override
     public void showChatInputView() {
-        if(chatFragment != null){
+        if (chatFragment != null) {
             chatFragment.showInput(); // 显示输入框
         }
     }
