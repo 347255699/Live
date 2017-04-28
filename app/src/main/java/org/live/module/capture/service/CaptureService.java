@@ -165,7 +165,7 @@ public class CaptureService extends Service {
     }
 
     /**
-     * 设置服务状态回掉
+     * 设置服务状态回调
      *
      * @param serviceStatusListener
      */

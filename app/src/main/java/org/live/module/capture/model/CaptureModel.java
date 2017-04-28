@@ -9,6 +9,7 @@ public interface CaptureModel {
 
     /**
      * 开始录屏和直播
+     *
      * @param rtmpUrl 推流地址
      */
     public void startScreenCaptureAndPublish(String rtmpUrl);
@@ -22,4 +23,11 @@ public interface CaptureModel {
      * 设置隐私模式
      */
     public void triggerPrivateMode(boolean isPrivateMode);
+
+    /**
+     * 设置清晰度
+     *
+     * @param videoQuality
+     */
+    public void setVideoQuality(Integer videoQuality);
 }
