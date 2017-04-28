@@ -82,6 +82,8 @@
             android:layout_weight="3"
             android:background="@drawable/bg_edittext"
             android:hint="请输入..."
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:maxLines="1"
             android:padding="5dip"
             android:textColorHint="#AAAAAA"

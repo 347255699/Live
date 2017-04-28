@@ -45,6 +45,7 @@ import org.live.module.home.view.custom.UserInfoDialogView;
 import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.login.domain.MobileUserVo;
 import org.live.module.play.domain.LiveRoomInfo;
+import org.live.module.play.view.impl.PlayActivity;
 import org.live.module.publish.view.custom.NickNameSpan;
 
 import java.util.HashMap;
@@ -348,11 +349,11 @@ public class ChatFragment extends Fragment {
     private void showUserInfoDialog(SimpleUserVo simpleUserVo) {
 
         if (userInfoDialogView == null) userInfoDialogView = new UserInfoDialogView(getActivity());
-  /*      if(){
+        if (getActivity() instanceof PlayActivity) {
             userInfoDialogView.getBtnHoldView().setVisibility(View.GONE);
-        }*/
-
-
+        } else {
+            userInfoDialogView.getBtnHoldView().setVisibility(View.VISIBLE);
+        }
         userInfoDialogView.setValueAndShow(simpleUserVo);
         Button shutUpBtn = userInfoDialogView.getShutupBtnView(); // 禁言
         Button kickoutBtn = userInfoDialogView.getKickoutBtnView(); // 踢出
@@ -417,20 +418,24 @@ public class ChatFragment extends Fragment {
         dialog.show();
         View dialogView = dialog.getHolderView();
         final EditText chatMsgEditText = (EditText) dialogView.findViewById(R.id.et_chat_msg); // 聊天内容输入框
-        chatMsgEditText.setFocusable(true); // 自动对焦
+    //    chatMsgEditText.setFocusable(true); // 自动对焦
         Button chatMsgSentBtn = (Button) dialogView.findViewById(R.id.btn_chat_send); // 发送按钮
         chatMsgSentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                org.live.common.domain.Message message = new org.live.common.domain.Message();
-                MobileUserVo mobileUserVo = HomeActivity.mobileUserVo;
-                message.setNickname(mobileUserVo.getNickname());
-                message.setAccount(mobileUserVo.getAccount());
-                message.setDestination(liveRoomInfo.getLiveRoomNum()); // 消息目的的
-                message.setMessageType(MessageType.SEND_TO_CHATROOM_MESSAGE_TYPE);
-                message.setFromChatRoomNum(liveRoomInfo.getLiveRoomNum());
-                message.setContent(chatMsgEditText.getText().toString());
-                chatActivityEvent.getChatReceiveServiceBinder().sendMsg(message); // 发送消息
+                String msg = chatMsgEditText.getText().toString();
+                if (msg.length() > 0 && !liveRoomInfo.isShutupFlag()) {
+                    org.live.common.domain.Message message = new org.live.common.domain.Message();
+                    MobileUserVo mobileUserVo = HomeActivity.mobileUserVo;
+                    message.setNickname(mobileUserVo.getNickname());
+                    message.setAccount(mobileUserVo.getAccount());
+                    message.setDestination(liveRoomInfo.getLiveRoomNum()); // 消息目的的
+                    message.setMessageType(MessageType.SEND_TO_CHATROOM_MESSAGE_TYPE);
+                    message.setFromChatRoomNum(liveRoomInfo.getLiveRoomNum());
+                    message.setContent(msg);
+                    chatActivityEvent.getChatReceiveServiceBinder().sendMsg(message); // 发送消息
+                    chatMsgEditText.setText("");
+                }
             }
         });
     }
