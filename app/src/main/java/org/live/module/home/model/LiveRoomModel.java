@@ -233,7 +233,7 @@ public class LiveRoomModel {
                     dataModel = new SimpleResponseModel<Object>() ;
                 }
                 message.obj = dataModel ;
-                message.what = HomeConstants.LOAD_USER_INFO_SUCCESS_FLAG ;
+                message.what = HomeConstants.LOAD_REPORT_SUCCESS_FLAG ;
                 handler.sendMessage(message) ;
             }
         }) ;

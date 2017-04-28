@@ -67,7 +67,6 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
         mobileUserVo = HomeActivity.mobileUserVo; // 取得用户信息
         playFragment = new PlayFragment();
         chatFragment = new ChatFragment();
-        setFragmentDefault(); // 设置默认fragment
         StringBuilder urlBuilder = new StringBuilder(128);
         urlBuilder.append(LiveConstants.REMOTE_SERVER_WEB_SOCKET_IP)
                 .append("/chat?account=")
@@ -80,6 +79,7 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
         Intent serviceIntent = new Intent(this, AnchorChatService.class);
         serviceIntent.putExtra(LiveKeyConstants.Global_URL_KEY, wsUrl);
         bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE); // 绑定聊天服务*/
+        setFragmentDefault(); // 设置默认fragment
     }
 
     /**
@@ -98,7 +98,7 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
     public void reloadCurrentFragment() {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fl_play_playerDump, playFragment, "playerDump");
-        fragmentTransaction.replace(R.id.fl_play_chat, chatFragment, "playChat");
+       // fragmentTransaction.replace(R.id.fl_play_chat, chatFragment, "playChat");
         fragmentTransaction.commit();
     }
 
