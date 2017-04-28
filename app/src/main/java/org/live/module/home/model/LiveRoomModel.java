@@ -137,7 +137,7 @@ public class LiveRoomModel {
             public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
                 Message message = Message.obtain() ;
                 if(e != null) {
-                    Log.e(TAG, e.getMessage()) ;
+                    Log.e(TAG, e.getMessage()== null ?"": e.getMessage()) ;
                     message.what = HomeConstants.LOAD_LIMITATION_EXCEPTION_FLAG ;
                     handler.sendMessage(message) ;
                     return ;
@@ -164,7 +164,7 @@ public class LiveRoomModel {
             public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
                 Message message = Message.obtain() ;
                 if(e != null) {
-                    Log.e(TAG, e.getMessage()) ;
+                    Log.e(TAG, e.getMessage()== null ?"": e.getMessage()) ;
                     message.what = HomeConstants.LOAD_LIMITATION_EXCEPTION_FLAG ;
                     handler.sendMessage(message) ;
                     return ;
@@ -190,7 +190,7 @@ public class LiveRoomModel {
             public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
                 Message message = Message.obtain() ;
                 if(e != null) {
-                    Log.e(TAG, e.getMessage()) ;
+                    Log.e(TAG, e.getMessage()== null ?"": e.getMessage()) ;
                     message.what = HomeConstants.LOAD_ANCHOR_INFO_EXCEPTION_FLAG ;
                     handler.sendMessage(message) ;
                     return ;
@@ -223,7 +223,7 @@ public class LiveRoomModel {
             public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
                 Message message = Message.obtain() ;
                 if(e != null) {
-                    Log.e(TAG, e.getMessage()) ;
+                    Log.e(TAG, e.getMessage()== null ?"": e.getMessage()) ;
                     message.what = HomeConstants.LOAD_REPORT_EXCEPTIOIN_FLAG ;
                     handler.sendMessage(message) ;
                     return ;
@@ -251,7 +251,7 @@ public class LiveRoomModel {
             public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
                 Message message = Message.obtain() ;
                 if(e != null) {
-                    Log.e(TAG, e.getMessage()) ;
+                    Log.e(TAG, e.getMessage()== null ?"": e.getMessage()) ;
                     message.what = HomeConstants.LOAD_USER_INFO_EXCEPTION_FLAG ;
                     handler.sendMessage(message) ;
                     return ;
@@ -279,7 +279,7 @@ public class LiveRoomModel {
             public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
                 Message message = Message.obtain() ;
                 if(e != null) {
-                    Log.e(TAG, e.getMessage()) ;
+                    Log.e(TAG, e.getMessage()== null ?"": e.getMessage()) ;
                     message.what = HomeConstants.LOAD_LIVE_ROOM_EXCEPTION_FLAG ;
                     handler.sendMessage(message) ;
                     return ;
