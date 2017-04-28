@@ -29,42 +29,42 @@ public class HomeConstants {
     /**
      * 加载直播间限制正确
      */
-    public static final int LOAD_LIMITATION_SUCCESS_FLAG = 105 ;
+    public static final int LOAD_LIMITATION_SUCCESS_FLAG = 105;
 
     /**
      * 加载直播间限制的时候，发生异常。
      */
-    public static final int LOAD_LIMITATION_EXCEPTION_FLAG = 106 ;
+    public static final int LOAD_LIMITATION_EXCEPTION_FLAG = 106;
 
     /**
      * 加载主播信息的时候，发生异常。
      */
-    public static final int LOAD_ANCHOR_INFO_EXCEPTION_FLAG = 107 ;
+    public static final int LOAD_ANCHOR_INFO_EXCEPTION_FLAG = 107;
 
     /**
      * 加载主播信息正确
      */
-    public static final int LOAD_ANCHOR_INFO_SUCCESS_FLAG = 108 ;
+    public static final int LOAD_ANCHOR_INFO_SUCCESS_FLAG = 108;
 
     /**
      * 加载用户信息的时候，发生异常。
      */
-    public static final int LOAD_USER_INFO_EXCEPTION_FLAG = 109 ;
+    public static final int LOAD_USER_INFO_EXCEPTION_FLAG = 109;
 
     /**
      * 加载主播信息正确
      */
-    public static final int LOAD_USER_INFO_SUCCESS_FLAG = 110 ;
+    public static final int LOAD_USER_INFO_SUCCESS_FLAG = 110;
 
     /**
      * 加载举报信息异常
      */
-    public static final int LOAD_REPORT_EXCEPTIOIN_FLAG = 111 ;
+    public static final int LOAD_REPORT_EXCEPTIOIN_FLAG = 111;
 
     /**
-     *  加载举报信息成功！
+     * 加载举报信息成功！
      */
-    public static final int LOAD_REPORT_SUCCESS_FLAG = 112 ;
+    public static final int LOAD_REPORT_SUCCESS_FLAG = 112;
 
     /**
      * 分类名称的key
@@ -135,52 +135,58 @@ public class HomeConstants {
     /**
      * 限制类型，禁言
      */
-    public static final int LIMIT_TYPE_SHUTUP = 1 ;
+    public static final int LIMIT_TYPE_SHUTUP = 1;
 
     /**
      * 限制类型，踢出房间
      */
-    public static final int LIMIT_TYPE_KICKOUT = 2 ;
+    public static final int LIMIT_TYPE_KICKOUT = 2;
 
     /**
      * 限制类型的key
      */
-    public static final String LIMIT_TYPE_KEY_FLAG = "limitTypeKey" ;
+    public static final String LIMIT_TYPE_KEY_FLAG = "limitTypeKey";
 
     /**
      * 头像的key
      */
-    public static final String HEAD_IMG_URL_KEY = "headImgUrlKey" ;
+    public static final String HEAD_IMG_URL_KEY = "headImgUrlKey";
 
     /**
      * 直播间名的key
      */
-    public static final String LIVE_ROOM_NAME_KEY = "liveRoomNameKey" ;
+    public static final String LIVE_ROOM_NAME_KEY = "liveRoomNameKey";
 
     /**
      * 直播间拉推流地址的key
      */
-    public static final String LIVE_ROOM_URL_KEY = "liveRoomUrlKey" ;
+    public static final String LIVE_ROOM_URL_KEY = "liveRoomUrlKey";
 
     /**
      * 直播间id的key
      */
-    public static final String LIVE_ROOM_ID_KEY = "liveRoomIdKey" ;
+    public static final String LIVE_ROOM_ID_KEY = "liveRoomIdKey";
 
     /**
      * 直播间在线人数的key
      */
-    public static final String LIVE_ROOM_ONLINE_COUNT_KEY = "liveRoomOnlineCountKey" ;
+    public static final String LIVE_ROOM_ONLINE_COUNT_KEY = "liveRoomOnlineCountKey";
 
     /**
      * 直播间号的key
      */
-    public static final String LIVE_ROOM_NUM_KEY = "liveRoomNumKey" ;
+    public static final String LIVE_ROOM_NUM_KEY = "liveRoomNumKey";
+
+
+    /**
+     * 主播id
+     */
+    public static final String ANCHOR_ID_KEY = "anchorIdKey";
 
     /**
      * 用户的id
      */
-    public static final String USER_ID_KEY = "userIdKey" ;
+    public static final String USER_ID_KEY = "userIdKey";
 
     /**
      * 直播类型，录屏

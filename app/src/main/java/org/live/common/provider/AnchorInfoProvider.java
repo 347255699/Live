@@ -1,6 +1,5 @@
 package org.live.common.provider;
 
-import org.live.module.login.domain.MobileUserVo;
 import org.live.module.play.domain.LiveRoomInfo;
 
 /**
@@ -9,10 +8,6 @@ import org.live.module.play.domain.LiveRoomInfo;
  */
 
 public interface AnchorInfoProvider {
-    /**
-     * 取得主播信息
-     */
-    public MobileUserVo getAnchorInfo();
 
     /**
      * 取得直播间信息

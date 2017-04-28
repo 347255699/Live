@@ -1,43 +1,46 @@
 package org.live.module.home.domain;
 
 
-
 /**
  * 直播间的vo
- *
+ * <p>
  * Created by Mr.wang on 2017/4/5.
  */
 public class LiveRoomVo {
 
     /**
-     *  直播间id
+     * 直播间id
      */
-    private String liveRoomId ;
+    private String liveRoomId;
 
     /**
-     *  房间号
+     * 主播id
      */
-    private String roomNum ;
+    private String anchorId;
+    /**
+     * 房间号
+     */
+    private String roomNum;
 
     /**
-     *  直播间封面
+     * 直播间封面
      */
-    private String liveRoomCoverUrl ;
+    private String liveRoomCoverUrl;
 
     /**
      * 直播地址
      */
-    private String liveRoomUrl ;
+    private String liveRoomUrl;
 
     /**
      * 直播间名称
      */
-    private String liveRoomName ;
+    private String liveRoomName;
 
     /**
-     *  主播名称
+     * 主播名称
      */
-    private String anchorName ;
+    private String anchorName;
 
     /**
      * 头像url
@@ -45,14 +48,14 @@ public class LiveRoomVo {
     private String headImgUrl;
 
     /**
-     *  在线人数
+     * 在线人数
      */
-    private int onlineCount ;
+    private int onlineCount;
 
     /**
-     *  正在直播的标记
+     * 正在直播的标记
      */
-    private boolean liveFlag ;
+    private boolean liveFlag;
 
     public LiveRoomVo() {
     }
@@ -64,6 +67,14 @@ public class LiveRoomVo {
 
     public void setLiveRoomId(String liveRoomId) {
         this.liveRoomId = liveRoomId;
+    }
+
+    public String getAnchorId() {
+        return anchorId;
+    }
+
+    public void setAnchorId(String anchorId) {
+        this.anchorId = anchorId;
     }
 
     public String getLiveRoomCoverUrl() {
