@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -26,6 +27,7 @@ import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.login.domain.MobileUserVo;
 import org.live.module.play.domain.LiveRoomInfo;
 import org.live.module.play.listener.OnPlayActivityEvent;
+import org.live.module.publish.view.impl.LiveOverFragment;
 
 
 /**
@@ -99,6 +101,24 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
         fragmentTransaction.commit();
     }
 
+    /**
+     * 主播离开，替换fragment为直播结束的fragement
+     */
+    public void replaceLiveOverFragment() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.remove(chatFragment) ;
+        fragmentTransaction.replace(R.id.fl_play_playerDump, new LiveOverFragment(), "playerDump");
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (anchorChatServiceBinder != null) {
+            unbindService(conn);
+            anchorChatServiceBinder = null;
+        }
+    }
 
     @Override
     public MobileUserVo getAnchorInfo() {
@@ -152,4 +172,5 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
     public AnchorChatService.ChatReceiveServiceBinder getChatReceiveServiceBinder() {
         return this.anchorChatServiceBinder;
     }
+
 }

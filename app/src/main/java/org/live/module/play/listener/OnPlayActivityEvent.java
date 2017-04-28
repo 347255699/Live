@@ -9,10 +9,15 @@ public interface OnPlayActivityEvent {
     /**
      * 聊天输入框视图
      */
-    public void showChatInputView();
+     void showChatInputView();
 
     /**
      * 注销服务
      */
-    public void logoutService();
+     void logoutService();
+
+    /**
+     * 主播离开，替换fragment为直播结束的fragement
+     */
+    void replaceLiveOverFragment() ;
 }

@@ -2,6 +2,10 @@ package org.live.module.play.view.impl;
 
 
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +43,7 @@ import org.live.common.domain.MessageType;
 import org.live.common.listener.ChatActivityEvent;
 import org.live.common.listener.NoDoubleClickListener;
 import org.live.common.provider.AnchorInfoProvider;
+import org.live.common.util.JsonUtils;
 import org.live.common.util.ResponseModel;
 import org.live.module.chat.service.AnchorChatService;
 import org.live.module.home.constants.HomeConstants;
@@ -122,6 +127,13 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
         this.play(liveRoomInfo.getLiveRoomUrl());
         return currentFragmentView;
     }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        registerReceiver() ;
+    }
+
 
     /**
      * 初始化UI
@@ -235,6 +247,7 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
     @Override
     public void onDestroy() {
         Log.d(TAG, "destroy");
+        getActivity().unregisterReceiver(chatReceiver) ;    //注销广播接收器
         playPresenter.stopPlay();
         mPlayerView.onDestroy();
         super.onDestroy();
@@ -316,4 +329,59 @@ public class PlayFragment extends Fragment implements PlayView, View.OnClickList
             }
         }
     }
+
+    /**
+     * 注册广播接收器
+     */
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AnchorChatService.ACTION); // 绑定意图
+        filter.setPriority(Integer.MAX_VALUE); // 高优先级
+        getActivity().registerReceiver(chatReceiver, filter); // 注册广播接收器
+    }
+
+    /**
+     * 广播接收器
+     *
+     */
+    private BroadcastReceiver chatReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            org.live.common.domain.Message message =
+                    JsonUtils.fromJson(intent.getStringExtra("msg"), org.live.common.domain.Message.class);
+            switch (message.getMessageType()) {
+                case MessageType.USER_ENTER_CHATROOM_MESSAGE_TYPE : {   //用户进入直播间
+                    onlineCountView.setText(message.getContent()) ; //刷新在线人数
+                    break;
+                }
+                case MessageType.USER_EXIT_CHATROOM_MESSAGE_TYPE: {     //用户离开直播间
+                    onlineCountView.setText(message.getContent()) ;
+                    break;
+                }
+                case MessageType.SHUTUP_USER_MESSAGE_TYPE: {    //用户被禁言
+                    switchInputBtnState(true) ;
+                    break;
+                }
+                case MessageType.RELIEVE_SHUTUP_USER_MESSAGE_TYPE : {   //用户被解除禁言
+                    switchInputBtnState(false) ;
+                    break ;
+                }
+
+                case MessageType.KICKOUT_USER_MESSAGE_TYPE: {   //用户踢出主播间
+                    Toast.makeText(getActivity(), "您被主播踢出房间", Toast.LENGTH_SHORT).show();
+                    getActivity().finish() ;
+                    break ;
+                }
+
+                case MessageType.ANCHOR_EXIT_CHATROOM_MESSAGE_TYPE: {   //主播离开
+                    playActivityEvent.logoutService() ;
+                    playActivityEvent.replaceLiveOverFragment() ;
+                    break ;
+                }
+
+            }
+
+
+        }
+    } ;
 }
