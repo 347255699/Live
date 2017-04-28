@@ -73,7 +73,7 @@ public class ChatFragment extends Fragment {
     private LiveRoomPresenter liveRoomPresenter;
     private MobileUserVo mobileUserVo;
     private AnchorInfoProvider anchorInfoProvider;
-     private LiveRoomInfo liveRoomInfo;
+    private LiveRoomInfo liveRoomInfo;
     /**
      * 用户弹出框信息
      */
@@ -238,8 +238,14 @@ public class ChatFragment extends Fragment {
                     item3.put("account", "10001");
                     item3.put("nickname", message.getNickname());
                     addRecord(item3); // 添加消息记录
-                    break; // 提示用户被禁言
-                // TODO 提示用户关注了主播
+                    break; // 系统消息
+                case MessageType.USER_ATTENTION_CHATROOM:
+                    Map<String, String> item4 = new HashMap<>(3);
+                    item4.put("record", message.getContent());
+                    item4.put("account", "10002");
+                    item4.put("nickname", message.getNickname());
+                    addRecord(item4); // 添加消息记录
+                    break; //提示用户关注了主播
                 default:
                     break;
             }
@@ -307,6 +313,10 @@ public class ChatFragment extends Fragment {
                         msgTextView.setText(data.get(position).get("record")); // 显示提示信息
                         msgTextView.setTextColor(context.getResources().getColor(R.color.colorRed1));
                         break; // 用户被禁言或被提出房间
+                    case "10002":
+                        msgTextView.setText(data.get(position).get("record")); // 显示提示信息
+                        msgTextView.setTextColor(context.getResources().getColor(R.color.colorGold));
+                        break; // 用户关注了主播
                     default:
                         String msg = data.get(position).get("nickname") + "：" + data.get(position).get("record"); // 消息
                         int startIndex = msg.indexOf("："); // 消息间隔下标
@@ -336,7 +346,13 @@ public class ChatFragment extends Fragment {
      * 弹出用户信息的弹出框
      */
     private void showUserInfoDialog(SimpleUserVo simpleUserVo) {
+
         if (userInfoDialogView == null) userInfoDialogView = new UserInfoDialogView(getActivity());
+  /*      if(){
+            userInfoDialogView.getBtnHoldView().setVisibility(View.GONE);
+        }*/
+
+
         userInfoDialogView.setValueAndShow(simpleUserVo);
         Button shutUpBtn = userInfoDialogView.getShutupBtnView(); // 禁言
         Button kickoutBtn = userInfoDialogView.getKickoutBtnView(); // 踢出
@@ -391,7 +407,7 @@ public class ChatFragment extends Fragment {
     /**
      * 显示输入框
      */
-    public void showInput(){
+    public void showInput() {
         final DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite)
                 .setContentHolder(new ViewHolder(R.layout.item_chat_input))
                 .setOverlayBackgroundResource(R.color.transparent) // 设置为透明背景
@@ -399,7 +415,7 @@ public class ChatFragment extends Fragment {
                 .setGravity(Gravity.BOTTOM)
                 .create();
         dialog.show();
-        View dialogView =  dialog.getHolderView();
+        View dialogView = dialog.getHolderView();
         final EditText chatMsgEditText = (EditText) dialogView.findViewById(R.id.et_chat_msg); // 聊天内容输入框
         chatMsgEditText.setFocusable(true); // 自动对焦
         Button chatMsgSentBtn = (Button) dialogView.findViewById(R.id.btn_chat_send); // 发送按钮

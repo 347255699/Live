@@ -15,4 +15,6 @@ public interface OnPlayActivityEvent {
      * 注销服务
      */
     public void logoutService();
+
+
 }

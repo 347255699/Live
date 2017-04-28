@@ -145,20 +145,10 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
         }
     }
 
-    /**
-     * 获取直播信息
-     *
-     * @return
-     */
-    @Override
-    public MobileUserVo getAnchorInfo() {
-
-        return this.mobileUserVo;
-    }
-
     @Override
     public LiveRoomInfo getLiveRoomInfo() {
-        return null;
+        LiveRoomInfo liveRoomInfo = new LiveRoomInfo(mobileUserVo.getUserId(), mobileUserVo.getLiveRoomVo().getRoomId(), mobileUserVo.getLiveRoomVo().getRoomNum());
+        return liveRoomInfo;
     }
 
     /**

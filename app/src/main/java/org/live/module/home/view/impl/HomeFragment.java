@@ -31,87 +31,87 @@ import org.live.module.play.view.impl.PlayActivity;
 import java.util.List;
 
 /**
- *  主页fragment
- *
+ * 主页fragment
+ * <p>
  * Created by Mr.wang on 2017/3/14.
  */
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
 
-    public static final String TAG = "HOME" ;
+    public static final String TAG = "HOME";
 
-    private View currentFragmentView = null ;   //当前的fragment视图
+    private View currentFragmentView = null;   //当前的fragment视图
 
-    private RecyclerView liveRoomRecycleView ;
+    private RecyclerView liveRoomRecycleView;
 
-    private GridLayoutManager layoutManager = null ;    //grid布局管理器，为RecyclerView设置布局
+    private GridLayoutManager layoutManager = null;    //grid布局管理器，为RecyclerView设置布局
 
-    private LiveRoomGridAdapter adapter = null ;    //直播数据的适配器
+    private LiveRoomGridAdapter adapter = null;    //直播数据的适配器
 
-    private SwipeRefreshLayout refreshLayout = null ;  //下拉刷新
+    private SwipeRefreshLayout refreshLayout = null;  //下拉刷新
 
-    private View toSearchPageBtn ;  //跳转到搜索页面的按钮
+    private View toSearchPageBtn;  //跳转到搜索页面的按钮
 
-    private LiveRoomPresenter presenter ;
+    private LiveRoomPresenter presenter;
 
-    private Handler handler ;
+    private Handler handler;
 
-    private ImageView notFoundResultView ;  //未找到直播间的view
+    private ImageView notFoundResultView;  //未找到直播间的view
 
     /**
-     *  暂存点击的直播间的下标
+     * 暂存点击的直播间的下标
      */
-    private int clickPositionFlag ;
+    private int clickPositionFlag;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "HomeFragment执行了onCreateView") ;
-        if(currentFragmentView != null) return currentFragmentView ;
-        currentFragmentView = inflater.inflate(R.layout.fragment_home, null) ;
+        Log.d(TAG, "HomeFragment执行了onCreateView");
+        if (currentFragmentView != null) return currentFragmentView;
+        currentFragmentView = inflater.inflate(R.layout.fragment_home, null);
         initial();
-        newInstanceHandler() ;  //实例化handler
-        presenter = new LiveRoomPresenter(getContext(), handler) ;
-        presenter.loadLiveRoomData() ;
-        return currentFragmentView ;
+        newInstanceHandler();  //实例化handler
+        presenter = new LiveRoomPresenter(getContext(), handler);
+        presenter.loadLiveRoomData();
+        return currentFragmentView;
     }
 
     /**
-     *  初始化
+     * 初始化
      */
     public void initial() {
-        toSearchPageBtn = currentFragmentView.findViewById(R.id.btn_home_search) ;
-        toSearchPageBtn.setClickable(true) ;    //设置为可点击的
+        toSearchPageBtn = currentFragmentView.findViewById(R.id.btn_home_search);
+        toSearchPageBtn.setClickable(true);    //设置为可点击的
         notFoundResultView = (ImageView) currentFragmentView.findViewById(R.id.iv_home_notFound);
         refreshLayout = (SwipeRefreshLayout) currentFragmentView.findViewById(R.id.sl_home_refresh);
-        refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
+        refreshLayout.setColorSchemeResources(R.color.themeColor1);    //设置颜色
 
-        liveRoomRecycleView = (RecyclerView) currentFragmentView.findViewById(R.id.rv_home_liveRoomHold) ;
+        liveRoomRecycleView = (RecyclerView) currentFragmentView.findViewById(R.id.rv_home_liveRoomHold);
 
-        layoutManager = new GridLayoutManager(getContext(), 2) ;    //一行显示2列
+        layoutManager = new GridLayoutManager(getContext(), 2);    //一行显示2列
 
-        liveRoomRecycleView.setLayoutManager(layoutManager) ;
+        liveRoomRecycleView.setLayoutManager(layoutManager);
 
-        liveRoomRecycleView.addItemDecoration(new LiveRoomItemDecoration()) ;
+        liveRoomRecycleView.addItemDecoration(new LiveRoomItemDecoration());
 
-        adapter = new LiveRoomGridAdapter(getContext()) ;
+        adapter = new LiveRoomGridAdapter(getContext());
 
-        liveRoomRecycleView.setAdapter(adapter) ;
-        liveRoomRecycleView.setHasFixedSize(true) ; //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        liveRoomRecycleView.setAdapter(adapter);
+        liveRoomRecycleView.setHasFixedSize(true); //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         //下拉刷新数据
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.loadLiveRoomData() ;
+                presenter.loadLiveRoomData();
             }
         });
 
         toSearchPageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SearchLiveRoomActivity.class) ;
-                startActivity(intent) ;
+                Intent intent = new Intent(getActivity(), SearchLiveRoomActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -120,10 +120,10 @@ public class HomeFragment extends Fragment{
             @Override
             public void onItemClick(View view, int position) {
                 //Toast.makeText(getContext(), adapter.liveRoomList.get(position).getLiveRoomName(), Toast.LENGTH_SHORT).show() ;
-                String liveRoomId = adapter.liveRoomList.get(position).getLiveRoomId() ;    //直播间id
+                String liveRoomId = adapter.liveRoomList.get(position).getLiveRoomId();    //直播间id
                 String userId = HomeActivity.mobileUserVo.getUserId();  //用户id
-                clickPositionFlag = position ;  //更改暂存的下标
-                presenter.loadLiveRoomLimitations(userId, liveRoomId) ;
+                clickPositionFlag = position;  //更改暂存的下标
+                presenter.loadLiveRoomLimitations(userId, liveRoomId);
             }
         });
 
@@ -131,57 +131,58 @@ public class HomeFragment extends Fragment{
 
 
     public void newInstanceHandler() {
-        this.handler = new Handler(){
+        this.handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                if(msg.what == HomeConstants.LOAD_LIVE_ROOM_SUCCESS_FLAG) { //直播间数据加载成功
+                if (msg.what == HomeConstants.LOAD_LIVE_ROOM_SUCCESS_FLAG) { //直播间数据加载成功
                     SimpleResponseModel<List<LiveRoomVo>> dataModel = (SimpleResponseModel<List<LiveRoomVo>>) msg.obj;
-                    if(dataModel.getStatus() == 1) {
-                        adapter.liveRoomList.clear() ;    //先清空之间的直播间数据
+                    if (dataModel.getStatus() == 1) {
+                        adapter.liveRoomList.clear();    //先清空之间的直播间数据
                         List<LiveRoomVo> liveRoomVos = dataModel.getData();
-                        if(liveRoomVos == null || liveRoomVos.size() == 0) {    //没有直播间信息
-                            notFoundResultView.setVisibility(ImageView.VISIBLE) ;
-                            adapter.notifyDataSetChanged() ;
+                        if (liveRoomVos == null || liveRoomVos.size() == 0) {    //没有直播间信息
+                            notFoundResultView.setVisibility(ImageView.VISIBLE);
+                            adapter.notifyDataSetChanged();
                         } else {
-                            notFoundResultView.setVisibility(ImageView.GONE) ;
-                            adapter.liveRoomList.addAll(liveRoomVos) ;
-                            adapter.notifyDataSetChanged() ;
+                            notFoundResultView.setVisibility(ImageView.GONE);
+                            adapter.liveRoomList.addAll(liveRoomVos);
+                            adapter.notifyDataSetChanged();
                         }
                     } else {
-                        Toast.makeText(getContext(), "服务器繁忙！", Toast.LENGTH_LONG).show() ;
+                        Toast.makeText(getContext(), "服务器繁忙！", Toast.LENGTH_LONG).show();
                     }
 
-                } else if(msg.what == HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG) {     //用户在直播间的限制加载成功
+                } else if (msg.what == HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG) {     //用户在直播间的限制加载成功
                     SimpleResponseModel<List<Integer>> dataModel = (SimpleResponseModel<List<Integer>>) msg.obj;
-                    if(dataModel.getStatus() == 1) {
-                        List<Integer> limitations = dataModel.getData() ;
-                        if(limitations.contains(HomeConstants.LIMIT_TYPE_KICKOUT)) {
-                            Toast.makeText(getContext(), "您被直播踢出直播间，暂时不能进入该直播间！", Toast.LENGTH_SHORT).show() ;
+                    if (dataModel.getStatus() == 1) {
+                        List<Integer> limitations = dataModel.getData();
+                        if (limitations.contains(HomeConstants.LIMIT_TYPE_KICKOUT)) {
+                            Toast.makeText(getContext(), "您被直播踢出直播间，暂时不能进入该直播间！", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         //进入直播间
-                        Intent intent = new Intent(getActivity(), PlayActivity.class) ;
-                        if(limitations.contains(HomeConstants.LIMIT_TYPE_SHUTUP)) {
-                            intent.putExtra(HomeConstants.LIMIT_TYPE_KEY_FLAG, HomeConstants.LIMIT_TYPE_SHUTUP) ;
+                        Intent intent = new Intent(getActivity(), PlayActivity.class);
+                        if (limitations.contains(HomeConstants.LIMIT_TYPE_SHUTUP)) {
+                            intent.putExtra(HomeConstants.LIMIT_TYPE_KEY_FLAG, HomeConstants.LIMIT_TYPE_SHUTUP);
                         }
-                        LiveRoomVo liveRoomVo = adapter.liveRoomList.get(clickPositionFlag) ;   //得到被点击的直播间
-                        intent.putExtra(HomeConstants.LIVE_ROOM_ID_KEY, liveRoomVo.getLiveRoomId()) ;   //房间id
-                        intent.putExtra(HomeConstants.LIVE_ROOM_NAME_KEY, liveRoomVo.getLiveRoomName()) ;   //房间名
-                        intent.putExtra(HomeConstants.LIVE_ROOM_URL_KEY, liveRoomVo.getLiveRoomUrl()) ; //直播推流地址
-                        intent.putExtra(HomeConstants.HEAD_IMG_URL_KEY, liveRoomVo.getHeadImgUrl()) ;   //头像url
-                        intent.putExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, liveRoomVo.getOnlineCount()) ;    //在线人数
-                        intent.putExtra(HomeConstants.LIVE_ROOM_NUM_KEY, liveRoomVo.getRoomNum()) ;     //直播间号
-                        startActivity(intent) ;
+                        LiveRoomVo liveRoomVo = adapter.liveRoomList.get(clickPositionFlag);   //得到被点击的直播间
+                        intent.putExtra(HomeConstants.ANCHOR_ID_KEY, liveRoomVo.getAnchorId()); // 主播id
+                        intent.putExtra(HomeConstants.LIVE_ROOM_ID_KEY, liveRoomVo.getLiveRoomId());   //房间id
+                        intent.putExtra(HomeConstants.LIVE_ROOM_NAME_KEY, liveRoomVo.getLiveRoomName());   //房间名
+                        intent.putExtra(HomeConstants.LIVE_ROOM_URL_KEY, liveRoomVo.getLiveRoomUrl()); //直播推流地址
+                        intent.putExtra(HomeConstants.HEAD_IMG_URL_KEY, liveRoomVo.getHeadImgUrl());   //头像url
+                        intent.putExtra(HomeConstants.LIVE_ROOM_ONLINE_COUNT_KEY, liveRoomVo.getOnlineCount());    //在线人数
+                        intent.putExtra(HomeConstants.LIVE_ROOM_NUM_KEY, liveRoomVo.getRoomNum());     //直播间号
+                        startActivity(intent);
 
                     } else {
-                        Toast.makeText(getContext(), "服务器繁忙！", Toast.LENGTH_LONG).show() ;
+                        Toast.makeText(getContext(), "服务器繁忙！", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_LONG).show() ;
+                    Toast.makeText(getContext(), "连接服务器失败！", Toast.LENGTH_LONG).show();
                 }
-                refreshLayout.setRefreshing(false) ;    //隐藏刷新控件
+                refreshLayout.setRefreshing(false);    //隐藏刷新控件
             }
-        } ;
+        };
     }
 
 

@@ -25,6 +25,7 @@ import org.live.module.home.domain.AppAnchorInfo;
 import org.live.module.home.presenter.LiveRoomPresenter;
 import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.login.domain.MobileUserVo;
+import org.live.module.play.domain.LiveRoomInfo;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -46,8 +47,7 @@ public class LiveOverFragment extends Fragment {
 
     private Button returnBtn;      //返回按钮
 
-    private MobileUserVo mobileUserVo; // 用户引用
-
+    private LiveRoomInfo liveRoomInfo; // 直播间信息
     private View view;
 
     private Handler handler;
@@ -61,9 +61,9 @@ public class LiveOverFragment extends Fragment {
         liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler);
         if (getActivity() instanceof AnchorInfoProvider) {
             AnchorInfoProvider anchorInfoProvider = (AnchorInfoProvider) getActivity();
-            this.mobileUserVo = anchorInfoProvider.getAnchorInfo(); // 取得主播信息
+            this.liveRoomInfo = anchorInfoProvider.getLiveRoomInfo(); // 直播间信息
         }
-        liveRoomPresenter.loadAnchorInfoData(mobileUserVo.getUserId(), mobileUserVo.getLiveRoomVo().getRoomId()); // 加载数据
+        liveRoomPresenter.loadAnchorInfoData(liveRoomInfo.getAnchorId(), liveRoomInfo.getLiveRoomId()); // 加载数据
         initial();
         return view;
     }
@@ -73,7 +73,6 @@ public class LiveOverFragment extends Fragment {
      */
     private void initial() {
 
-        MobileUserVo.LiveRoomInUserVo liveRoomInUserVo = mobileUserVo.getLiveRoomVo();
 
         headImgView = (ImageView) view.findViewById(R.id.iv_live_over_headImg);
         accountView = (TextView) view.findViewById(R.id.tv_live_over_account);
@@ -81,13 +80,13 @@ public class LiveOverFragment extends Fragment {
         attentionCountView = (TextView) view.findViewById(R.id.tv_live_over_attentionCount);
         descriptionView = (TextView) view.findViewById(R.id.tv_live_over_description);
 
-        Glide.with(getActivity()).load(LiveConstants.REMOTE_SERVER_HTTP_IP + mobileUserVo.getHeadImgUrl())
+   /*     Glide.with(getActivity()).load(LiveConstants.REMOTE_SERVER_HTTP_IP + mobileUserVo.getHeadImgUrl())
                 .bitmapTransform(new CropCircleTransformation(getActivity()))
                 .into(headImgView); // 设置头像
         accountView.setText(mobileUserVo.getAccount()); // 设置主播账号
         nicknameView.setText(mobileUserVo.getNickname()); // 设置主播昵称
-        attentionCountView.setText("0");/*info.getAttentionCount() + ""*/ // 设置关注数
-        descriptionView.setText("签名: " + liveRoomInUserVo.getDescription()); // 设置主播签名
+        attentionCountView.setText("0");*//*info.getAttentionCount() + ""*//* // 设置关注数
+        descriptionView.setText("签名: " + liveRoomInUserVo.getDescription()); // 设置主播签名*/
 
 
         returnBtn = (Button) view.findViewById(R.id.btn_live_over_return);
@@ -99,7 +98,7 @@ public class LiveOverFragment extends Fragment {
         });
     }
 
-    private void initEventHandler(){
+    private void initEventHandler() {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
