@@ -29,6 +29,9 @@ import org.live.module.play.domain.LiveRoomInfo;
 import org.live.module.play.listener.OnPlayActivityEvent;
 import org.live.module.publish.view.impl.LiveOverFragment;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 
 /**
  * 直播拉流的Activity
@@ -67,6 +70,11 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
         mobileUserVo = HomeActivity.mobileUserVo; // 取得用户信息
         playFragment = new PlayFragment();
         chatFragment = new ChatFragment();
+        String nicknameEncoding = null ;
+        try {
+            nicknameEncoding = URLEncoder.encode(mobileUserVo.getNickname(), "UTF-8") ;
+        } catch (UnsupportedEncodingException e) {
+        }
         StringBuilder urlBuilder = new StringBuilder(128);
         urlBuilder.append(LiveConstants.REMOTE_SERVER_WEB_SOCKET_IP)
                 .append("/chat?account=")
@@ -74,7 +82,7 @@ public class PlayActivity extends FragmentActivity implements AnchorInfoProvider
                 .append("&chatroom=")
                 .append(liveRoomInfo.getLiveRoomNum())
                 .append("&nickname=")
-                .append(mobileUserVo.getNickname());
+                .append(nicknameEncoding) ;
         this.wsUrl = urlBuilder.toString();
         Intent serviceIntent = new Intent(this, AnchorChatService.class);
         serviceIntent.putExtra(LiveKeyConstants.Global_URL_KEY, wsUrl);

@@ -28,6 +28,9 @@ import org.live.module.login.domain.MobileUserVo;
 import org.live.module.play.domain.LiveRoomInfo;
 import org.live.module.publish.listener.OnPublishActivityListener;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * 推流主活动窗口
  */
@@ -56,8 +59,24 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
         this.rtmpUrl = getIntent().getStringExtra(LiveKeyConstants.Global_URL_KEY); // 初始化参数
         setContentView(R.layout.activity_recorder);
         this.mobileUserVo = HomeActivity.mobileUserVo;
-        this.wsUrl = LiveConstants.REMOTE_SERVER_WEB_SOCKET_IP + "/chat?account=" + mobileUserVo.getAccount() + "&chatroom=" + mobileUserVo.getLiveRoomVo().getRoomNum()
-                + "&nickname=" + mobileUserVo.getNickname() + "&anchor=" + 1; // websocket链接
+
+        String nicknameEncoding = null ;
+        try {
+            nicknameEncoding = URLEncoder.encode(mobileUserVo.getNickname(), "UTF-8") ;
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        StringBuilder urlStringBuilder = new StringBuilder(128) ;
+        urlStringBuilder.append(LiveConstants.REMOTE_SERVER_WEB_SOCKET_IP)
+                        .append("/chat?account=")
+                        .append(mobileUserVo.getAccount())
+                        .append("&chatroom=")
+                        .append(mobileUserVo.getLiveRoomVo().getRoomNum())
+                        .append("&nickname=")
+                        .append(nicknameEncoding)
+                        .append("&anchor=1") ;
+
+        this.wsUrl = urlStringBuilder.toString() ; // websocket链接
         Intent intent = new Intent(this, AnchorChatService.class);
         intent.putExtra(LiveKeyConstants.Global_URL_KEY, wsUrl);
         bindService(intent, conn, Context.BIND_AUTO_CREATE); // 绑定聊天服务
