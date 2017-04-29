@@ -172,6 +172,16 @@ public class PublishActivity extends FragmentActivity implements BackHandledInte
     }
 
     /**
+     * 取得websocket链接
+     *
+     * @return
+     */
+    @Override
+    public String getWsUrl() {
+        return this.wsUrl;
+    }
+
+    /**
      * 退出直播
      */
     @Override
