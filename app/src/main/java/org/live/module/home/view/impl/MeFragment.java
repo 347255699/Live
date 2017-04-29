@@ -68,7 +68,7 @@ public class MeFragment extends Fragment {
     private OnHomeActivityEventListener homeActivityEventListener;
     private MobileUserVo mobileUserVo; // 用户数据
 
-    private String[] mItemLabel = {"编辑个人信息", "我的收藏", "关于高校直播"};
+    private String[] mItemLabel = {"编辑个人信息", "我的关注", "关于高校直播"};
 
     @Nullable
     @Override

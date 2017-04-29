@@ -112,6 +112,7 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
     private CaptureFragment.BlackListAdapter blackListAdapter; // 黑名单适配器
     private int liftABanUserIndex; // 待解禁用户下标
     private OnCaptureActivityListener captureActivityListener;
+    private CaptureService.CaptureBinder captureBinder; // 录屏服务引用
 
     @Nullable
     @Override
@@ -370,7 +371,10 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
                                 @Override
                                 public void onBtnClick() {  //确定
                                     dialog.dismiss();
-                                    getActivity().unbindService(conn); // 解绑录屏服务
+                                    if (captureBinder != null) {
+                                        getActivity().unbindService(conn); // 解绑录屏服务
+                                        captureBinder = null; // 释放资源
+                                    }
                                 }
                             });
                         }
@@ -386,6 +390,7 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
                     if (CaptureService.isCapturing) {
                         showToastMsg("正在录屏直播，不能退出当前界面！", Toast.LENGTH_SHORT); // 提示未退出录屏直播
                     } else {
+                        captureActivityListener.logoutService(); // 注销服务
                         getActivity().finish();
                     }
                     break;
@@ -504,6 +509,7 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
          */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            captureBinder = (CaptureService.CaptureBinder) service;
             final CaptureService captureService = ((CaptureService.CaptureBinder) service).getCaptureService(); //返回一个CaptureService对象
             //注册录屏服务状态通知回调接口
             captureService.setServiceStatusListener(new OnCaptureServiceStatusListener() {
@@ -674,7 +680,11 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
                     refreshOnlineCount(onlineCount2); // 刷新在线观看人数
                     break; // 用户进入直播间
                 case MessageType.ANCHOR_EXIT_CHATROOM_MESSAGE_TYPE:
-                    getActivity().unbindService(conn); // 解绑录屏服务
+                    if (captureBinder != null) {
+                        getActivity().unbindService(conn); // 解绑录屏服务
+                        captureBinder = null; // 释放资源
+                    }
+
                     break; // 主播离开直播间
                 default:
                     break;

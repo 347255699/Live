@@ -48,10 +48,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".module.demo.MainActivity">
-        </activity>
-        <activity android:name=".module.publish.view.impl.PublishActivity"  android:configChanges="orientation|screenSize"/>
-        <activity android:name=".module.play.view.impl.PlayActivity" />
+        <activity android:name=".module.demo.MainActivity"></activity>
+        <activity
+            android:name=".module.publish.view.impl.PublishActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".module.play.view.impl.PlayActivity" />
         <activity
             android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"
             android:theme="@android:style/Theme.Translucent" />
@@ -61,7 +63,7 @@
         <activity
             android:name=".module.home.view.impl.HomeActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- service -->
         <service
             android:name=".common.service.PreferencesService"

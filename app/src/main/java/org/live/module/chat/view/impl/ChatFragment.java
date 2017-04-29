@@ -15,9 +15,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -254,6 +256,13 @@ public class ChatFragment extends Fragment {
                     item5.put("nickname", message.getNickname());
                     addRecord(item5); // 添加消息记录
                     break; //提示用户取消了关注
+                case MessageType.RELIEVE_SHUTUP_USER_MESSAGE_TYPE:
+                    Map<String, String> item6 = new HashMap<>(3);
+                    item6.put("record", message.getContent());
+                    item6.put("account", "10001");
+                    item6.put("nickname", message.getNickname());
+                    addRecord(item6); // 添加消息记录
+                    break; // 主播对用户接触禁言
                 default:
                     break;
             }
@@ -420,16 +429,31 @@ public class ChatFragment extends Fragment {
      * 显示输入框
      */
     public void showInput() {
+        ViewHolder viewHolder = new ViewHolder(R.layout.item_chat_input);
         final DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite)
-                .setContentHolder(new ViewHolder(R.layout.item_chat_input))
+                .setContentHolder(viewHolder)
                 .setOverlayBackgroundResource(R.color.transparent) // 设置为透明背景
                 .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setGravity(Gravity.BOTTOM)
                 .create();
+
         dialog.show();
         View dialogView = dialog.getHolderView();
         final EditText chatMsgEditText = (EditText) dialogView.findViewById(R.id.et_chat_msg); // 聊天内容输入框
-    //    chatMsgEditText.setFocusable(true); // 自动对焦
+        chatMsgEditText.setFocusable(true); // 获得焦点
+        chatMsgEditText.setOnFocusChangeListener(new android.view.View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    // 此处为失去焦点时的处理内容
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0); // 关闭软键盘
+                    }
+                }
+            }
+        });
+        //    chatMsgEditText.setFocusable(true); // 自动对焦
         Button chatMsgSentBtn = (Button) dialogView.findViewById(R.id.btn_chat_send); // 发送按钮
         chatMsgSentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
