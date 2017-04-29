@@ -11,13 +11,6 @@ public interface OnPublishActivityListener {
 
 
     /**
-     * 取得websocket链接
-     *
-     * @return
-     */
-    public String getWsUrl();
-
-    /**
      * 退出直播
      */
     public void backLiving();
