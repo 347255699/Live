@@ -1,15 +1,12 @@
-package org.live.module.publish.listener;
+package org.live.module.capture.listener;
 
 import org.live.module.chat.service.AnchorChatService;
 
 /**
- * 推流窗口
- * Created by KAM on 2017/4/24.
+ * Created by KAM on 2017/4/29.
  */
 
-public interface OnPublishActivityListener {
-
-
+public interface OnCaptureActivityListener {
     /**
      * 退出直播
      */
@@ -26,5 +23,4 @@ public interface OnPublishActivityListener {
      * 注销服务
      */
     public void logoutService();
-
 }

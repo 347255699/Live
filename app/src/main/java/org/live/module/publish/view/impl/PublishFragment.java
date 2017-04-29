@@ -702,17 +702,6 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         return definition;
     }
 
-/*    *//**
-     * 监听系统参数变化
-     *
-     * @param newConfig
-     *//*
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        int mobileRotation = this.getActivity().getWindowManager().getDefaultDisplay().getRotation();
-        recorderPresenter.onDisplayRotationChanged(mobileRotation);
-    }*/
-
 
     /**
      * 旋转屏幕时更改推流方向

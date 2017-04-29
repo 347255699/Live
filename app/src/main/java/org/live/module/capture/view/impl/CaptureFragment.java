@@ -1,9 +1,11 @@
 package org.live.module.capture.view.impl;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,14 +48,17 @@ import org.live.common.constants.LiveKeyConstants;
 import org.live.common.domain.MessageType;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
+import org.live.common.util.JsonUtils;
 import org.live.common.util.NetworkUtils;
 import org.live.common.util.ResponseModel;
+import org.live.module.capture.listener.OnCaptureActivityListener;
 import org.live.module.capture.listener.OnCaptureServiceStatusListener;
 import org.live.module.capture.presenter.CapturePresenter;
 import org.live.module.capture.presenter.impl.CapturePresenterImpl;
 import org.live.module.capture.service.CaptureService;
 import org.live.module.capture.util.WindowManagerUtil;
 import org.live.module.capture.view.CaptureView;
+import org.live.module.chat.service.AnchorChatService;
 import org.live.module.home.constants.HomeConstants;
 import org.live.module.home.domain.AppAnchorInfo;
 import org.live.module.home.presenter.LiveRoomPresenter;
@@ -61,6 +66,7 @@ import org.live.module.home.view.custom.AnchorInfoDialogView;
 import org.live.module.home.view.impl.HomeActivity;
 import org.live.module.login.domain.MobileUserVo;
 import org.live.module.publish.domain.LimitationVo;
+import org.live.module.publish.listener.OnPublishActivityListener;
 import org.live.module.publish.util.constant.PublishConstant;
 
 import java.util.ArrayList;
@@ -105,12 +111,17 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
     private AnchorInfoDialogView anchorInfoDialogView;     //主播信息弹出框的包裹view
     private CaptureFragment.BlackListAdapter blackListAdapter; // 黑名单适配器
     private int liftABanUserIndex; // 待解禁用户下标
+    private OnCaptureActivityListener captureActivityListener;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_capture, container);
+        view = inflater.inflate(R.layout.fragment_capture, container, false);
         onClickListener = new IconButtonOnClickListener();
         captureActivity = (CaptureActivity) getActivity();
+        if (getActivity() instanceof OnCaptureActivityListener) {
+            this.captureActivityListener = (OnCaptureActivityListener) getActivity();
+        }
         capturePresenter = new CapturePresenterImpl(getActivity(), null, this);
         rtmpUrl = captureActivity.getRtmpUrl(); // 获取推流地址
         this.mobileUserVo = HomeActivity.mobileUserVo; // 用户信息
@@ -118,6 +129,22 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
         newHanderInstance();
         liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler);
         return view;
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        registerReceiver(); // 注册广播接收器
+    }
+
+    /**
+     * 注册服务
+     */
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AnchorChatService.ACTION); // 绑定意图
+        filter.setPriority(Integer.MAX_VALUE); // 高优先级
+        getActivity().registerReceiver(chatReceiver, filter); // 注册广播接收器
     }
 
     @Override
@@ -130,6 +157,12 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
             }
         }
         super.onStart();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(chatReceiver); // 注销广播接收器
     }
 
     private void newHanderInstance() {
@@ -213,7 +246,7 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
 
                 View dialogView = dialog.getHolderView(); // 取得内容容器
                 ListView blackList = (ListView) dialogView.findViewById(R.id.lv_black_list);
-                 getData(); // 获取数据
+                getData(); // 获取数据
                 blackListAdapter = new BlackListAdapter(getActivity());
 
                 blackList.setAdapter(blackListAdapter);
@@ -244,6 +277,8 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
         isCapturing = false;
         cCaptureStatusButton.setIcon(MaterialDrawableBuilder.IconValue.PLAY);
         captureActivity.getcCapturingStatusTextView().setText("录屏直播未开始...");
+        captureActivityListener.logoutService(); // 解绑聊天服务
+        captureActivityListener.backLiving(); // 退出录屏直播
     }
 
     /**
@@ -253,7 +288,7 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
      * @param lengthType 消息显示时长
      */
     private void showToastMsg(String msg, int lengthType) {
-        Toast.makeText(getActivity().getApplicationContext(), msg, lengthType).show();
+        Toast.makeText(getActivity(), msg, lengthType).show();
     }
 
     @Override
@@ -279,12 +314,29 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
 
     @Override
     public void refreshOnlineCount(String count) {
-
+        pOnlineCount.setText(count);
     }
 
     @Override
     public void refreshBlackList(List<LimitationVo> limitationVos) {
+        if (limitationVos.size() > 0) {
+            for (LimitationVo limitationVo : limitationVos) {
+                Map<String, Object> item = new HashMap<>();
+                item.put("nickname", limitationVo.getNickname());
+                item.put("account", limitationVo.getAccount());
+                item.put("limitType", limitationVo.getLimitType());
+                item.put("userId", limitationVo.getUserId());
+                item.put("roomNum", limitationVo.getRoomNum());
+                data.add(item);
+            }
+        } else {
+            Map<String, Object> item = new HashMap<>();
+            item.put("nickname", "无相关内容");
+            item.put("account", "0");
+            data.add(item);
+        }
 
+        blackListAdapter.notifyDataSetChanged(); // 刷新黑名单视图
     }
 
     /**
@@ -305,7 +357,22 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
                             }
                             getActivity().bindService(intent, conn, Context.BIND_AUTO_CREATE); // 绑定录屏服务
                         } else {
-                            getActivity().unbindService(conn); // 解绑录屏服务
+                            final MaterialDialog dialog = new MaterialDialog(getActivity());
+                            dialog.content("您确定要结束直播吗？ ");
+                            dialog.btnNum(2).btnText("取消", "确定").btnTextColor(NormalDialog.STYLE_TWO);
+                            dialog.show();
+                            dialog.setOnBtnClickL(new OnBtnClickL() {
+                                @Override
+                                public void onBtnClick() {  //取消
+                                    dialog.dismiss();
+                                }
+                            }, new OnBtnClickL() {
+                                @Override
+                                public void onBtnClick() {  //确定
+                                    dialog.dismiss();
+                                    getActivity().unbindService(conn); // 解绑录屏服务
+                                }
+                            });
                         }
                         cCaptureStatusButton.setEnabled(true);
                     } else {
@@ -317,9 +384,10 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
                     break;
                 case R.id.btn_capture_close: // 关闭当前界面
                     if (CaptureService.isCapturing) {
-                        getActivity().unbindService(conn); // 解绑录屏服务
+                        showToastMsg("正在录屏直播，不能退出当前界面！", Toast.LENGTH_SHORT); // 提示未退出录屏直播
+                    } else {
+                        getActivity().finish();
                     }
-                    getActivity().finish();
                     break;
                 default:
                     break;
@@ -441,24 +509,26 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
             captureService.setServiceStatusListener(new OnCaptureServiceStatusListener() {
                 @Override
                 public void onServiceStop(boolean isNormal) {
-                    WindowManagerUtil.removeCaptureFABView(getActivity().getApplicationContext()); // 清除浮窗
+                    if (WindowManagerUtil.captureFABView != null) {
+                        WindowManagerUtil.removeCaptureFABView(getActivity()); // 清除浮窗
+                    }
                     showCapturePlayView();
-                    if (isNormal) {
+                /*    if (isNormal) {
                         showToastMsg("录屏直播已关闭", Toast.LENGTH_SHORT);
                     } else {
                         showToastMsg("网络无法连接，录屏直播已关闭", Toast.LENGTH_SHORT);
-                    }
+                    }*/
                 }
 
                 @Override
                 public void onServiceStart() {
                     Log.i(TAG, "onServiceStart");
-                    WindowManagerUtil.createCaptureFABView(getActivity().getApplicationContext(), new NoDoubleClickListener() {
+                    WindowManagerUtil.createCaptureFABView(getActivity(), new NoDoubleClickListener() {
                         @Override
                         protected void onNoDoubleClick(View v) {
                             switch (v.getId()) {
                                 case R.id.fab_capture_home:
-                                    startActivity(new Intent(getActivity().getApplicationContext(), CaptureActivity.class)); // 前往主页
+                                    // startActivity(new Intent(getActivity().getApplicationContext(), CaptureActivity.class)); // 前往主页
                                     break;
                                 case R.id.fab_capture_lock:
                                     if (!isPrivateMode) {
@@ -468,26 +538,7 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
                                     }
                                     break;
                                 case R.id.fab_capture_close:
-                                    BaseAnimatorSet bas_in = new FlipVerticalSwingEnter();  //动画，弹出提示框的动画
-                                    BaseAnimatorSet bas_out = new FadeExit();                //关闭提示框的动画
-                                    final MaterialDialog dialog = new MaterialDialog(getActivity());
-                                    dialog.content("确认关闭录屏直播?");
-                                    dialog.btnNum(2).btnText("取消", "确认").btnTextColor(NormalDialog.STYLE_TWO);
-                                    dialog.showAnim(bas_in)
-                                            .dismissAnim(bas_out)
-                                            .show();
-                                    dialog.setOnBtnClickL(new OnBtnClickL() {
-                                        @Override
-                                        public void onBtnClick() {  // 确认
-                                            dialog.dismiss();
-                                        }
-                                    }, new OnBtnClickL() {
-                                        @Override
-                                        public void onBtnClick() {  // 取消
-                                            getActivity().unbindService(conn); // 解绑录屏服务
-                                            dialog.dismiss();
-                                        }
-                                    });
+                                    WindowManagerUtil.removeCaptureFABView(getActivity()); // 清除浮窗
                                     break;
                                 default:
                                     break;
@@ -589,7 +640,7 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
                     message.setDestination(roomNum + "-" + userAccount);
                     message.setNickname(userNickname); // 构建消息
 
-                    //publishActivityListener.getChatReceiveServiceBinder().sendMsg(message); // 发送消息
+                    captureActivityListener.getChatReceiveServiceBinder().sendMsg(message); // 发送消息
                     data.remove(position);
                     if (data.size() == 0) {
                         Map<String, Object> item2 = new HashMap<>();
@@ -605,4 +656,29 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
 
         }
     }
+
+    /**
+     * 广播接收器
+     */
+    private BroadcastReceiver chatReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            org.live.common.domain.Message message = JsonUtils.fromJson(intent.getStringExtra("msg"), org.live.common.domain.Message.class);
+            switch (message.getMessageType()) {
+                case MessageType.USER_ENTER_CHATROOM_MESSAGE_TYPE:
+                    String onlineCount = message.getContent();
+                    refreshOnlineCount(onlineCount); // 刷新在线观看人数
+                    break; // 用户进入直播间
+                case MessageType.USER_EXIT_CHATROOM_MESSAGE_TYPE:
+                    String onlineCount2 = message.getContent();
+                    refreshOnlineCount(onlineCount2); // 刷新在线观看人数
+                    break; // 用户进入直播间
+                case MessageType.ANCHOR_EXIT_CHATROOM_MESSAGE_TYPE:
+                    getActivity().unbindService(conn); // 解绑录屏服务
+                    break; // 主播离开直播间
+                default:
+                    break;
+            }
+        }
+    };
 }
