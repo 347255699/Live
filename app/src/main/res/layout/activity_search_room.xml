@@ -20,11 +20,12 @@
             app:materialIconColor="@color/colorWhite"
             app:materialIconSize="35dp"
             android:layout_gravity="left|center_vertical"
+            android:background="@drawable/selector_green_corners_button"
              />
         <EditText
             android:id="@+id/et_search_input"
-            android:layout_width="255dp"
-            android:layout_height="32dp"
+            android:layout_width="260dp"
+            android:layout_height="35dp"
             android:layout_gravity="center|center_vertical"
             android:hint="主播号|房间号|主播昵称|房间名"
             android:textColorHint="@color/colorShallowGray"
@@ -42,7 +43,9 @@
             app:materialIconColor="@color/colorWhite"
             app:materialIconSize="28dp"
             android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_green_corners_button"
+            />
     </android.support.v7.widget.Toolbar>
 
     <ImageView

@@ -27,7 +27,8 @@
             app:materialIconColor="@color/colorWhite"
             app:materialIconSize="28dp"
             android:layout_gravity="right"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_green_corners_button"/>
     </android.support.v7.widget.Toolbar>
 
     <ImageView
