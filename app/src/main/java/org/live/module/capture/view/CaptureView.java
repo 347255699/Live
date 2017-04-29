@@ -1,5 +1,8 @@
 package org.live.module.capture.view;
 
+import org.live.module.publish.domain.LimitationVo;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,4 +12,13 @@ import java.util.Map;
 
 public interface CaptureView {
     void onShowQualitySettingsView(Map<String, Object> config); // 显示推流参数设置视图
+
+    /**
+     * 刷新当前在线观看人数
+     *
+     * @param count
+     */
+    public void refreshOnlineCount(String count);
+
+    public void refreshBlackList(List<LimitationVo> limitationVos); // 刷新黑名单
 }

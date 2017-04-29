@@ -379,7 +379,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         }
         dialog = DialogPlus.newDialog(getActivity()).setBackgroundColorResId(R.color.colorWall)
                 .setContentHolder(new ViewHolder(R.layout.dialog_beauty_settings))
-                .setExpanded(true, 375).setGravity(Gravity.BOTTOM)
+                .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT).setGravity(Gravity.BOTTOM)
                 .create();
         dialog.show();
         initBeautySettingsRangeBar(dialog.getHolderView(), beauty, whitening); // 监听并初始化拉杆
@@ -410,7 +410,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         dialog = DialogPlus.newDialog(getActivity())
                 .setBackgroundColorResId(R.color.colorWall)
                 .setContentHolder(new ViewHolder(R.layout.dialog_volume_settings))
-                .setExpanded(true, 550).setGravity(Gravity.BOTTOM)
+                .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT).setGravity(Gravity.BOTTOM)
                 .create();
         dialog.show();
         initVolumeSettingsView(dialog.getHolderView(), microphone, volume, isVolumeOff);
@@ -431,7 +431,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
         dialog = DialogPlus.newDialog(getActivity())
                 .setBackgroundColorResId(R.color.colorWall)
                 .setContentHolder(new ViewHolder(R.layout.dialog_publish_settings))
-                .setExpanded(true, 350).setGravity(Gravity.BOTTOM)
+                .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT).setGravity(Gravity.BOTTOM)
                 .create();
         dialog.show();
         initPublishSettingsView(dialog.getHolderView(), config);
@@ -722,7 +722,7 @@ public class PublishFragment extends BackHandledFragment implements PublishView 
     }
 
     /**
-     * 黑明单适配器
+     * 黑名单适配器
      */
     public class BlackListAdapter extends BaseAdapter {
         private LayoutInflater inflater;

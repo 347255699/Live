@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,9 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.FadeExit.FadeExit;
 import com.flyco.animation.FlipEnter.FlipVerticalSwingEnter;
@@ -26,28 +35,40 @@ import com.flyco.dialog.widget.MaterialDialog;
 import com.flyco.dialog.widget.NormalDialog;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.suke.widget.SwitchButton;
 import com.tencent.rtmp.TXLiveConstants;
 
 import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
 import net.steamcrafted.materialiconlib.MaterialIconView;
 
 import org.live.R;
+import org.live.common.constants.LiveConstants;
 import org.live.common.constants.LiveKeyConstants;
+import org.live.common.domain.MessageType;
 import org.live.common.listener.BackHandledFragment;
 import org.live.common.listener.NoDoubleClickListener;
 import org.live.common.util.NetworkUtils;
+import org.live.common.util.ResponseModel;
 import org.live.module.capture.listener.OnCaptureServiceStatusListener;
 import org.live.module.capture.presenter.CapturePresenter;
 import org.live.module.capture.presenter.impl.CapturePresenterImpl;
 import org.live.module.capture.service.CaptureService;
 import org.live.module.capture.util.WindowManagerUtil;
 import org.live.module.capture.view.CaptureView;
-import org.live.module.play.view.impl.PlayActivity;
-import org.live.module.play.view.impl.PlayFragment;
+import org.live.module.home.constants.HomeConstants;
+import org.live.module.home.domain.AppAnchorInfo;
+import org.live.module.home.presenter.LiveRoomPresenter;
+import org.live.module.home.view.custom.AnchorInfoDialogView;
+import org.live.module.home.view.impl.HomeActivity;
+import org.live.module.login.domain.MobileUserVo;
+import org.live.module.publish.domain.LimitationVo;
 import org.live.module.publish.util.constant.PublishConstant;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * 录屏模块
@@ -72,6 +93,18 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
     private CapturePresenter capturePresenter;
     private String pDefinitionInfos[] = {"标清", "高清", "超清"};
 
+    private MobileUserVo mobileUserVo; // 用户信息
+    private ImageView pHeadImgImageView; // 用户头像视图
+    private TextView pLiveRoomName; // 直播间名称
+    private TextView pOnlineCount; // 在线人数
+    private RelativeLayout pLiveRoomInfoRelativeLayout; // 直播间信息视图
+    private Button pBlockListButton;// 黑名单按钮
+    private Handler handler;
+    private List<Map<String, Object>> data;
+    private LiveRoomPresenter liveRoomPresenter;
+    private AnchorInfoDialogView anchorInfoDialogView;     //主播信息弹出框的包裹view
+    private CaptureFragment.BlackListAdapter blackListAdapter; // 黑名单适配器
+    private int liftABanUserIndex; // 待解禁用户下标
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,7 +113,10 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
         captureActivity = (CaptureActivity) getActivity();
         capturePresenter = new CapturePresenterImpl(getActivity(), null, this);
         rtmpUrl = captureActivity.getRtmpUrl(); // 获取推流地址
+        this.mobileUserVo = HomeActivity.mobileUserVo; // 用户信息
         initUIElements();
+        newHanderInstance();
+        liveRoomPresenter = new LiveRoomPresenter(getActivity(), handler);
         return view;
     }
 
@@ -94,6 +130,34 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
             }
         }
         super.onStart();
+    }
+
+    private void newHanderInstance() {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == HomeConstants.LOAD_ANCHOR_INFO_SUCCESS_FLAG) {   //加载主播信息成功
+                    ResponseModel<AppAnchorInfo> dataModel = (ResponseModel) msg.obj;
+                    if (dataModel.getStatus() == 1) {
+                        AppAnchorInfo info = dataModel.getData();
+                        showAnchorInfoDialog(info);
+                    }
+                }
+            }
+        };
+    }
+
+    /**
+     * 弹出主播信息的弹出框
+     *
+     * @param info
+     */
+    private void showAnchorInfoDialog(AppAnchorInfo info) {
+        if (anchorInfoDialogView == null)
+            anchorInfoDialogView = new AnchorInfoDialogView(getActivity());
+        anchorInfoDialogView.getReportView().setVisibility(View.GONE);     //隐藏举报
+        anchorInfoDialogView.getAttentionHold().setVisibility(View.GONE);  //隐藏关注按钮
+        anchorInfoDialogView.setValueAndShow(info);
     }
 
     /**
@@ -113,6 +177,55 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
         cCaptureStatusButton.setOnClickListener(onClickListener);
         cCaptureSettingsButton.setOnClickListener(onClickListener);
         cCaptureCloseButton.setOnClickListener(onClickListener);
+
+        pHeadImgImageView = (ImageView) view.findViewById(R.id.iv_capture_head_img);
+        pLiveRoomName = (TextView) view.findViewById(R.id.tv_capture_live_room_name);
+        pOnlineCount = (TextView) view.findViewById(R.id.tv_capture_online_count);
+        pLiveRoomInfoRelativeLayout = (RelativeLayout) view.findViewById(R.id.rl_capture_live_room_info);
+        pLiveRoomInfoRelativeLayout.getBackground().setAlpha(ALPHHA_DEFAULT_VALUE); // 设置透明度*/
+
+        Glide.with(getActivity()).load(LiveConstants.REMOTE_SERVER_HTTP_IP + mobileUserVo.getHeadImgUrl())
+                .bitmapTransform(new CropCircleTransformation(getActivity()))
+                .into(pHeadImgImageView); // 设置头像
+        pLiveRoomName.setText(mobileUserVo.getLiveRoomVo().getRoomName());
+
+        pBlockListButton = (Button) view.findViewById(R.id.btn_capture_black_list);
+        pBlockListButton.getBackground().setAlpha(150);
+        pBlockListButton.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            protected void onNoDoubleClick(View v) {
+                final DialogPlus dialog = DialogPlus.newDialog(getActivity()).setContentBackgroundResource(R.color.colorWhite)
+                        .setContentHolder(new ViewHolder(R.layout.dialog_black_list))
+                        .setHeader(R.layout.dialog_header)
+                        .setContentHeight(650)
+                        .setGravity(Gravity.CENTER)
+                        .create();
+                dialog.show();
+                View dialogHeader = dialog.getHeaderView(); // 取得标题栏
+                dialogHeader.findViewById(R.id.btn_header_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                }); // 绑定取消按钮
+                TextView headerTitleTextView = (TextView) dialogHeader.findViewById(R.id.tv_header_title);
+                headerTitleTextView.setText("黑名单"); // 设置标题
+
+                View dialogView = dialog.getHolderView(); // 取得内容容器
+                ListView blackList = (ListView) dialogView.findViewById(R.id.lv_black_list);
+                 getData(); // 获取数据
+                blackListAdapter = new BlackListAdapter(getActivity());
+
+                blackList.setAdapter(blackListAdapter);
+            }
+        }); // 黑名单按钮点击
+
+        pLiveRoomInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                liveRoomPresenter.loadAnchorInfoData(mobileUserVo.getUserId(), mobileUserVo.getLiveRoomVo().getRoomId());
+            }
+        });
     }
 
     /**
@@ -147,11 +260,31 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
     public void onShowQualitySettingsView(Map<String, Object> config) {
         DialogPlus dialog = DialogPlus.newDialog(getActivity())
                 .setBackgroundColorResId(R.color.colorWall)
-                .setContentHolder(new ViewHolder(R.layout.dialog_publish_settings))
-                .setExpanded(true, 350).setGravity(Gravity.BOTTOM)
+                .setContentHolder(new ViewHolder(R.layout.dialog_quality_settings))
+                .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setGravity(Gravity.BOTTOM)
                 .create();
         dialog.show();
         initQualitySettingsView(dialog.getHolderView(), config);
+    }
+
+    /**
+     * 获得数据
+     */
+    public void getData() {
+        List<Map<String, Object>> data = new ArrayList<>();
+        capturePresenter.getBlackListData(); // 获取数据
+        this.data = data;
+    }
+
+    @Override
+    public void refreshOnlineCount(String count) {
+
+    }
+
+    @Override
+    public void refreshBlackList(List<LimitationVo> limitationVos) {
+
     }
 
     /**
@@ -202,7 +335,7 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
      * @param config
      */
     public void initQualitySettingsView(View qualitySettingsView, Map<String, Object> config) {
-        Spinner pDefinitionSpinner = (Spinner) qualitySettingsView.findViewById(R.id.spin_pulish_definition);
+        Spinner pDefinitionSpinner = (Spinner) qualitySettingsView.findViewById(R.id.spin_quality_definition);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pDefinitionInfos); // 建立Adapter并且绑定数据源
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -383,4 +516,93 @@ public class CaptureFragment extends BackHandledFragment implements CaptureView 
             });
         }
     };
+
+    /**
+     * 黑名单适配器
+     */
+    public class BlackListAdapter extends BaseAdapter {
+        private LayoutInflater inflater;
+        private Context context;
+
+        public BlackListAdapter(Context context) {
+            this.context = context;
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return arg0;
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            // TODO Auto-generated method stub
+            return arg0;
+        }
+
+        @Override
+        public View getView(final int position, View view, ViewGroup arg2) {
+            if (view == null) {
+                view = inflater.inflate(R.layout.item_black_list, null);
+            }
+            TextView nicknameTextView = (TextView) view.findViewById(R.id.tv_black_list_nickname);
+            Button btn = (Button) view.findViewById(R.id.btn_black_list_relieve);
+            Map<String, Object> item = data.get(position);
+            String nickname = (String) item.get("nickname");
+            String account = (String) item.get("account");
+            if (position == 0) {
+                if (account.equals("0")) {
+                    nicknameTextView.setText(nickname);
+                    btn.setVisibility(View.GONE);
+                    return view;
+                }
+            }
+            int limitType = (int) item.get("limitType");
+            nicknameTextView.setText(nickname); // 设置昵称
+            String btnTxt = (limitType == PublishConstant.BLACK_LIST_LIMIT_TYPE_SHUTUP) ? "解除禁言" : "解除踢出";
+            btn.setText(btnTxt); // 设置按钮内容
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    liftABanUserIndex = position; // 缓存待解禁用户下标
+                    Map<String, Object> item = data.get(position);
+                    int limitType = (int) item.get("limitType"); // 解禁类型
+                    String roomNum = mobileUserVo.getLiveRoomVo().getRoomNum(); // 房间号
+                    String userAccount = (String) item.get("account"); // 待解禁用户账号
+                    String userNickname = (String) item.get("nickname"); // 取得待发消息内容项
+
+                    org.live.common.domain.Message message = new org.live.common.domain.Message();
+                    message.setAccount(userAccount);
+                    message.setFromChatRoomNum(roomNum);
+                    if (limitType == PublishConstant.BLACK_LIST_LIMIT_TYPE_SHUTUP) {
+                        message.setMessageType(MessageType.RELIEVE_SHUTUP_USER_MESSAGE_TYPE);
+                    } else {
+                        message.setMessageType(MessageType.RELIEVE_KICKOUT_USER_MESSAGE_TYPE);
+                    }
+                    message.setDestination(roomNum + "-" + userAccount);
+                    message.setNickname(userNickname); // 构建消息
+
+                    //publishActivityListener.getChatReceiveServiceBinder().sendMsg(message); // 发送消息
+                    data.remove(position);
+                    if (data.size() == 0) {
+                        Map<String, Object> item2 = new HashMap<>();
+                        item2.put("nickname", "无相关内容");
+                        item2.put("account", "0");
+                        data.add(item2);
+                    }
+                    blackListAdapter.notifyDataSetChanged(); // 刷新视图
+
+                }
+            }); // 解禁按钮
+            return view;
+
+        }
+    }
 }

@@ -1,10 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+    <!-- 直播间信息 -->
+    <RelativeLayout
+        android:id="@+id/rl_capture_live_room_info"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_corners_liveroom_info"
+        android:clickable="true"
+        android:paddingBottom="1dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="15dp"
+        android:paddingTop="1dp">
 
+        <ImageView
+            android:id="@+id/iv_capture_head_img"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/hint_404" />
+
+        <TextView
+            android:id="@+id/tv_capture_live_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/iv_capture_head_img"
+            android:text="主播名称"
+            android:textColor="@color/colorWhite"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tv_capture_online_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_capture_live_room_name"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@id/iv_capture_head_img"
+            android:text="1"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+    </RelativeLayout>
+    <!-- 黑名单按钮 -->
+    <Button
+        android:id="@+id/btn_capture_black_list"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/select_btn_red_bg"
+        android:text="黑名单"
+        android:textColor="@color/colorWhite" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,8 +79,8 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
-                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="play"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -47,8 +98,8 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
-                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="settings"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
@@ -66,10 +117,10 @@
                 android:background="@drawable/round_backgroud"
                 android:padding="5dp"
                 android:scaleType="center"
-                app:materialIconColor="@color/colorWhite"
                 app:materialIcon="close"
+                app:materialIconColor="@color/colorWhite"
                 app:materialIconSize="@dimen/icon_recorder_size" />
         </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

@@ -4,9 +4,9 @@
     android:id="@+id/activity_capture"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBlack"
+    android:background="@color/colorlittleBlack"
     tools:context="org.live.module.capture.view.impl.CaptureActivity">
-
+    <!-- 黑名单按钮 -->
     <TextView
         android:id="@+id/tv_capture_status"
         android:layout_width="wrap_content"

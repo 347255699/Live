@@ -36,4 +36,6 @@ public interface CaptureModel {
      */
     void setVideoQuality(Integer videoQuality);
 
+    public void getBlackListData(); // 取得黑名单数据
+
 }

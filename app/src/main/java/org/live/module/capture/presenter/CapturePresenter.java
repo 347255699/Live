@@ -34,4 +34,6 @@ public interface CapturePresenter {
      * @param videoQuality
      */
     void setVideoQuality(Integer videoQuality);
+
+    void getBlackListData(); // 取得黑名单数据
 }

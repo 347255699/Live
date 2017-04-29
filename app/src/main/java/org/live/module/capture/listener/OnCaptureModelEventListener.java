@@ -1,5 +1,8 @@
 package org.live.module.capture.listener;
 
+import org.live.module.publish.domain.LimitationVo;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +33,9 @@ public interface OnCaptureModelEventListener {
      *
      * @param isPrivateMode
      */
-    public void onPrivateModeStatus(boolean isPrivateMode);
+    void onPrivateModeStatus(boolean isPrivateMode);
 
     void onShowQualitySettingsView(Map<String, Object> config); // 显示推流参数设置视图
+
+    void refreshBlackList(List<LimitationVo> limitationVos); // 刷新黑名单
 }

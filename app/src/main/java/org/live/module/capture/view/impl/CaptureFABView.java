@@ -12,8 +12,10 @@ import net.steamcrafted.materialiconlib.MaterialIconView;
 import org.live.R;
 import org.live.common.listener.NoDoubleClickListener;
 import org.live.module.capture.view.CaptureView;
+import org.live.module.publish.domain.LimitationVo;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -163,6 +165,16 @@ public class CaptureFABView extends LinearLayout implements CaptureView{
 
     @Override
     public void onShowQualitySettingsView(Map<String, Object> config) {
+
+    }
+
+    @Override
+    public void refreshOnlineCount(String count) {
+
+    }
+
+    @Override
+    public void refreshBlackList(List<LimitationVo> limitationVos) {
 
     }
 }

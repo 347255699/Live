@@ -4,17 +4,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 
+import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.AsyncHttpGet;
+import com.koushikdutta.async.http.AsyncHttpResponse;
 import com.tencent.rtmp.ITXLivePushListener;
 import com.tencent.rtmp.TXLivePushConfig;
 import com.tencent.rtmp.TXLivePusher;
 
 import org.live.R;
+import org.live.common.constants.LiveConstants;
 import org.live.common.service.PreferencesService;
+import org.live.common.util.JsonUtils;
+import org.live.common.util.ResponseModel;
+import org.live.common.util.SimpleResponseModel;
 import org.live.module.capture.listener.OnCaptureModelEventListener;
 import org.live.module.capture.model.CaptureModel;
+import org.live.module.home.constants.HomeConstants;
+import org.live.module.home.view.impl.HomeActivity;
+import org.live.module.publish.domain.LimitationVo;
 import org.live.module.publish.util.constant.PublishConstant;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.tencent.rtmp.TXLiveConstants.PUSH_ERR_NET_DISCONNECT;
@@ -101,6 +116,39 @@ public class CaptureModelImpl implements CaptureModel, ITXLivePushListener {
         intent.putExtras(getBundle());
         context.startService(intent); // 开启参数持久化服务类
     }
+
+    @Override
+    public void getBlackListData() {
+        AsyncHttpGet request = new AsyncHttpGet(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/limits?liveRoomId=" + HomeActivity.mobileUserVo.getLiveRoomVo().getRoomId());
+        AsyncHttpClient.getDefaultInstance().executeString(request, new AsyncHttpClient.StringCallback() {
+            @Override
+            public void onCompleted(Exception e, AsyncHttpResponse source, String result) {
+                Message message = responseHandler.obtainMessage();
+                if (e != null) {
+                    Log.e("Global", e.getMessage());
+                    return;
+                }
+                ResponseModel<List<LimitationVo>> dataModel = JsonUtils.fromJson(result, new TypeToken<SimpleResponseModel<List<LimitationVo>>>() {
+                }.getType());
+                if (dataModel == null) {
+                    dataModel = new SimpleResponseModel<>();
+                }
+                message.obj = dataModel;
+                message.what = HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG;
+                responseHandler.sendMessage(message);
+            }
+        });
+    }
+
+    Handler responseHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == HomeConstants.LOAD_LIMITATION_SUCCESS_FLAG) {
+                ResponseModel<List<LimitationVo>> dataModel = (ResponseModel<List<LimitationVo>>) msg.obj;
+                eventListener.refreshBlackList(dataModel.getData()); // 刷新黑名单
+            }
+        }
+    }; // 处理响应
 
     @Override
     public void onPushEvent(int i, Bundle bundle) {

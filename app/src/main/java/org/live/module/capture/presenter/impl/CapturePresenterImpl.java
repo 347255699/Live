@@ -12,7 +12,9 @@ import org.live.module.capture.presenter.CapturePresenter;
 import org.live.module.capture.util.WindowManagerUtil;
 import org.live.module.capture.util.constant.CaptureConstant;
 import org.live.module.capture.view.CaptureView;
+import org.live.module.publish.domain.LimitationVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,6 +69,11 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
         captureModel.setVideoQuality(videoQuality);
     }
 
+    @Override
+    public void getBlackListData() {
+        captureModel.getBlackListData();
+    }
+
     /**
      * 通知正在录屏直播
      */
@@ -110,6 +117,11 @@ public class CapturePresenterImpl implements CapturePresenter, OnCaptureModelEve
     @Override
     public void onShowQualitySettingsView(Map<String, Object> config) {
         captureView2.onShowQualitySettingsView(config);
+    }
+
+    @Override
+    public void refreshBlackList(List<LimitationVo> limitationVos) {
+        captureView2.refreshBlackList(limitationVos);
     }
 
 
