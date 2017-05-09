@@ -16,19 +16,25 @@
         android:text="@string/capturing_status"
         android:textColor="@color/colorGray"
         android:textSize="25dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/capture_hint"
+        android:layout_below="@id/tv_capture_status"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_below="@id/tv_capture_status"
+        android:text="@string/capture_hint"
         android:textColor="@color/colorGray"
         android:textSize="10dp" />
-    <fragment
-        android:id="@+id/fgt_capture"
-        android:name="org.live.module.capture.view.impl.CaptureFragment"
+
+    <FrameLayout
+        android:id="@+id/fl_capture"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/fl_capture_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>
