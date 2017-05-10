@@ -197,4 +197,9 @@ public class HomeConstants {
      */
     public static final int LIVING_TYPE_GENERAL = 1;
 
+    /**
+     * 检查是否处在禁播
+     */
+    public static final int HTTP_RESPONSE_IS_BAN_RESULT_CODE = 1111;
+
 }

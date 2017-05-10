@@ -42,4 +42,9 @@ public interface OnHomeActivityEventListener {
      * 刷新视图
      */
     public void refreshFragment();
+
+    /**
+     * 检查直播间是否被禁播
+     */
+    public void checkLiveRoomIsBan();
 }

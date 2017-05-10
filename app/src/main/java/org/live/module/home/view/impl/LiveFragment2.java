@@ -152,16 +152,7 @@ public class LiveFragment2 extends Fragment {
         lStartLivingButton.setOnClickListener(new NoDoubleClickListener() {
             @Override
             protected void onNoDoubleClick(View v) {
-                int rbId = lLivingTypeRadioGroup.getCheckedRadioButtonId();
-                int type = (rbId == R.id.rb_capture) ? HomeConstants.LIVING_TYPE_CAPTURE : HomeConstants.LIVING_TYPE_GENERAL;
-                Intent intent;
-                if (type == HomeConstants.LIVING_TYPE_CAPTURE) {
-                    intent = new Intent(getActivity(), CaptureActivity.class); // 录屏直播
-                } else {
-                    intent = new Intent(getActivity(), PublishActivity.class); // 普通直播
-                }
-                intent.putExtra(LiveKeyConstants.Global_URL_KEY, liveRoomInUserVo.getLiveRoomUrl()); // 推流地址
-                startActivity(intent); // 进入直播间
+                homeActivityEventListener.checkLiveRoomIsBan();
             }
         }); // 绑定开始直播按钮
 
@@ -233,5 +224,25 @@ public class LiveFragment2 extends Fragment {
             data.add(map);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 进入直播间
+     */
+    public void intoLiveRoom(boolean isBan) {
+        if (!isBan) {
+            int rbId = lLivingTypeRadioGroup.getCheckedRadioButtonId();
+            int type = (rbId == R.id.rb_capture) ? HomeConstants.LIVING_TYPE_CAPTURE : HomeConstants.LIVING_TYPE_GENERAL;
+            Intent intent;
+            if (type == HomeConstants.LIVING_TYPE_CAPTURE) {
+                intent = new Intent(getActivity(), CaptureActivity.class); // 录屏直播
+            } else {
+                intent = new Intent(getActivity(), PublishActivity.class); // 普通直播
+            }
+            intent.putExtra(LiveKeyConstants.Global_URL_KEY, liveRoomInUserVo.getLiveRoomUrl()); // 推流地址
+            startActivity(intent); // 进入直播间
+        } else {
+            Toast.makeText(getActivity(), "您已被禁播", Toast.LENGTH_SHORT).show();
+        }
     }
 }

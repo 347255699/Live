@@ -21,6 +21,7 @@ public interface AnchorInfoPresenter {
 
     /**
      * 裁剪房间封面
+     *
      * @param uri
      */
     public void cropRoomCover(Uri uri);
@@ -35,4 +36,9 @@ public interface AnchorInfoPresenter {
      * 校验输入项
      */
     public boolean validateInputItem(String key, String val);
+
+    /**
+     * 检查直播间是否被禁播
+     */
+    public void checkLiveRoomIsBan();
 }

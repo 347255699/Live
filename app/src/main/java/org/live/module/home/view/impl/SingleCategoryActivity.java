@@ -35,35 +35,35 @@ import org.live.module.play.view.impl.PlayActivity;
 import java.util.List;
 
 /**
- *  展示某直播分类下的直播间
- *  展示我的收藏中的直播间
+ * 展示某直播分类下的直播间
+ * 展示我的收藏中的直播间
  * Created by Mr.wang on 2017/4/5.
  */
 public class SingleCategoryActivity extends AppCompatActivity {
 
-    public static final String TAG = "HOME" ;
+    public static final String TAG = "HOME";
 
-    private TextView titleTextView ; //title名称的textview
+    private TextView titleTextView; //title名称的textview
 
-    private SwipeRefreshLayout refreshLayout ;  //下拉刷新
+    private SwipeRefreshLayout refreshLayout;  //下拉刷新
 
-    private RecyclerView liveRoomRecycleView ;
+    private RecyclerView liveRoomRecycleView;
 
-    private LiveRoomGridAdapter adapter ;
+    private LiveRoomGridAdapter adapter;
 
-    private String categoryName ;   //分类名称
+    private String categoryName;   //分类名称
 
-    private String categoryId ;     //分类id
+    private String categoryId;     //分类id
 
-    private String userId ;     //用户id
+    private String userId;     //用户id
 
-    private LiveRoomPresenter presenter ;
+    private LiveRoomPresenter presenter;
 
-    private Handler handler ;
+    private Handler handler;
 
-    private ImageView notFoundResultView ;  //未找到直播间时显示的图片
+    private ImageView notFoundResultView;  //未找到直播间时显示的图片
 
-    private String entryTypeFlag ;  //进入的页面入口的判断
+    private String entryTypeFlag;  //进入的页面入口的判断
 
     /**
      * 暂存点击的直播间的下标
@@ -73,51 +73,51 @@ public class SingleCategoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_category) ;
-        Intent intent = getIntent() ;
+        setContentView(R.layout.activity_single_category);
+        Intent intent = getIntent();
 
-        entryTypeFlag = intent.getStringExtra(HomeConstants.ENTER_SINGLE_CATEGORY_KEY) ;
-        if(HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {  //从我的收藏中进入这个页面的
-            userId = intent.getStringExtra(HomeConstants.ATTENTION_LIVEROOM_USER_ID) ;
-        } else  {   //从主播分类中进入的
-            categoryId = intent.getStringExtra(HomeConstants.CATEGORY_ID_KEY) ;
-            categoryName = intent.getStringExtra(HomeConstants.CATEGORY_NAME_KEY) ;
+        entryTypeFlag = intent.getStringExtra(HomeConstants.ENTER_SINGLE_CATEGORY_KEY);
+        if (HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {  //从我的收藏中进入这个页面的
+            userId = intent.getStringExtra(HomeConstants.ATTENTION_LIVEROOM_USER_ID);
+        } else {   //从主播分类中进入的
+            categoryId = intent.getStringExtra(HomeConstants.CATEGORY_ID_KEY);
+            categoryName = intent.getStringExtra(HomeConstants.CATEGORY_NAME_KEY);
         }
 
-        initial() ;
-        newInstanceHandler() ;
-        presenter = new LiveRoomPresenter(getBaseContext(), handler) ;
+        initial();
+        newInstanceHandler();
+        presenter = new LiveRoomPresenter(getBaseContext(), handler);
 
         //预先加载数据
-        if(HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
-            presenter.loadAttentionLiveRoomByUserId(userId) ;
+        if (HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
+            presenter.loadAttentionLiveRoomByUserId(userId);
         } else {
-            presenter.loadLiveRoomDataByCategoryId(categoryId) ;
+            presenter.loadLiveRoomDataByCategoryId(categoryId);
         }
 
         //初始化标题栏
-        initActionBar() ;
+        initActionBar();
     }
 
     /**
-     *  初始化
+     * 初始化
      */
     private void initial() {
 
         notFoundResultView = (ImageView) findViewById(R.id.iv_singleCategory_notFound);
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.sl_singleCategory_refresh);
-        refreshLayout.setColorSchemeResources( R.color.themeColor1) ;    //设置颜色
+        refreshLayout.setColorSchemeResources(R.color.themeColor1);    //设置颜色
 
-        titleTextView = (TextView) findViewById(R.id.tv_title_singleCategory) ;
+        titleTextView = (TextView) findViewById(R.id.tv_title_singleCategory);
 
         liveRoomRecycleView = (RecyclerView) findViewById(R.id.rv_singleCategory_liveRoomHold);
         //设置布局
-        liveRoomRecycleView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2)) ;
+        liveRoomRecycleView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2));
         //设置tiem之间的边距
-        liveRoomRecycleView.addItemDecoration(new LiveRoomItemDecoration()) ;
+        liveRoomRecycleView.addItemDecoration(new LiveRoomItemDecoration());
         //设置适配器
-        adapter = new LiveRoomGridAdapter(getBaseContext()) ;
-        liveRoomRecycleView.setAdapter(adapter) ;
+        adapter = new LiveRoomGridAdapter(getBaseContext());
+        liveRoomRecycleView.setAdapter(adapter);
         //点击直播间
         adapter.setListener(new OnItemClickListener() {
             @Override
@@ -130,19 +130,19 @@ public class SingleCategoryActivity extends AppCompatActivity {
             }
         });
 
-        if(HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
-            titleTextView.setText("我的收藏") ;
+        if (HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
+            titleTextView.setText("我的关注");
         } else {
-            titleTextView.setText(categoryName) ;
+            titleTextView.setText(categoryName);
         }
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
-                    presenter.loadAttentionLiveRoomByUserId(userId) ;
+                if (HomeConstants.ATTENTION_LIVEROOM.equals(entryTypeFlag)) {
+                    presenter.loadAttentionLiveRoomByUserId(userId);
                 } else {
-                    presenter.loadLiveRoomDataByCategoryId(categoryId) ;
+                    presenter.loadLiveRoomDataByCategoryId(categoryId);
                 }
             }
         });
@@ -152,7 +152,7 @@ public class SingleCategoryActivity extends AppCompatActivity {
      * 初始化标题栏
      */
     private void initActionBar() {
-        Toolbar lToolbar = (Toolbar) findViewById(R.id.rl_singleCategory_top) ;
+        Toolbar lToolbar = (Toolbar) findViewById(R.id.rl_singleCategory_top);
         lToolbar.setTitle("");
         setSupportActionBar(lToolbar);
         lToolbar.setNavigationIcon(getIconDrawable(MaterialDrawableBuilder.IconValue.CHEVRON_LEFT, Color.WHITE));
@@ -165,6 +165,7 @@ public class SingleCategoryActivity extends AppCompatActivity {
         });
 
     }
+
     /**
      * 获取图标
      *

@@ -98,7 +98,7 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
             liveFragment2 = (LiveFragment2) fragmentList.get(fragmentIndex);
         }
 
-        if(liveFragment2 != null){
+        if (liveFragment2 != null) {
             liveFragment2.refreshData(); // 刷新数据
         }
 
@@ -279,6 +279,11 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
         fragmentPagerAdapter.notifyDataSetChanged();// 刷新视图
     }
 
+    @Override
+    public void checkLiveRoomIsBan() {
+        anchorInfoPresenter.checkLiveRoomIsBan();
+    }
+
 
     /**
      * 自定义FragmentPagerAdapter
@@ -373,6 +378,13 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
             cover = null; // 释放资源
         }
 
+    }
+
+    @Override
+    public void intoLiveRoom(boolean isBan) {
+        if (liveFragment2 != null) {
+            liveFragment2.intoLiveRoom(isBan); // 进入直播间
+        }
     }
 
     /**

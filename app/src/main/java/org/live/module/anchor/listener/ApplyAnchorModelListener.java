@@ -1,8 +1,8 @@
 package org.live.module.anchor.listener;
 
-import org.live.module.home.domain.LiveCategoryVo;
+        import org.live.module.home.domain.LiveCategoryVo;
 
-import java.util.List;
+        import java.util.List;
 
 /**
  * model层对视图层的反向驱动
@@ -28,6 +28,7 @@ public interface ApplyAnchorModelListener {
      * @param liveCategoryVos
      */
     public void showCategoryList(List<LiveCategoryVo> liveCategoryVos);
+
 
 
 }

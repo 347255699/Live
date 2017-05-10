@@ -52,6 +52,11 @@ public class AnchorInfoPresenterImpl implements AnchorInfoPresenter, AnchorInfoM
     }
 
     @Override
+    public void checkLiveRoomIsBan() {
+        anchorInfoModel.checkLiveRoomIsBan();
+    }
+
+    @Override
     public void showToast(String msg) {
         anchorInfoView.showToast(msg);
     }
@@ -69,5 +74,10 @@ public class AnchorInfoPresenterImpl implements AnchorInfoPresenter, AnchorInfoM
     @Override
     public void setRoomCover() {
         anchorInfoView.setRoomCover();
+    }
+
+    @Override
+    public void intoLiveRoom(boolean isBan) {
+        anchorInfoView.intoLiveRoom(isBan);
     }
 }

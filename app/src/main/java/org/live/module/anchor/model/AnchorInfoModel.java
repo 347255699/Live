@@ -36,4 +36,5 @@ public interface AnchorInfoModel {
      */
     public boolean validateInputItem(String key, String val);
 
+    public void checkLiveRoomIsBan();
 }

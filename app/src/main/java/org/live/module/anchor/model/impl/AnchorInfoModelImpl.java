@@ -139,7 +139,7 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
         } finally {
             try {
                 // 关闭流
-                if(b != null) {
+                if (b != null) {
                     b.flush();
                     b.close();
                 }
@@ -160,11 +160,11 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
     public boolean validateInputItem(String key, String val) {
         Map<String, Map<String, Object>> rules = new HashMap<>();
         Map<String, Object> rule = new LinkedHashMap<>();
-        if(key.equals("description")){
+        if (key.equals("description")) {
             rule.put("required", true);
             rule.put("maxLength", 15);
         }
-        if(key.equals("roomName")){
+        if (key.equals("roomName")) {
             rule.put("required", true);
             rule.put("maxLength", 10);
         }
@@ -180,6 +180,15 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
         }
         Validator validator = new Validator(context);
         return validator.validate(vals, labels, rules); // 开启校验
+    }
+
+    @Override
+    public void checkLiveRoomIsBan() {
+        try {
+            HttpRequestUtils.requestHttp(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/ban?anchorId=" + HomeActivity.mobileUserVo.getUserId(), RequestMethod.GET, null, responseHandler, HomeConstants.HTTP_RESPONSE_IS_BAN_RESULT_CODE);
+        } catch (Exception e) {
+            Log.e("Global", e.getMessage());
+        }
     }
 
     /**
@@ -208,6 +217,17 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
                     if (model.getStatus() == 1) {
                         modelListener.back(); // 返回
                         modelListener.showToast("修改成功");
+                    } else {
+                        modelListener.showToast(model.getMessage());
+                    }
+                }
+            }
+            if (msg.what == HomeConstants.HTTP_RESPONSE_IS_BAN_RESULT_CODE) {
+                JSONObject reulst = (JSONObject) msg.obj;
+                if (reulst != null) {
+                    SimpleResponseModel model = JsonUtils.fromJson(reulst.toString(), SimpleResponseModel.class);
+                    if (model.getStatus() == 1) {
+                        modelListener.intoLiveRoom((Boolean) model.getData());
                     } else {
                         modelListener.showToast(model.getMessage());
                     }

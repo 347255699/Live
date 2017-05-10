@@ -33,4 +33,9 @@ public interface AnchorInfoView {
      * 设置头像
      */
     public void setRoomCover();
+
+    /**
+     * 进入直播间
+     */
+    public void intoLiveRoom(boolean isBan);
 }

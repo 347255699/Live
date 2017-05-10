@@ -156,5 +156,10 @@ public class AnchorInfoActivity extends AppCompatActivity implements AnchorInfoV
 
     }
 
+    @Override
+    public void intoLiveRoom(boolean isBan) {
+
+    }
+
 
 }

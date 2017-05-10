@@ -33,4 +33,6 @@ public interface AnchorInfoModelListener {
      * 设置头像
      */
     public void setRoomCover();
+
+    public void intoLiveRoom(boolean isBan);
 }
