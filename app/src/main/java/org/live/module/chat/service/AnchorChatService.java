@@ -15,6 +15,8 @@ import org.live.common.constants.LiveKeyConstants;
 import org.live.common.domain.Message;
 import org.live.common.util.JsonUtils;
 
+import java.util.concurrent.ExecutionException;
+
 
 /**
  * 主播聊天消息接受服务
@@ -31,6 +33,8 @@ public class AnchorChatService extends Service {
     private Intent intent = new Intent(ACTION); // 设置广播意图
     private WebSocket websocket;
 
+    Future<WebSocket> future ;  //未来获取到websocket
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -44,12 +48,13 @@ public class AnchorChatService extends Service {
         return new ChatReceiveServiceBinder();
     }
 
+
     @Override
     public void onDestroy() {
         Log.i(TAG, "---------------------》》断开websocket链接");
-        if (websocket != null) {
-            websocket.close(); // 关闭websocket链接
-        }
+        //if (websocket != null) {
+        getWebsocket().close(); // 关闭websocket链接
+        //}
         super.onDestroy();
     }
 
@@ -57,7 +62,7 @@ public class AnchorChatService extends Service {
      * 建立websocket链接，注意此链接建立在非UI线程内
      */
     private void buildWebSocketConnecting() throws Exception {
-        Future<WebSocket> future = AsyncHttpClient.getDefaultInstance().websocket(wsUrl + "", "my-protocol", new AsyncHttpClient.WebSocketConnectCallback() {
+        future = AsyncHttpClient.getDefaultInstance().websocket(wsUrl + "", "my-protocol", new AsyncHttpClient.WebSocketConnectCallback() {
             @Override
             public void onCompleted(Exception ex, WebSocket webSocket) {
                 if (ex != null) {
@@ -74,7 +79,7 @@ public class AnchorChatService extends Service {
                 });
             }
         });
-        this.websocket = future.get();
+        //this.websocket = future.get();
     }
 
     /**
@@ -83,7 +88,22 @@ public class AnchorChatService extends Service {
     public class ChatReceiveServiceBinder extends Binder {
 
         public void sendMsg(Message message) {
-            websocket.send(JsonUtils.toJson(message)); // 发送消息
+            getWebsocket().send(JsonUtils.toJson(message)); // 发送消息
         } // 发送消息
+    }
+
+    /**
+     * 延迟加载获取webssocket
+     * @return
+     */
+    private WebSocket getWebsocket() {
+        if(websocket == null) {
+            try {
+                websocket = future.get() ;
+            } catch (Exception e) {
+                Log.d(TAG, e != null ? e.getMessage() : "unknown Exception") ;
+            }
+        }
+        return websocket ;
     }
 }
