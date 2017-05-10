@@ -199,6 +199,7 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
         public void handleMessage(Message msg) {
             if (msg.what == AnchorConstants.HTTP_RESPONSE_RESULT_POST_LIVE_ROOM_COVER_CODE) {
                 SimpleResponseModel model = JsonUtils.fromJson((String) msg.obj, SimpleResponseModel.class);
+                Log.d("HOME","请求的结果---》"+ msg.obj) ;
                 if (model != null) {
                     if (model.getStatus() == 1) {
                         modelListener.showToast("提交成功");
@@ -227,9 +228,9 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
                 if (reulst != null) {
                     SimpleResponseModel model = JsonUtils.fromJson(reulst.toString(), SimpleResponseModel.class);
                     if (model.getStatus() == 1) {
-                        modelListener.intoLiveRoom(false);
+                        modelListener.intoLiveRoom(true);
                     } else {
-                        modelListener.showToast(model.getMessage());
+                        modelListener.intoLiveRoom(false);
                     }
                 }
             }

@@ -382,7 +382,13 @@ public class HomeActivity extends FragmentActivity implements OnHomeActivityEven
 
     @Override
     public void intoLiveRoom(boolean isBan) {
-        if (liveFragment2 != null) {
+        if(liveFragment2 == null){
+            int fragmentIndex = viewPager.getCurrentItem();
+            if (fragmentList.get(fragmentIndex) instanceof LiveFragment2) {
+                liveFragment2 = (LiveFragment2) fragmentList.get(fragmentIndex);
+            }
+            liveFragment2.intoLiveRoom(isBan); // 进入直播间
+        }else{
             liveFragment2.intoLiveRoom(isBan); // 进入直播间
         }
     }

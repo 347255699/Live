@@ -230,7 +230,7 @@ public class LiveFragment2 extends Fragment {
      * 进入直播间
      */
     public void intoLiveRoom(boolean isBan) {
-        if (!isBan) {
+        if (isBan) {
             int rbId = lLivingTypeRadioGroup.getCheckedRadioButtonId();
             int type = (rbId == R.id.rb_capture) ? HomeConstants.LIVING_TYPE_CAPTURE : HomeConstants.LIVING_TYPE_GENERAL;
             Intent intent;
