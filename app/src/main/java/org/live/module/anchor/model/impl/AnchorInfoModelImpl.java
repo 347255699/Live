@@ -185,7 +185,7 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
     @Override
     public void checkLiveRoomIsBan() {
         try {
-            HttpRequestUtils.requestHttp(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/" + HomeActivity.mobileUserVo.getLiveRoomVo().getRoomId(), RequestMethod.GET, null, responseHandler, HomeConstants.HTTP_RESPONSE_IS_BAN_RESULT_CODE);
+            HttpRequestUtils.requestHttp(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/live/" + HomeActivity.mobileUserVo.getLiveRoomVo().getRoomId(), RequestMethod.GET, null, responseHandler, HomeConstants.HTTP_RESPONSE_IS_BAN_RESULT_CODE);
         } catch (Exception e) {
             Log.e("Global", e.getMessage());
         }
@@ -227,7 +227,7 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
                 if (reulst != null) {
                     SimpleResponseModel model = JsonUtils.fromJson(reulst.toString(), SimpleResponseModel.class);
                     if (model.getStatus() == 1) {
-                        modelListener.intoLiveRoom((Boolean) model.getData());
+                        modelListener.intoLiveRoom(false);
                     } else {
                         modelListener.showToast(model.getMessage());
                     }
