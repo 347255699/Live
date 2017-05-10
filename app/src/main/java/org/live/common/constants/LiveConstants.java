@@ -10,7 +10,7 @@ public class LiveConstants {
     /**
      * 远程服务器地址
      */
-    public static final String REMOTE_SERVER_IP = "10.20.197.154";
+    public static String REMOTE_SERVER_IP = "119.29.80.59";
 
     /**
      * http协议开头
@@ -25,12 +25,12 @@ public class LiveConstants {
     /**
      * http远程服务器的端口
      */
-    public static final String REMOTE_PORT = "8080";
+    public static final String REMOTE_PORT = "80";
 
     /**
      * 远程服务器的地址
      */
-    public static final String REMOTE_SERVER_HTTP_IP =
+    public static String REMOTE_SERVER_HTTP_IP =
             HTTP_PREFIX + REMOTE_SERVER_IP + ":" + REMOTE_PORT;
 
     /**
@@ -61,6 +61,6 @@ public class LiveConstants {
     /**
      * rtmp拉流地址的前缀
      */
-    public static final String RTMP_PLAY_IP_PREFIX  = "rtmp://119.29.167.148/live/" ;
+    public static final String RTMP_PLAY_IP_PREFIX  = "rtmp://119.29.80.59/live/" ;
 
 }
