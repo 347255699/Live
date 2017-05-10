@@ -162,7 +162,7 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
         Map<String, Object> rule = new LinkedHashMap<>();
         if(key.equals("description")){
             rule.put("required", true);
-            rule.put("maxLength", 30);
+            rule.put("maxLength", 15);
         }
         if(key.equals("roomName")){
             rule.put("required", true);
