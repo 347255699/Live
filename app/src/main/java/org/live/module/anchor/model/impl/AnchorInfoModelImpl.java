@@ -185,7 +185,7 @@ public class AnchorInfoModelImpl implements AnchorInfoModel {
     @Override
     public void checkLiveRoomIsBan() {
         try {
-            HttpRequestUtils.requestHttp(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/ban?anchorId=" + HomeActivity.mobileUserVo.getUserId(), RequestMethod.GET, null, responseHandler, HomeConstants.HTTP_RESPONSE_IS_BAN_RESULT_CODE);
+            HttpRequestUtils.requestHttp(LiveConstants.REMOTE_SERVER_HTTP_IP + "/app/liveroom/" + HomeActivity.mobileUserVo.getLiveRoomVo().getRoomId(), RequestMethod.GET, null, responseHandler, HomeConstants.HTTP_RESPONSE_IS_BAN_RESULT_CODE);
         } catch (Exception e) {
             Log.e("Global", e.getMessage());
         }
