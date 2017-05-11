@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment {
                     if (dataModel.getStatus() == 1) {
                         List<Integer> limitations = dataModel.getData();
                         if (limitations.contains(HomeConstants.LIMIT_TYPE_KICKOUT)) {
-                            Toast.makeText(getContext(), "您被直播踢出直播间，暂时不能进入该直播间！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "您被踢出直播间，暂时不能进入该直播间！", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         //进入直播间

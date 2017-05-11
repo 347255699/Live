@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_app_info_showImg"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="@color/themeColor">
+
+        <net.steamcrafted.materialiconlib.MaterialIconView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/btn_app_info_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:scaleType="center"
+            app:materialIcon="chevron_left"
+            app:materialIconColor="@color/colorWhite"
+            app:materialIconSize="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/selector_green_corners_button"/>
+
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:src="@drawable/app_info"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_app_info_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="校园直播是本校师生交流互动的平台"
+        android:layout_below="@id/rl_app_info_showImg"
+        android:textSize="20sp"
+        android:textColor="@color/colorGray"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/tv_app_info_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_app_info_description"
+        android:textSize="18sp"
+        android:text="版本号：v1.0.0"
+        android:textColor="@color/colorGray"
+        android:layout_marginTop="35dp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/tv_app_info_creater"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_app_info_version"
+        android:text="@string/app_info_creater"
+        android:textColor="@color/colorGray"
+        android:textSize="18sp"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>

@@ -97,6 +97,7 @@
         <activity android:name=".module.home.view.impl.LiveRoomCoverActivity" />
         <activity android:name=".module.demo.PlayDemoActivity" />
         <activity android:name=".module.demo.SettingActivity" />
+        <activity android:name=".module.home.view.impl.AppInfoActivity" />
     </application>
 
 </manifest>

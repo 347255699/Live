@@ -131,6 +131,9 @@ public class MeFragment extends Fragment {
                         intent1.putExtra(HomeConstants.ATTENTION_LIVEROOM_USER_ID, mobileUserVo.getUserId());
                         startActivity(intent1);
                         break;
+                    case 2: //点击关于高校直播
+                        Intent intent2 = new Intent(getActivity(), AppInfoActivity.class) ;
+                        startActivity(intent2) ;
                 }
             }
         }); // 绑定列表项点击事件
