@@ -35,6 +35,14 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
      */
     private EditText fRealNameEditText;
     /**
+     * 手机号码输入框
+     */
+    private EditText fMobileNumberEditText;
+    /**
+     * 邮箱地址输入框
+     */
+    private EditText fEmailEditText;
+    /**
      * 重置密码输入框
      */
     private EditText fPasswordEditText;
@@ -72,6 +80,8 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
         fRealNameEditText = (EditText) view.findViewById(R.id.et_forgetPassword_realName);
         fPasswordEditText = (EditText) view.findViewById(R.id.et_forgetPassword_password);
         fRePasswordEditText = (EditText) view.findViewById(R.id.et_forgetPassword_rePassword);
+        fMobileNumberEditText = (EditText) view.findViewById(R.id.et_forgetPassword_mobileNumber);
+        fEmailEditText = (EditText) view.findViewById(R.id.et_forgetPassword_email);
         fResetButton = (Button) view.findViewById(R.id.btn_forgetPassword_submit);
         fResetButton.setOnClickListener(this);
     }
@@ -86,11 +96,15 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_forgetPassword_submit:
-                if (validateForm()) {
-                    Map<String, Object> params = new HashMap<String, Object>();
+                String mobileNumber = fMobileNumberEditText.getText().toString();
+                String email = fEmailEditText.getText().toString();
+                if (validateForm() && mobileNumber.equals(mobileNumber) && email.equals(email)) {
+                    Map<String, Object> params = new HashMap<>();
                     params.put("account", fMemberNoEditText.getText().toString());
                     params.put("newPassword", fPasswordEditText.getText().toString());
                     params.put("realName", fRealNameEditText.getText().toString());
+                   /* params.put("mobileNumber", fMobileNumberEditText.getText().toString());
+                    params.put("email", fEmailEditText.getText().toString());*/
                     try {
                         loginActivityEventListener.showProgressBar();
                         loginPresenter.httpRequest(LoginConstant.MODEL_TYPE_FORGET_PASSWORD, params); // 请求重置密码
@@ -112,9 +126,9 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
         Map<String, String> vals = new LinkedHashMap<String, String>(); // 待校验的字符组
         Map<String, String> labels = new HashMap<String, String>(); // 字符组对应的标签组
         Map<String, Map<String, Object>> rules = new HashMap<>(); // 字符组对应的规则组
-        String[] columns = {"memberNo", "realName", "password", "rePassword"};
-        String[] titles = {"学号/工号", "姓名", "重置密码", "确认重置密码"};
-        EditText[] editTexts = {fMemberNoEditText, fRealNameEditText, fPasswordEditText, fRePasswordEditText};
+        String[] columns = {"memberNo", "realName", "mobileNumber", "email", "password", "rePassword"};
+        String[] titles = {"学号/工号", "姓名", "手机号码", "邮箱地址", "重置密码", "确认重置密码"};
+        EditText[] editTexts = {fMemberNoEditText, fRealNameEditText, fMobileNumberEditText, fEmailEditText, fPasswordEditText, fRePasswordEditText};
         for (int i = 0; i < columns.length; i++) {
             String key = columns[i];
             String val = editTexts[i].getText().toString();
@@ -134,6 +148,14 @@ public class ForgetPasswordFragment extends BackHandledFragment implements View.
                 case "realName":
                     rule.put("required", true);
                     rule.put("maxLength", 10);
+                    break;
+                case "email":
+                    rule.put("required", true);
+                    rule.put("matchRegEx", "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
+                    break;
+                case "mobileNumber":
+                    rule.put("required", true);
+                    rule.put("matchRegEx", "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$");
                     break;
                 case "password":
                     rule.put("required", true);
